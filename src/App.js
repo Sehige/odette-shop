@@ -26,6 +26,11 @@ import ShopPage from './components/shop/ShopPage';
 import CheckoutPage from './components/checkout/CheckoutPage';
 import OrderConfirmation from './components/checkout/OrderConfirmation';
 
+// Other pages
+import AboutPage from './components/pages/AboutPage';
+import ContactPage from './components/pages/ContactPage';
+import EventsPage from './components/pages/EventsPage';
+
 function App() {
   const [language, setLanguage] = useState('ro');
   const [currentPage, setCurrentPage] = useState('home');
@@ -125,24 +130,18 @@ function App() {
         />
       )}
 
-      {/* Placeholder pages for other sections */}
-      {['events', 'about', 'contact'].includes(currentPage) && (
-        <div className="pt-24 pb-16 min-h-screen bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">
-              {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} Page
-            </h1>
-            <p className="text-gray-600 mb-8">This section will be completed in the next phase.</p>
-            <button
-              onClick={() => setCurrentPage('home')}
-              className="font-medium hover:opacity-80"
-              style={{ color: '#1e3a8a' }}
-            >
-              ← Back to Home
-            </button>
-          </div>
-        </div>
+      {currentPage === 'about' && (
+        <AboutPage language={language} setCurrentPage={setCurrentPage} />
       )}
+
+      {currentPage === 'events' && (
+        <EventsPage language={language} setCurrentPage={setCurrentPage} />
+      )}
+
+      {currentPage === 'contact' && (
+        <ContactPage language={language} setCurrentPage={setCurrentPage} />
+      )}
+
 
       <Footer language={language} setCurrentPage={setCurrentPage} />
 
