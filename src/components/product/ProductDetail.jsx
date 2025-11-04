@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { X, Minus, Plus } from 'lucide-react';
 import { translations } from '../../data/translations';
+import ProductCard from './ProductCard';
 
-const ProductDetail = ({ product, language, addToCart, onClose }) => {
+const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) => {
   const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : null);
   const [selectedFlavor, setSelectedFlavor] = useState(
     product.flavors ? product.flavors[language][0] : null
@@ -15,10 +16,26 @@ const ProductDetail = ({ product, language, addToCart, onClose }) => {
     onClose();
   };
 
+  // Get related/paired products
+  const getRelatedProducts = () => {
+    if (!allProducts) return [];
+    
+    // Simple logic: show 3 random products from the same category or complementary items
+    // In a real app, this would be based on actual pairing data
+    const related = allProducts
+      .filter(p => p.id !== product.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+    
+    return related;
+  };
+
+  const relatedProducts = getRelatedProducts();
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+      <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
           <h2 className="text-2xl font-bold text-gray-900">{product.name[language]}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition">
             <X className="w-6 h-6" />
@@ -26,7 +43,7 @@ const ProductDetail = ({ product, language, addToCart, onClose }) => {
         </div>
 
         <div className="p-6">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
             {/* Image */}
             <div className="aspect-square rounded-xl overflow-hidden">
               <img
@@ -144,6 +161,31 @@ const ProductDetail = ({ product, language, addToCart, onClose }) => {
               </div>
             </div>
           </div>
+
+          {/* Related Products Section */}
+          {relatedProducts.length > 0 && (
+            <div className="border-t pt-8">
+              <h3 className="text-2xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
+                {language === 'ro' ? 'Produse Care Se Potrivesc' : 'Products That Pair Well'}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {language === 'ro' 
+                  ? 'Clienții noștri aleg frecvent aceste produse împreună. Puteți adăuga și lumanări sau litere personalizate.'
+                  : 'Our customers often choose these products together. You can also add candles or personalized letters.'}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedProducts.map((relatedProduct) => (
+                  <ProductCard
+                    key={relatedProduct.id}
+                    product={relatedProduct}
+                    language={language}
+                    addToCart={addToCart}
+                    setSelectedProduct={() => {}} // Don't open nested modals
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

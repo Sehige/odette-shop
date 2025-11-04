@@ -1,36 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 
 const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartTotal = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-white'
-    }`}>
+    <header className="fixed w-full top-0 z-40 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-4">
-          {/* Logo */}
-          <button 
-            onClick={() => setCurrentPage('home')}
-            className="text-2xl md:text-3xl font-serif font-bold transition"
-            style={{ color: '#373ad4ff' }}
-          >
-            Odette
-          </button>
+        <div className="flex items-center justify-between h-20">
+          {/* Left Section: Social Media Icons */}
+          <div className="flex items-center gap-3">
+            <a 
+              href="https://instagram.com/odettepastry" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-pink-600 transition"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a 
+              href="https://facebook.com/odettepastry" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-blue-600 transition"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+          </div>
+
+          {/* Center Section: Logo and Brand Name */}
+          <div className="flex items-center gap-3">
+            {/* Generic Logo Placeholder */}
+            <div className="w-12 h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
+              <img 
+                src="/mnt/project/placeholder_cake_picture_2.jpeg" 
+                alt="Odette Logo" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <button
+              onClick={() => setCurrentPage('home')}
+              className="text-2xl md:text-3xl font-serif font-bold transition"
+              style={{ color: '#1e3a8a' }}
+            >
+              Odette
+            </button>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
@@ -51,9 +72,9 @@ const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart 
             </button>
           </nav>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Language Switcher */}
+          {/* Right Section: Language Toggle and Shopping Cart */}
+          <div className="flex items-center gap-4">
+            {/* Language Toggle */}
             <button
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
               className="text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase"
@@ -61,24 +82,28 @@ const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart 
               {language === 'ro' ? 'EN' : 'RO'}
             </button>
 
-            {/* Shopping Cart */}
+            {/* Shopping Cart with Total */}
             <button 
               onClick={() => setShowCart(true)}
-              className="relative p-2 text-gray-700 hover:text-blue-900 transition"
+              className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-blue-900 transition"
             >
               <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium" 
-                  style={{ backgroundColor: '#d4af37' }}>
-                  {cartItemCount}
+                <>
+                  <span className="absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium" 
+                    style={{ backgroundColor: '#d4af37' }}>
+                    {cartItemCount}
+                  </span>
+                  <span className="hidden md:inline text-sm font-semibold" style={{ color: '#d4af37' }}>
+                    {cartTotal} {t.lei}
+                  </span>
+                </>
+              )}
+              {cartItemCount === 0 && (
+                <span className="hidden md:inline text-sm font-semibold text-gray-500">
+                  0 {t.lei}
                 </span>
               )}
-            </button>
-
-            {/* Contact Button */}
-            <button className="hidden md:block text-white px-4 md:px-6 py-2 rounded-full hover:opacity-90 transition font-medium text-sm"
-              style={{ backgroundColor: '#d4af37' }}>
-              {t.contact}
             </button>
 
             {/* Mobile menu button */}

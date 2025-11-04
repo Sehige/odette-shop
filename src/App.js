@@ -11,7 +11,6 @@ import Footer from './components/layout/Footer';
 import HeroSection from './components/home/HeroSection';
 import BestSellers from './components/home/BestSellers';
 import FeaturedCategories from './components/home/FeaturedCategories';
-import TrustBadges from './components/home/TrustBadges';
 
 // Product components
 import ProductDetail from './components/product/ProductDetail';
@@ -30,6 +29,7 @@ import OrderConfirmation from './components/checkout/OrderConfirmation';
 import AboutPage from './components/pages/AboutPage';
 import ContactPage from './components/pages/ContactPage';
 import EventsPage from './components/pages/EventsPage';
+import BlogPage from './components/pages/AboutPage';
 
 function App() {
   const [language, setLanguage] = useState('ro');
@@ -98,7 +98,7 @@ function App() {
             setCurrentPage={setCurrentPage}
             setFilter={setFilter}
           />
-          <TrustBadges language={language} />
+          {/* TrustBadges removed from here - now in ShopPage */}
         </>
       )}
 
@@ -131,7 +131,7 @@ function App() {
       )}
 
       {currentPage === 'about' && (
-        <AboutPage language={language} setCurrentPage={setCurrentPage} />
+        <BlogPage language={language} setCurrentPage={setCurrentPage} />
       )}
 
       {currentPage === 'events' && (
@@ -141,7 +141,6 @@ function App() {
       {currentPage === 'contact' && (
         <ContactPage language={language} setCurrentPage={setCurrentPage} />
       )}
-
 
       <Footer language={language} setCurrentPage={setCurrentPage} />
 
@@ -164,6 +163,7 @@ function App() {
           language={language}
           addToCart={addToCart}
           onClose={() => setSelectedProduct(null)}
+          allProducts={productsData}
         />
       )}
     </div>

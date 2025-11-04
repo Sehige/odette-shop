@@ -9,6 +9,16 @@ const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
   
   const bestSellers = products.filter(p => p.bestseller);
   
+  // Create infinite carousel effect by getting products in a circular manner
+  const getVisibleProducts = () => {
+    const visible = [];
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % bestSellers.length;
+      visible.push(bestSellers[index]);
+    }
+    return visible;
+  };
+  
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % bestSellers.length);
   };
@@ -28,11 +38,11 @@ const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
         </div>
 
         <div className="relative">
-          {/* Carousel */}
+          {/* Carousel - Always shows 3 products */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {bestSellers.slice(currentIndex, currentIndex + 3).map((product, idx) => (
+            {getVisibleProducts().map((product, idx) => (
               <ProductCard 
-                key={product.id}
+                key={`${product.id}-${currentIndex}-${idx}`}
                 product={product}
                 language={language}
                 addToCart={addToCart}
@@ -44,16 +54,35 @@ const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
           {/* Navigation Arrows */}
           <button
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition z-10"
+            aria-label="Previous products"
           >
             <ChevronLeft className="w-6 h-6 text-gray-700" />
           </button>
           <button
             onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 transition z-10"
+            aria-label="Next products"
           >
             <ChevronRight className="w-6 h-6 text-gray-700" />
           </button>
+        </div>
+
+        {/* Carousel Dots */}
+        <div className="flex justify-center gap-2 mt-8">
+          {bestSellers.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition ${
+                index === currentIndex ? 'w-8' : ''
+              }`}
+              style={{ 
+                backgroundColor: index === currentIndex ? '#d4af37' : '#d1d5db' 
+              }}
+              aria-label={`Go to product ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>

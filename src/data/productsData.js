@@ -26,7 +26,9 @@ export const productsData = [
       en: 'Belgian chocolate, flour, eggs, sugar, butter, cream'
     },
     allergens: { ro: 'Gluten, ouă, lactate', en: 'Gluten, eggs, dairy' },
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 2,
@@ -44,7 +46,9 @@ export const productsData = [
       en: 'Flour, eggs, butter, milk, Madagascar vanilla, chocolate'
     },
     allergens: { ro: 'Gluten, ouă, lactate', en: 'Gluten, eggs, dairy' },
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 3,
@@ -62,7 +66,9 @@ export const productsData = [
       en: 'Almonds, egg white, sugar, natural colorants'
     },
     allergens: { ro: 'Migdale, ouă', en: 'Almonds, eggs' },
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 4,
@@ -75,7 +81,9 @@ export const productsData = [
     price: 190,
     image: RED_VELVET_IMAGE,
     sizes: ['1kg', '1.5kg', '2kg'],
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 5,
@@ -87,7 +95,9 @@ export const productsData = [
     },
     price: 12,
     image: CROISSANT_IMAGE,
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 6,
@@ -99,7 +109,9 @@ export const productsData = [
     },
     price: 45,
     image: BERRY_TART_IMAGE,
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 7,
@@ -112,19 +124,23 @@ export const productsData = [
     price: 450,
     image: HERO_IMAGE,
     sizes: ['2kg', '3kg', '4kg', '5kg'],
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 8,
     name: { ro: 'Profiterole', en: 'Profiteroles' },
     category: 'pastries',
     description: { 
-      ro: 'Gogoși frantuzești umplute cu cremă și acoperite cu ciocolată',
+      ro: 'Gogoși franțuzești umplute cu cremă și acoperite cu ciocolată',
       en: 'French cream puffs filled with pastry cream and chocolate'
     },
     price: 18,
     image: ECLAIR_IMAGE,
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 9,
@@ -136,19 +152,23 @@ export const productsData = [
     },
     price: 14,
     image: CROISSANT_IMAGE,
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 10,
-    name: { ro: 'Cookie Ciocolată', en: 'Chocolate Cookie' },
+    name: { ro: 'Cookie Vegan Ciocolată', en: 'Vegan Chocolate Cookie' },
     category: 'cookies',
     description: { 
-      ro: 'Cookie cu bucăți de ciocolată belgiană, crocant în exterior',
-      en: 'Cookie with Belgian chocolate chips, crispy outside'
+      ro: 'Cookie vegan cu bucăți de ciocolată neagră, fără ingrediente animale',
+      en: 'Vegan cookie with dark chocolate chips, no animal ingredients'
     },
     price: 8,
     image: MACARON_IMAGE,
-    bestseller: false
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: true
   },
   {
     id: 11,
@@ -161,7 +181,9 @@ export const productsData = [
     price: 220,
     image: CAKE_IMAGE,
     sizes: ['1.5kg', '2kg', '3kg'],
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
   },
   {
     id: 12,
@@ -173,6 +195,23 @@ export const productsData = [
     },
     price: 85,
     image: ECLAIR_IMAGE,
-    bestseller: true
+    bestseller: true,
+    isVegetarian: true,
+    isVegan: false
+  },
+  {
+    id: 13,
+    name: { ro: 'Tort Vegan Fructe', en: 'Vegan Fruit Cake' },
+    category: 'cakes',
+    description: { 
+      ro: 'Tort 100% vegan cu fructe proaspete și cremă vegetală',
+      en: '100% vegan cake with fresh fruits and plant-based cream'
+    },
+    price: 165,
+    image: BERRY_TART_IMAGE,
+    sizes: ['1kg', '1.5kg', '2kg'],
+    bestseller: false,
+    isVegetarian: true,
+    isVegan: true
   }
 ];
