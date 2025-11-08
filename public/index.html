@@ -1,43 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="theme-color" content="#1e3a8a" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Odette - Prăjituri Artizanale și Torturi Premium în Satu Mare | Cofetărie Online</title>
+    <meta name="title" content="Odette - Prăjituri Artizanale și Torturi Premium în Satu Mare | Cofetărie Online" />
+    <meta name="description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Satu Mare. Ingrediente premium, rețete tradiționale. Comenzi pentru evenimente." />
+    <meta name="keywords" content="prăjituri Satu Mare, torturi personalizate, cofetărie online, deserturi premium, torturi nuntă, prăjituri evenimente, cofetărie artizanală" />
+    <meta name="author" content="Odette Bakery" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.odette.ro" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.odette.ro/" />
+    <meta property="og:title" content="Odette - Prăjituri Artizanale și Torturi Premium" />
+    <meta property="og:description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Satu Mare." />
+    <meta property="og:image" content="https://www.odette.ro/og-image.jpg" />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:site_name" content="Odette Bakery" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.odette.ro/" />
+    <meta property="twitter:title" content="Odette - Prăjituri Artizanale și Torturi Premium" />
+    <meta property="twitter:description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium." />
+    <meta property="twitter:image" content="https://www.odette.ro/twitter-image.jpg" />
+    
+    <!-- Geo Tags -->
+    <meta name="geo.region" content="RO-SM" />
+    <meta name="geo.placename" content="Satu Mare" />
+    <meta name="geo.position" content="47.791;22.876" />
+    <meta name="ICBM" content="47.791, 22.876" />
+    
+    <!-- Business Info -->
+    <meta name="contact" content="contact@odette.ro" />
+    <meta name="language" content="Romanian" />
+    
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Bakery",
+      "name": "Odette",
+      "image": "https://www.odette.ro/logo.png",
+      "@id": "https://www.odette.ro",
+      "url": "https://www.odette.ro",
+      "telephone": "+40-XXX-XXX-XXX",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Strada Exemplu 123",
+        "addressLocality": "Satu Mare",
+        "postalCode": "440XXX",
+        "addressCountry": "RO"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 47.791,
+        "longitude": 22.876
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "09:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "10:00",
+          "closes": "16:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/odette",
+        "https://www.instagram.com/odette"
+      ]
+    }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Trebuie să activați JavaScript pentru a rula această aplicație.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

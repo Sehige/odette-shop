@@ -1,3 +1,20 @@
-# https://www.robotstxt.org/robotstxt.html
+# Odette Bakery - Robots.txt
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow admin and account pages
+Disallow: /admin/
+Disallow: /account/
+Disallow: /checkout/
+Disallow: /cart/
+Disallow: /api/
+
+# Allow specific crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.odette.ro/sitemap.xml
