@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Data imports
 import { productsData } from './data/productsData';
@@ -30,6 +30,7 @@ import AboutPage from './components/pages/AboutPage';
 import ContactPage from './components/pages/ContactPage';
 import EventsPage from './components/pages/EventsPage';
 import BlogPage from './components/pages/AboutPage';
+
 
 function App() {
   const [language, setLanguage] = useState('ro');
