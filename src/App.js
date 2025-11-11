@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 // Data imports
 import { productsData } from './data/productsData';
-import { supabase } from './lib/supabase'
 
 // Layout components
 import Header from './components/layout/Header';
@@ -14,7 +13,7 @@ import BestSellers from './components/home/BestSellers';
 import FeaturedCategories from './components/home/FeaturedCategories';
 
 // Product components
-import ProductDetail from './components/product/ProductDetail';
+import ProductDetail from './components/products/ProductDetail';
 
 // Cart components
 import ShoppingCartSidebar from './components/cart/ShoppingCartSidebar';
@@ -99,7 +98,6 @@ function App() {
             setCurrentPage={setCurrentPage}
             setFilter={setFilter}
           />
-          {/* TrustBadges removed from here - now in ShopPage */}
         </>
       )}
 
@@ -132,7 +130,7 @@ function App() {
       )}
 
       {currentPage === 'about' && (
-        <BlogPage language={language} setCurrentPage={setCurrentPage} />
+        <AboutPage language={language} setCurrentPage={setCurrentPage} />
       )}
 
       {currentPage === 'events' && (

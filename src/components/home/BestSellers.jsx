@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations } from '../../data/translations';
-import ProductCard from '../product/ProductCard';
+import ProductCard from '../products/ProductCard';
+//import { useBestSellers } from '../../products/useBestSellers';
 
 const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const t = translations[language];
-  
+  //const { bestSellers } = getBestSellers(products);
   const bestSellers = products.filter(p => p.bestseller);
   
   // Create infinite carousel effect by getting products in a circular manner
   const getVisibleProducts = () => {
     const visible = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const index = (currentIndex + i) % bestSellers.length;
       visible.push(bestSellers[index]);
     }
@@ -38,8 +39,8 @@ const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
         </div>
 
         <div className="relative">
-          {/* Carousel - Always shows 3 products */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Carousel - Always shows 4 products */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {getVisibleProducts().map((product, idx) => (
               <ProductCard 
                 key={`${product.id}-${currentIndex}-${idx}`}

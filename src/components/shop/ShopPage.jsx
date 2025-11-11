@@ -1,6 +1,6 @@
 import React from 'react';
 import { translations } from '../../data/translations';
-import ProductCard from '../product/ProductCard';
+import ProductCard from '../products/ProductCard';
 import TrustBadges from '../home/TrustBadges';
 
 const ShopPage = ({ language, products, filter, setFilter, addToCart, setSelectedProduct }) => {
