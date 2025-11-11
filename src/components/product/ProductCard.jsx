@@ -1,97 +1,57 @@
-import React from 'react';
-import { Heart, Check } from 'lucide-react';
-import { translations } from '../../data/translations';
+// ========================================
+// FILE: src/components/products/ProductCard.jsx
+// ========================================
 
-const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
-  const t = translations[language];
-  
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+function ProductCard({ product }) {
+  // Get primary image
+  const primaryImage = product.product_images?.find(img => img.is_primary)
+  const imageUrl = primaryImage?.image_url || '/placeholder-cake.jpg'
+
   return (
-    <div 
-      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
-    >
-      {/* Image - Clickable */}
-      <div 
-        className="relative overflow-hidden aspect-square"
-        onClick={() => setSelectedProduct(product)}
-      >
-        <img
-          src={product.image}
-          alt={product.name[language]}
-          className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
-        />
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            // Add to favorites functionality (future feature)
-          }}
-          className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition"
-        >
-          <Heart className="w-5 h-5 text-gray-600" />
-        </button>
-      </div>
-      
-      {/* Product Info - Clickable */}
-      <div 
-        className="p-6"
-        onClick={() => setSelectedProduct(product)}
-      >
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="text-xl font-semibold text-gray-900">
-            {product.name[language]}
-          </h3>
-          {/* Vegan/Vegetarian Indicators */}
-          {product.isVegan && (
-            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
-              <Check className="w-3 h-3 text-green-600" />
-              <span className="text-xs font-medium text-green-600">
-                {language === 'ro' ? 'Vegan' : 'Vegan'}
-              </span>
-            </div>
-          )}
-          {product.isVegetarian && !product.isVegan && (
-            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
-              <Check className="w-3 h-3 text-green-600" />
-              <span className="text-xs font-medium text-green-600">
-                {language === 'ro' ? 'Vegetarian' : 'Vegetarian'}
-              </span>
-            </div>
-          )}
-        </div>
-        <p className="text-gray-600 text-sm mb-4">
-          {product.description[language]}
-        </p>
+    <Link to={`/products/${product.slug}`} className="product-card">
+      {/* Product Image */}
+      <div className="product-card__image">
+        <img src={imageUrl} alt={product.name_en} />
         
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-2xl font-bold" style={{ color: '#d4af37' }}>
-            {product.price} {t.lei}
-          </span>
-        </div>
-        
-        <div className="flex gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedProduct(product);
-            }}
-            className="flex-1 border-2 py-2 rounded-lg font-medium hover:bg-blue-50 transition"
-            style={{ borderColor: '#1e3a8a', color: '#1e3a8a' }}
-          >
-            {t.viewDetails}
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product);
-            }}
-            className="flex-1 text-white py-2 rounded-lg font-medium hover:opacity-90 transition"
-            style={{ backgroundColor: '#d4af37' }}
-          >
-            {t.addToCart}
-          </button>
-        </div>
+        {/* Badges */}
+        {product.is_best_seller && (
+          <span className="badge badge--bestseller">Best Seller</span>
+        )}
+        {product.is_new && (
+          <span className="badge badge--new">New</span>
+        )}
       </div>
-    </div>
-  );
-};
 
-export default ProductCard;
+      {/* Product Info */}
+      <div className="product-card__content">
+        <h3 className="product-card__title">
+          {product.name_ro} / {product.name_en}
+        </h3>
+        
+        <p className="product-card__description">
+          {product.short_description_ro}
+        </p>
+
+        {/* Price */}
+        <div className="product-card__price">
+          {product.compare_at_price && (
+            <span className="price--old">{product.compare_at_price} RON</span>
+          )}
+          <span className="price--current">{product.base_price} RON</span>
+        </div>
+
+        {/* Stock Status */}
+        {product.stock_quantity > 0 ? (
+          <span className="stock--available">In Stock</span>
+        ) : (
+          <span className="stock--unavailable">Out of Stock</span>
+        )}
+      </div>
+    </Link>
+  )
+}
+
+export default ProductCard

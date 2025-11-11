@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 // Data imports
 import { productsData } from './data/productsData';
+import { supabase } from './lib/supabase'
 
 // Layout components
 import Header from './components/layout/Header';

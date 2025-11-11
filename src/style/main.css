@@ -1,0 +1,43 @@
+:root {
+  /* Navy, White, Gold Theme */
+  --color-navy: #1e3a5f;
+  --color-navy-light: #2c5282;
+  --color-navy-dark: #142636;
+  
+  --color-gold: #d4af37;
+  --color-gold-light: #f4d58d;
+  --color-gold-dark: #b8860b;
+  
+  --color-white: #ffffff;
+  --color-cream: #faf8f3;
+  
+  /* Text colors */
+  --text-primary: var(--color-navy-dark);
+  --text-secondary: #64748b;
+  --text-inverse: var(--color-white);
+}
+
+/* Apply theme */
+body {
+  background-color: var(--color-white);
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-gold-dark);
+}
+
+header {
+  background-color: var(--color-navy);
+  color: var(--color-white);
+}
