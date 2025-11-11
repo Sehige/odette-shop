@@ -1,5 +1,6 @@
 // ========================================
-// PRODUCT API SERVICE
+// PRODUCT SERVICE - For Create React App
+// Path: src/services/productService.js
 // ========================================
 
 import { supabase } from '../lib/supabase'
@@ -11,13 +12,6 @@ import { supabase } from '../lib/supabase'
 export const productService = {
   /**
    * Get all active products with images and category info
-   * @param {Object} options - Query options
-   * @param {string} options.categorySlug - Filter by category slug
-   * @param {boolean} options.featured - Filter featured products
-   * @param {boolean} options.bestSeller - Filter best sellers
-   * @param {number} options.limit - Limit results
-   * @param {string} options.search - Search term
-   * @returns {Promise<{data: Array, error: Error|null}>}
    */
   async getProducts(options = {}) {
     try {
@@ -95,8 +89,6 @@ export const productService = {
 
   /**
    * Get single product by slug
-   * @param {string} slug - Product slug
-   * @returns {Promise<{data: Object, error: Error|null}>}
    */
   async getProductBySlug(slug) {
     try {
@@ -155,8 +147,6 @@ export const productService = {
 
   /**
    * Get product by ID
-   * @param {string} productId - Product UUID
-   * @returns {Promise<{data: Object, error: Error|null}>}
    */
   async getProductById(productId) {
     try {
@@ -181,82 +171,7 @@ export const productService = {
   },
 
   /**
-   * Get related products (same category)
-   * @param {string} productId - Current product ID
-   * @param {string} categoryId - Category ID
-   * @param {number} limit - Number of products to return
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async getRelatedProducts(productId, categoryId, limit = 4) {
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images!inner (
-            image_url,
-            is_primary
-          )
-        `)
-        .eq('category_id', categoryId)
-        .eq('is_active', true)
-        .eq('product_images.is_primary', true)
-        .neq('id', productId)
-        .limit(limit)
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching related products:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Search products
-   * @param {string} searchTerm - Search query
-   * @param {string} language - Language code ('ro' or 'en')
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async searchProducts(searchTerm, language = 'ro') {
-    try {
-      const nameField = language === 'ro' ? 'name_ro' : 'name_en'
-      
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images!inner (
-            image_url,
-            is_primary
-          ),
-          categories (
-            name_ro,
-            name_en,
-            slug
-          )
-        `)
-        .eq('is_active', true)
-        .eq('product_images.is_primary', true)
-        .ilike(nameField, `%${searchTerm}%`)
-        .limit(20)
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error searching products:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
    * Check product availability
-   * @param {string} productId - Product ID
-   * @param {string} variantId - Variant ID (optional)
-   * @param {number} quantity - Desired quantity
-   * @returns {Promise<{available: boolean, stock: number, error: Error|null}>}
    */
   async checkAvailability(productId, variantId = null, quantity = 1) {
     try {
@@ -287,61 +202,6 @@ export const productService = {
       console.error('Error checking availability:', error)
       return { available: false, stock: 0, error }
     }
-  },
-
-  /**
-   * Get product reviews
-   * @param {string} productId - Product ID
-   * @param {number} limit - Number of reviews to return
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async getProductReviews(productId, limit = 10) {
-    try {
-      const { data, error } = await supabase
-        .from('reviews')
-        .select(`
-          *,
-          profiles (
-            full_name
-          ),
-          review_images (
-            image_url
-          )
-        `)
-        .eq('product_id', productId)
-        .eq('is_approved', true)
-        .order('created_at', { ascending: false })
-        .limit(limit)
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching reviews:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Get product reviews summary
-   * @param {string} productId - Product ID
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async getReviewsSummary(productId) {
-    try {
-      const { data, error } = await supabase
-        .from('product_reviews_summary')
-        .select('*')
-        .eq('product_id', productId)
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching reviews summary:', error)
-      return { data: null, error }
-    }
   }
 }
 
@@ -352,8 +212,6 @@ export const productService = {
 export const categoryService = {
   /**
    * Get all active categories
-   * @param {boolean} includeProducts - Include product count
-   * @returns {Promise<{data: Array, error: Error|null}>}
    */
   async getCategories(includeProducts = false) {
     try {
@@ -393,8 +251,6 @@ export const categoryService = {
 
   /**
    * Get category by slug
-   * @param {string} slug - Category slug
-   * @returns {Promise<{data: Object, error: Error|null}>}
    */
   async getCategoryBySlug(slug) {
     try {

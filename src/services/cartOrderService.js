@@ -1,595 +1,269 @@
-// ========================================
-// CART & ORDER API SERVICE
-// ========================================
-
-import { supabase } from '../lib/supabase'
-
 /**
- * Cart Service
- * Handles all shopping cart operations
+ * Cart and Order Service
+ * Handles cart operations and order processing for Odette Pastry Shop
  */
-export const cartService = {
-  /**
-   * Get user's cart items
-   * @param {string} userId - User ID (null for guest)
-   * @param {string} sessionId - Session ID for guests
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async getCartItems(userId = null, sessionId = null) {
-    try {
-      let query = supabase
-        .from('cart_items')
-        .select(`
-          *,
-          products (
-            id,
-            name_ro,
-            name_en,
-            slug,
-            base_price,
-            stock_quantity,
-            is_active,
-            product_images!inner (
-              image_url,
-              is_primary
-            )
-          ),
-          product_variants (
-            id,
-            name_ro,
-            name_en,
-            price_adjustment,
-            stock_quantity
-          )
-        `)
 
-      if (userId) {
-        query = query.eq('user_id', userId)
-      } else if (sessionId) {
-        query = query.eq('session_id', sessionId)
-      } else {
-        throw new Error('Either userId or sessionId required')
-      }
+// Calculate cart totals
+export const calculateCartTotals = (cartItems) => {
+  const subtotal = cartItems.reduce((total, item) => {
+    const basePrice = item.product.price || 0;
+    const sizeMultiplier = item.size?.priceMultiplier || 1;
+    const itemPrice = basePrice * sizeMultiplier * item.quantity;
+    return total + itemPrice;
+  }, 0);
 
-      const { data, error } = await query
+  return {
+    subtotal: subtotal.toFixed(2),
+    itemCount: cartItems.reduce((count, item) => count + item.quantity, 0)
+  };
+};
 
-      if (error) throw error
+// Format price with currency
+export const formatPrice = (price, currency = 'RON') => {
+  return `${parseFloat(price).toFixed(2)} ${currency}`;
+};
 
-      // Filter products with primary images only
-      const filteredData = data.filter(item => 
-        item.products && 
-        item.products.product_images && 
-        item.products.product_images.length > 0
-      )
+// Validate cart item before adding
+export const validateCartItem = (product, options = {}) => {
+  if (!product || !product.id) {
+    throw new Error('Invalid product');
+  }
 
-      return { data: filteredData, error: null }
-    } catch (error) {
-      console.error('Error fetching cart items:', error)
-      return { data: null, error }
+  if (options.quantity && options.quantity < 1) {
+    throw new Error('Quantity must be at least 1');
+  }
+
+  // Check if product requires size selection
+  if (product.sizes && product.sizes.length > 0 && !options.size) {
+    throw new Error('Please select a size');
+  }
+
+  // Check if product requires flavor selection
+  if (product.flavors && product.flavors.length > 0 && !options.flavor) {
+    throw new Error('Please select a flavor');
+  }
+
+  return true;
+};
+
+// Create cart item object
+export const createCartItem = (product, options = {}) => {
+  validateCartItem(product, options);
+
+  return {
+    id: `${product.id}-${options.size?.value || 'default'}-${options.flavor?.value || 'default'}-${Date.now()}`,
+    product,
+    quantity: options.quantity || 1,
+    size: options.size,
+    flavor: options.flavor,
+    addedAt: new Date().toISOString()
+  };
+};
+
+// Get cart from localStorage
+export const getStoredCart = () => {
+  try {
+    const stored = localStorage.getItem('odette_cart');
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Error loading cart from storage:', error);
+    return [];
+  }
+};
+
+// Save cart to localStorage
+export const saveCartToStorage = (cartItems) => {
+  try {
+    localStorage.setItem('odette_cart', JSON.stringify(cartItems));
+    return true;
+  } catch (error) {
+    console.error('Error saving cart to storage:', error);
+    return false;
+  }
+};
+
+// Clear cart from localStorage
+export const clearStoredCart = () => {
+  try {
+    localStorage.removeItem('odette_cart');
+    return true;
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    return false;
+  }
+};
+
+// Generate order number
+export const generateOrderNumber = () => {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000);
+  return `OD${timestamp}${random}`;
+};
+
+// Validate order data
+export const validateOrderData = (orderData) => {
+  const errors = {};
+
+  // Validate name
+  if (!orderData.name || orderData.name.trim().length < 2) {
+    errors.name = 'Name must be at least 2 characters';
+  }
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!orderData.email || !emailRegex.test(orderData.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  // Validate phone
+  const phoneRegex = /^[0-9\s\-\+\(\)]{10,}$/;
+  if (!orderData.phone || !phoneRegex.test(orderData.phone)) {
+    errors.phone = 'Please enter a valid phone number';
+  }
+
+  // Validate address (if delivery)
+  if (orderData.deliveryMethod === 'delivery') {
+    if (!orderData.address || orderData.address.trim().length < 5) {
+      errors.address = 'Please enter a valid delivery address';
     }
-  },
-
-  /**
-   * Add item to cart
-   * @param {Object} item - Cart item data
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async addToCart(item) {
-    try {
-      // Check if item already exists in cart
-      let existingQuery = supabase
-        .from('cart_items')
-        .select('*')
-        .eq('product_id', item.product_id)
-
-      if (item.user_id) {
-        existingQuery = existingQuery.eq('user_id', item.user_id)
-      } else {
-        existingQuery = existingQuery.eq('session_id', item.session_id)
-      }
-
-      if (item.variant_id) {
-        existingQuery = existingQuery.eq('variant_id', item.variant_id)
-      }
-
-      const { data: existing, error: existingError } = await existingQuery.single()
-
-      if (existingError && existingError.code !== 'PGRST116') {
-        throw existingError
-      }
-
-      // If exists, update quantity
-      if (existing) {
-        const newQuantity = existing.quantity + item.quantity
-        const { data, error } = await supabase
-          .from('cart_items')
-          .update({ 
-            quantity: newQuantity,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', existing.id)
-          .select()
-          .single()
-
-        if (error) throw error
-        return { data, error: null }
-      }
-
-      // Otherwise, insert new item
-      const { data, error } = await supabase
-        .from('cart_items')
-        .insert(item)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error adding to cart:', error)
-      return { data: null, error }
+    if (!orderData.city || orderData.city.trim().length < 2) {
+      errors.city = 'Please enter a city';
     }
-  },
-
-  /**
-   * Update cart item quantity
-   * @param {string} cartItemId - Cart item ID
-   * @param {number} quantity - New quantity
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async updateQuantity(cartItemId, quantity) {
-    try {
-      if (quantity <= 0) {
-        return await this.removeFromCart(cartItemId)
-      }
-
-      const { data, error } = await supabase
-        .from('cart_items')
-        .update({ 
-          quantity,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', cartItemId)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error updating cart quantity:', error)
-      return { data: null, error }
+    if (!orderData.postalCode) {
+      errors.postalCode = 'Please enter a postal code';
     }
-  },
+  }
 
-  /**
-   * Remove item from cart
-   * @param {string} cartItemId - Cart item ID
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async removeFromCart(cartItemId) {
-    try {
-      const { data, error } = await supabase
-        .from('cart_items')
-        .delete()
-        .eq('id', cartItemId)
-        .select()
-        .single()
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
 
-      if (error) throw error
+// Create order object
+export const createOrder = (cartItems, orderData) => {
+  const { subtotal, itemCount } = calculateCartTotals(cartItems);
+  const deliveryFee = orderData.deliveryMethod === 'delivery' ? 15 : 0;
+  const total = (parseFloat(subtotal) + deliveryFee).toFixed(2);
 
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error removing from cart:', error)
-      return { data: null, error }
-    }
-  },
+  return {
+    orderNumber: generateOrderNumber(),
+    items: cartItems,
+    customer: {
+      name: orderData.name,
+      email: orderData.email,
+      phone: orderData.phone,
+      address: orderData.address || '',
+      city: orderData.city || '',
+      postalCode: orderData.postalCode || ''
+    },
+    deliveryMethod: orderData.deliveryMethod,
+    paymentMethod: orderData.paymentMethod,
+    deliveryDate: orderData.deliveryDate,
+    deliveryTime: orderData.deliveryTime,
+    specialInstructions: orderData.notes || '',
+    pricing: {
+      subtotal: parseFloat(subtotal),
+      deliveryFee,
+      total: parseFloat(total)
+    },
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+};
 
-  /**
-   * Clear entire cart
-   * @param {string} userId - User ID
-   * @param {string} sessionId - Session ID for guests
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async clearCart(userId = null, sessionId = null) {
-    try {
-      let query = supabase.from('cart_items').delete()
+// Submit order (this would typically make an API call)
+export const submitOrder = async (order) => {
+  try {
+    // In a real application, this would be an API call to your backend
+    // For now, we'll simulate a successful submission
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (userId) {
-        query = query.eq('user_id', userId)
-      } else if (sessionId) {
-        query = query.eq('session_id', sessionId)
-      } else {
-        throw new Error('Either userId or sessionId required')
-      }
-
-      const { data, error } = await query.select()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error clearing cart:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Migrate guest cart to user account
-   * @param {string} sessionId - Guest session ID
-   * @param {string} userId - User ID
-   * @returns {Promise<{success: boolean, error: Error|null}>}
-   */
-  async migrateGuestCart(sessionId, userId) {
-    try {
-      const { data, error } = await supabase
-        .from('cart_items')
-        .update({ 
-          user_id: userId,
-          session_id: null 
-        })
-        .eq('session_id', sessionId)
-        .select()
-
-      if (error) throw error
-
-      return { success: true, error: null }
-    } catch (error) {
-      console.error('Error migrating cart:', error)
-      return { success: false, error }
-    }
-  },
-
-  /**
-   * Get cart total
-   * @param {Array} cartItems - Cart items array
-   * @returns {Object} Cart totals
-   */
-  calculateCartTotals(cartItems) {
-    let subtotal = 0
-    let itemCount = 0
-
-    cartItems.forEach(item => {
-      const basePrice = parseFloat(item.products.base_price)
-      const variantPrice = item.product_variants 
-        ? parseFloat(item.product_variants.price_adjustment || 0)
-        : 0
-      const itemPrice = basePrice + variantPrice
-      
-      subtotal += itemPrice * item.quantity
-      itemCount += item.quantity
-    })
+    // Store order in localStorage for demo purposes
+    const orders = JSON.parse(localStorage.getItem('odette_orders') || '[]');
+    orders.push(order);
+    localStorage.setItem('odette_orders', JSON.stringify(orders));
 
     return {
-      subtotal: subtotal.toFixed(2),
-      itemCount,
-      items: cartItems.length
-    }
+      success: true,
+      order
+    };
+  } catch (error) {
+    console.error('Error submitting order:', error);
+    return {
+      success: false,
+      error: error.message
+    };
   }
-}
+};
 
-/**
- * Order Service
- * Handles all order operations
- */
-export const orderService = {
-  /**
-   * Create new order
-   * @param {Object} orderData - Order information
-   * @param {Array} cartItems - Cart items to include in order
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async createOrder(orderData, cartItems) {
-    try {
-      // Start a Supabase transaction (using RPC function)
-      // First, create the order
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .insert({
-          ...orderData,
-          order_number: await this.generateOrderNumber()
-        })
-        .select()
-        .single()
-
-      if (orderError) throw orderError
-
-      // Create order items
-      const orderItems = cartItems.map(item => ({
-        order_id: order.id,
-        product_id: item.product_id,
-        variant_id: item.variant_id,
-        product_name_ro: item.products.name_ro,
-        product_name_en: item.products.name_en,
-        variant_name_ro: item.product_variants?.name_ro || null,
-        variant_name_en: item.product_variants?.name_en || null,
-        unit_price: parseFloat(item.products.base_price) + 
-                   (item.product_variants ? parseFloat(item.product_variants.price_adjustment || 0) : 0),
-        quantity: item.quantity,
-        subtotal: (parseFloat(item.products.base_price) + 
-                  (item.product_variants ? parseFloat(item.product_variants.price_adjustment || 0) : 0)) * 
-                  item.quantity,
-        special_instructions: item.special_instructions
-      }))
-
-      const { data: items, error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItems)
-        .select()
-
-      if (itemsError) throw itemsError
-
-      // Update inventory
-      for (const item of cartItems) {
-        if (item.variant_id) {
-          await supabase
-            .from('product_variants')
-            .update({
-              stock_quantity: supabase.rpc('decrement', { 
-                x: item.quantity 
-              })
-            })
-            .eq('id', item.variant_id)
-        } else {
-          await supabase
-            .from('products')
-            .update({
-              stock_quantity: supabase.rpc('decrement', { 
-                x: item.quantity 
-              })
-            })
-            .eq('id', item.product_id)
-        }
-      }
-
-      // Clear cart after successful order
-      if (orderData.user_id) {
-        await cartService.clearCart(orderData.user_id)
-      }
-
-      return { 
-        data: { 
-          ...order, 
-          order_items: items 
-        }, 
-        error: null 
-      }
-    } catch (error) {
-      console.error('Error creating order:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Generate unique order number
-   * @returns {Promise<string>}
-   */
-  async generateOrderNumber() {
-    try {
-      const { data, error } = await supabase
-        .rpc('generate_order_number')
-
-      if (error) throw error
-
-      return data
-    } catch (error) {
-      // Fallback if function doesn't exist
-      const prefix = 'ODT'
-      const year = new Date().getFullYear()
-      const random = Math.floor(Math.random() * 10000).toString().padStart(5, '0')
-      return `${prefix}-${year}-${random}`
-    }
-  },
-
-  /**
-   * Get user's orders
-   * @param {string} userId - User ID
-   * @param {number} limit - Number of orders to return
-   * @returns {Promise<{data: Array, error: Error|null}>}
-   */
-  async getUserOrders(userId, limit = 10) {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
-            *,
-            products (
-              name_ro,
-              name_en,
-              product_images!inner (
-                image_url,
-                is_primary
-              )
-            )
-          )
-        `)
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(limit)
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching user orders:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Get order by ID
-   * @param {string} orderId - Order ID
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async getOrderById(orderId) {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
-            *,
-            products (
-              name_ro,
-              name_en,
-              slug
-            )
-          ),
-          order_status_history (
-            *
-          )
-        `)
-        .eq('id', orderId)
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching order:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Get order by order number
-   * @param {string} orderNumber - Order number
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async getOrderByNumber(orderNumber) {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
-            *,
-            products (
-              name_ro,
-              name_en
-            )
-          )
-        `)
-        .eq('order_number', orderNumber)
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error fetching order by number:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Update order status
-   * @param {string} orderId - Order ID
-   * @param {string} newStatus - New status
-   * @param {string} notes - Optional notes
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async updateOrderStatus(orderId, newStatus, notes = null) {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .update({ 
-          status: newStatus,
-          ...(notes && { admin_notes: notes })
-        })
-        .eq('id', orderId)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error updating order status:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Cancel order
-   * @param {string} orderId - Order ID
-   * @param {string} reason - Cancellation reason
-   * @returns {Promise<{data: Object, error: Error|null}>}
-   */
-  async cancelOrder(orderId, reason = null) {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .update({ 
-          status: 'cancelled',
-          cancelled_at: new Date().toISOString(),
-          admin_notes: reason
-        })
-        .eq('id', orderId)
-        .select()
-        .single()
-
-      if (error) throw error
-
-      // TODO: Restore inventory
-
-      return { data, error: null }
-    } catch (error) {
-      console.error('Error cancelling order:', error)
-      return { data: null, error }
-    }
-  },
-
-  /**
-   * Calculate delivery fee based on location
-   * @param {string} city - Delivery city
-   * @param {number} subtotal - Order subtotal
-   * @returns {Promise<number>} Delivery fee
-   */
-  async calculateDeliveryFee(city, subtotal) {
-    try {
-      // Get delivery settings
-      const { data: settings } = await supabase
-        .from('site_settings')
-        .select('setting_value')
-        .eq('setting_key', 'delivery_fee')
-        .single()
-
-      const deliverySettings = settings?.setting_value || { default: 15, free_over: 100 }
-
-      // Free delivery over threshold
-      if (subtotal >= deliverySettings.free_over) {
-        return 0
-      }
-
-      // Check delivery zones
-      const { data: zones } = await supabase
-        .from('site_settings')
-        .select('setting_value')
-        .eq('setting_key', 'delivery_zones')
-        .single()
-
-      const deliveryZones = zones?.setting_value || {}
-
-      // Return zone-specific fee or default
-      const cityLower = city.toLowerCase()
-      for (const [zone, fee] of Object.entries(deliveryZones)) {
-        if (cityLower.includes(zone.toLowerCase())) {
-          return fee
-        }
-      }
-
-      return deliverySettings.default
-    } catch (error) {
-      console.error('Error calculating delivery fee:', error)
-      return 15 // Default fallback
-    }
+// Get order by order number
+export const getOrder = (orderNumber) => {
+  try {
+    const orders = JSON.parse(localStorage.getItem('odette_orders') || '[]');
+    return orders.find(order => order.orderNumber === orderNumber);
+  } catch (error) {
+    console.error('Error retrieving order:', error);
+    return null;
   }
-}
+};
+
+// Get all orders (for admin or user account)
+export const getAllOrders = () => {
+  try {
+    return JSON.parse(localStorage.getItem('odette_orders') || '[]');
+  } catch (error) {
+    console.error('Error retrieving orders:', error);
+    return [];
+  }
+};
+
+// Generate or retrieve session ID for tracking anonymous users
+export const getSessionId = () => {
+  try {
+    let sessionId = sessionStorage.getItem('odette_session_id');
+    
+    if (!sessionId) {
+      // Generate a new session ID
+      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionStorage.setItem('odette_session_id', sessionId);
+    }
+    
+    return sessionId;
+  } catch (error) {
+    console.error('Error managing session ID:', error);
+    // Return a temporary session ID if storage fails
+    return `temp_session_${Date.now()}`;
+  }
+};
+
+// Clear session (useful for logout or session reset)
+export const clearSession = () => {
+  try {
+    sessionStorage.removeItem('odette_session_id');
+    return true;
+  } catch (error) {
+    console.error('Error clearing session:', error);
+    return false;
+  }
+};
 
 export default {
-  cartService,
-  orderService
-}
+  calculateCartTotals,
+  formatPrice,
+  validateCartItem,
+  createCartItem,
+  getStoredCart,
+  saveCartToStorage,
+  clearStoredCart,
+  generateOrderNumber,
+  validateOrderData,
+  createOrder,
+  submitOrder,
+  getOrder,
+  getAllOrders,
+  getSessionId,
+  clearSession
+};
