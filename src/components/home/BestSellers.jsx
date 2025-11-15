@@ -2,13 +2,42 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
-//import { useBestSellers } from '../../products/useBestSellers';
+import { useBestSellers } from '../../hooks/useProducts';
 
-const BestSellers = ({ language, products, addToCart, setSelectedProduct }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const BestSellers = ({ language, addToCart, setSelectedProduct }) => {
+  const [currentIndex, setCurrentIndex] = useState(true);
   const t = translations[language];
-  //const { bestSellers } = getBestSellers(products);
-  const bestSellers = products.filter(p => p.bestseller);
+  
+  const { bestSellers, loading, error } = useBestSellers();
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-900 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading best sellers...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-red-600">Failed to load best sellers</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!bestSellers || bestSellers.length === 0) {
+    return null; // Don't show section if no best sellers
+  }
   
   // Create infinite carousel effect by getting products in a circular manner
   const getVisibleProducts = () => {

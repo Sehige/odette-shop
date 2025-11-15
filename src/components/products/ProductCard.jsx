@@ -37,10 +37,10 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
       >
         <div className="flex items-center gap-2 mb-2">
           <h3 className="text-xl font-semibold text-gray-900">
-            {product.name[language]}
+            {product.name}
           </h3>
           {/* Vegan/Vegetarian Indicators */}
-          {product.isVegan && (
+          {product.isVegetarian && (
             <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
               <Check className="w-3 h-3 text-green-600" />
               <span className="text-xs font-medium text-green-600">
@@ -48,7 +48,7 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
               </span>
             </div>
           )}
-          {product.isVegetarian && !product.isVegan && (
+          {product.isVegetarian && !product.isVegetarian && (
             <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
               <Check className="w-3 h-3 text-green-600" />
               <span className="text-xs font-medium text-green-600">
@@ -58,26 +58,13 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
           )}
         </div>
         <p className="text-gray-600 text-sm mb-4">
-          {product.description[language]}
+          {product.description}
         </p>
         
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex gap-4">
           <span className="text-2xl font-bold" style={{ color: '#d4af37' }}>
             {product.price} {t.lei}
           </span>
-        </div>
-        
-        <div className="flex gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedProduct(product);
-            }}
-            className="flex-1 border-2 py-2 rounded-lg font-medium hover:bg-blue-50 transition"
-            style={{ borderColor: '#1e3a8a', color: '#1e3a8a' }}
-          >
-            {t.viewDetails}
-          </button>
           <button
             onClick={(e) => {
               e.stopPropagation();

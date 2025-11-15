@@ -17,7 +17,7 @@ import {
   getProductsByPriceRange,
   getCategories,
   getFilteredProducts
-} from '../services/productsService';
+} from '../services/productService';
 
 /**
  * Custom hook to fetch all products

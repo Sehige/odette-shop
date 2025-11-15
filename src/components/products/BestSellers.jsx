@@ -149,10 +149,10 @@ const BestSellerCard = ({ product }) => {
           )}
         </div>
 
-        {/* Action Button */}
+        {/* Action Button 
         <button className="w-full bg-gradient-to-r from-[#1e3a8a] to-[#3b82f6] text-white font-semibold py-3 px-6 rounded-lg hover:from-[#1e40af] hover:to-[#2563eb] transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105">
           View Details
-        </button>
+        </button>*/}
       </div>
     </div>
   );

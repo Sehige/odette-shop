@@ -90,9 +90,7 @@ function App() {
           <HeroSection language={language} setCurrentPage={setCurrentPage} />
           <BestSellers
             language={language}
-            products={productsData}
             addToCart={addToCart}
-            setSelectedProduct={setSelectedProduct}
           />
           <FeaturedCategories
             language={language}
