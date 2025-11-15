@@ -91,6 +91,7 @@ function App() {
           <BestSellers
             language={language}
             addToCart={addToCart}
+            setSelectedProduct={setSelectedProduct}
           />
           <FeaturedCategories
             language={language}

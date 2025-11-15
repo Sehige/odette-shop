@@ -15,8 +15,8 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
         onClick={() => setSelectedProduct(product)}
       >
         <img
-          src={product.image}
-          alt={product.name[language]}
+          src={product.image_url}
+          alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
         />
         {/* Add to Favorites Button (future feature) */}
