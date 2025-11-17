@@ -17,7 +17,7 @@ const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart 
           {/* Left Section: Social Media Icons */}
           <div className="flex items-center gap-3">
             <a 
-              href="https://instagram.com/odettepastry" 
+              href="https://www.instagram.com/odette.confiserie/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-pink-600 transition"
@@ -25,7 +25,7 @@ const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart 
               <Instagram className="w-5 h-5" />
             </a>
             <a 
-              href="https://facebook.com/odettepastry" 
+              href="https://www.facebook.com/profile.php?id=61581913980330" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-blue-600 transition"

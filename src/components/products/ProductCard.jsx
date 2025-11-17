@@ -71,7 +71,7 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
               addToCart(product);
             }}
             className="flex-1 text-white py-2 rounded-lg font-medium hover:opacity-90 transition"
-            style={{ backgroundColor: '#d4af37' }}
+            style={{ backgroundColor: '#1e3a8a' }}
           >
             {t.addToCart}
           </button>
