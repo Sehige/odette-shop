@@ -16,7 +16,7 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
       >
         <img
           src={product.image_url}
-          alt={product.name}
+          alt={product.name_ro}
           className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
         />
         {/* Add to Favorites Button (future feature) */}
@@ -37,7 +37,7 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
       >
         <div className="flex items-center gap-2 mb-2">
           <h3 className="text-xl font-semibold text-gray-900">
-            {product.name}
+            {language === 'ro' ? product.name_ro : product.name_en}
           </h3>
           {/* Vegan/Vegetarian Indicators */}
           {product.isVegetarian && (

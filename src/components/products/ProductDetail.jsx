@@ -14,7 +14,6 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
   const { isAuthenticated } = useAuth();
   const t = translations[language];
   
-  // ✅ NEW: Ref for modal content
   const modalContentRef = useRef(null);
 
   // ✅ NEW: Handle ESC key press
@@ -93,7 +92,7 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
       >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
-          <h2 className="text-2xl font-bold text-gray-900">{product.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{language === 'ro' ? product.name_ro : product.name_en}</h2>
           <button 
             onClick={onClose} 
             className="p-2 hover:bg-gray-100 rounded-full transition"
@@ -109,7 +108,7 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
             <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
               <img
                 src={product.image_url}
-                alt={product.name}
+                alt={language === 'ro' ? product.name_ro : product.name_en}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -125,8 +124,7 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
                 )}
               </p>
               
-              <p className="text-gray-600 mb-6">{product.description}</p>
-
+              <p className="text-gray-600 mb-6">{language === 'ro' ? product.description_ro : product.description_en}</p>
               {/* Size Selection */}
               {product.sizes && product.sizes.length > 0 && (
                 <div className="mb-6">
