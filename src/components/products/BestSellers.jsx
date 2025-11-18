@@ -88,7 +88,7 @@ const BestSellerCard = ({ product }) => {
         {product.image_url ? (
           <img
             src={product.image_url}
-            alt={product.name}
+            alt={language === 'ro' ? product.name_ro : product.name_en}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         ) : (
@@ -112,7 +112,7 @@ const BestSellerCard = ({ product }) => {
 
         {/* Name */}
         <h3 className="text-xl font-bold text-gray-800 mb-2">
-          {product.name}
+          {language === 'ro' ? product.name_ro : product.name_en}
         </h3>
 
         {/* Description */}
