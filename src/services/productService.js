@@ -64,7 +64,7 @@ export const getBestSellers = async () => {
       .from('products')
       .select('*')
       .eq('best_seller_flag', true)
-      .order('name', { ascending: true });
+      .order('name_ro', { ascending: true });
 
     if (error) throw error;
 
