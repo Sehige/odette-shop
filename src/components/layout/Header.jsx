@@ -79,7 +79,7 @@ const Header = ({ language, setLanguage, cartItems, setCurrentPage, setShowCart 
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
               className="text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase"
             >
-              {language === 'ro' ? 'EN' : 'RO'}
+              {language === 'ro' ? 'RO' : 'EN'}
             </button>
 
             {/* Shopping Cart with Total */}
