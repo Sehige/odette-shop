@@ -11,6 +11,8 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
   const [selectedCategory, setSelectedCategory] = React.useState('all');
+
+  console.log('Categories in ShopPage:', categories);
   
   const filteredProducts = selectedCategory === 'all' 
     ? allProducts 
@@ -82,18 +84,18 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
           
           {/* Category Buttons */}
           {categories.map(category => {
-            const count = allProducts.filter(p => p.category === category).length;
+            const count = allProducts.filter(p => p.category === category.id).length;
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
                 className={`px-6 py-2 rounded-full font-medium transition ${
-                  selectedCategory === category
+                  selectedCategory === category.id
                     ? 'bg-blue-900 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                {category} ({count})
+                {language === 'ro' ? category.name_ro : category.name_en} ({count})
               </button>
             );
           })}

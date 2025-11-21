@@ -153,20 +153,34 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
  */
 export const getCategories = async () => {
   try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('category')
-      .order('category', { ascending: true });
+      // Step 1: Get all unique category UUIDs from products
+      const { data: productsData, error: productsError } = await supabase
+        .from('products')
+        .select('category');
 
-    if (error) throw error;
+      if (productsError) throw productsError;
 
-    // Extract unique categories
-    const uniqueCategories = [...new Set(data.map(item => item.category))];
+      // Step 2: Extract unique category UUIDs (filter out null/undefined)
+      const uniqueCategoryIds = [...new Set(productsData.map(p => p.category).filter(Boolean))];
 
-    return { data: uniqueCategories, error: null };
+      console.log('Unique category UUIDs from products:', uniqueCategoryIds);
+
+      // Step 3: Fetch the full category data (id, name_ro, name_en) from categories table
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from('categories')
+        .select('id, name_ro, name_en')
+        .in('id', uniqueCategoryIds)
+        .order('name_en', { ascending: true });
+
+      if (categoriesError) throw categoriesError;
+
+      console.log('Categories with names:', categoriesData);
+
+      return { data: categoriesData, error: null };
+
   } catch (error) {
     console.error('Error fetching categories:', error);
-    return { data: null, error };
+    return { data: [], error };
   }
 };
 
