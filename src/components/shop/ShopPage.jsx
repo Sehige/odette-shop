@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
 import TrustBadges from '../home/TrustBadges';
@@ -7,10 +8,19 @@ import { useAllProducts, useCategories } from '../../hooks/useProducts';
 
 const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
   const t = translations[language];
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
   const [selectedCategory, setSelectedCategory] = React.useState('all');
+
+  // Read filter from URL on mount
+  useEffect(() => {
+    const filterParam = searchParams.get('filter');
+    if (filterParam) {
+      setSelectedCategory(filterParam);
+    }
+  }, [searchParams]);
 
   console.log('Categories in ShopPage:', categories);
   
@@ -100,14 +110,7 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
             );
           })}
         </div>
-        
-        {/* Products Count */}
-        <div className="mb-6 text-center text-gray-600">
-          {language === 'ro' 
-            ? `Afișare ${filteredProducts.length} ${filteredProducts.length === 1 ? 'produs' : 'produse'}`
-            : `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
-        </div>
-        
+                
         {/* Products Grid */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

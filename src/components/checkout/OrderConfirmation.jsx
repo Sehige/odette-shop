@@ -1,9 +1,17 @@
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 
-const OrderConfirmation = ({ language, orderNumber, orderData, setCurrentPage }) => {
+const OrderConfirmation = ({ language }) => {
+  const { orderNumber } = useParams();
+  const navigate = useNavigate();
   const t = translations[language];
-  
+
+  // Calculate estimated delivery date (3 days from now)
+  const estimatedDate = new Date();
+  estimatedDate.setDate(estimatedDate.getDate() + 3);
+  const deliveryDate = estimatedDate.toLocaleDateString(language === 'ro' ? 'ro-RO' : 'en-US');
+
   return (
     <div className="pt-24 pb-16 min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="max-w-2xl w-full mx-auto px-4">
@@ -13,10 +21,10 @@ const OrderConfirmation = ({ language, orderNumber, orderData, setCurrentPage })
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          
+
           <h1 className="text-3xl font-bold text-gray-900 mb-2">{t.orderConfirmed}</h1>
           <p className="text-gray-600 mb-6">{t.thankYou}</p>
-          
+
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <div className="text-sm text-gray-600 mb-1">{t.orderNumber}</div>
             <div className="text-2xl font-bold" style={{ color: '#d4af37' }}>#{orderNumber}</div>
@@ -24,11 +32,11 @@ const OrderConfirmation = ({ language, orderNumber, orderData, setCurrentPage })
 
           <p className="text-gray-600 mb-2">{t.orderEmail}</p>
           <p className="text-sm text-gray-500 mb-8">
-            {t.estimatedDelivery}: <strong>{orderData.deliveryDate}</strong>
+            {t.estimatedDelivery}: <strong>{deliveryDate}</strong>
           </p>
 
           <button
-            onClick={() => setCurrentPage('home')}
+            onClick={() => navigate('/')}
             className="text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition"
             style={{ backgroundColor: '#d4af37' }}
           >

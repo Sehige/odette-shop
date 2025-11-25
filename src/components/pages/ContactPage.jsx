@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-react';
 
-const ContactPage = ({ language, setCurrentPage }) => {
+const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -94,20 +94,15 @@ const ContactPage = ({ language, setCurrentPage }) => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative py-16 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)'
-          }}></div>
+      
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+            {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
+          </h1>
+          <p className="text-xl text-gray-600">
+          </p>
         </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">{t.title}</h1>
-            <p className="text-xl" style={{ color: '#d4af37' }}>{t.subtitle}</p>
-          </div>
-        </div>
-      </section>
 
       {/* Main Content */}
       <section className="py-16">

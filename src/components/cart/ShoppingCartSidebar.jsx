@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
 import { translations } from '../../data/translations';
 
-const ShoppingCartSidebar = ({ language, cartItems, updateQuantity, removeFromCart, onClose, setCurrentPage }) => {
+const ShoppingCartSidebar = ({ language, cartItems, updateQuantity, removeFromCart, onClose }) => {
+  const navigate = useNavigate();
   const t = translations[language];
   
   const subtotal = cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -29,7 +31,7 @@ const ShoppingCartSidebar = ({ language, cartItems, updateQuantity, removeFromCa
               <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 mb-4">{t.cartEmpty}</p>
               <button
-                onClick={() => { onClose(); setCurrentPage('shop'); }}
+                onClick={() => { onClose(); navigate('/shop'); }}
                 className="font-medium hover:opacity-80"
                 style={{ color: '#1e3a8a' }}
               >
@@ -106,7 +108,7 @@ const ShoppingCartSidebar = ({ language, cartItems, updateQuantity, removeFromCa
               <span style={{ color: '#d4af37' }}>{total} {t.lei}</span>
             </div>
             <button
-              onClick={() => { onClose(); setCurrentPage('checkout'); }}
+              onClick={() => { onClose(); navigate('/checkout'); }}
               className="w-full text-white py-4 rounded-lg font-semibold hover:opacity-90 transition"
               style={{ backgroundColor: '#d4af37' }}
             >

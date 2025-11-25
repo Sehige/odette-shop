@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { HERO_IMAGE, CAKE_IMAGE, ECLAIR_IMAGE, MACARON_IMAGE, BERRY_TART_IMAGE } from '../../data/imageConstants';
 
-const HeroSection = ({ language, setCurrentPage }) => {
+const HeroSection = ({ language }) => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const t = translations[language];
   
@@ -74,8 +76,8 @@ const HeroSection = ({ language, setCurrentPage }) => {
               <p className="text-xl md:text-2xl mb-8 text-white/95 drop-shadow">
                 {slide.subtitle[language]}
               </p>
-              <button 
-                onClick={() => setCurrentPage('shop')}
+              <button
+                onClick={() => navigate('/shop')}
                 className="text-blue-900 px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition transform hover:scale-105 shadow-xl"
                 style={{ backgroundColor: '#d4af37' }}
               >

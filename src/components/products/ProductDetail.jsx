@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Minus, Plus } from 'lucide-react';
+import { X, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { translations } from '../../data/translations';
 import ProductCard from './ProductCard';
 import { createCartItem, validateCartItem } from '../../services/cartOrderService';
@@ -204,10 +204,11 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg"
+                className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
                 style={{ backgroundColor: '#d4af37' }}
               >
-                {t.addToCart || 'Add to Cart'} - {calculateTotalPrice()} {t.lei}
+                <ShoppingCart className="w-5 h-5" />
+                {calculateTotalPrice()} {t.lei}
               </button>
 
               {/* User Authentication Prompt (Optional) */}

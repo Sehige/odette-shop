@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { CAKE_IMAGE, ECLAIR_IMAGE, MACARON_IMAGE, HERO_IMAGE } from '../../data/imageConstants';
 
-const FeaturedCategories = ({ language, setCurrentPage, setFilter }) => {
+const FeaturedCategories = ({ language }) => {
+  const navigate = useNavigate();
   const t = translations[language];
-  
+
   const categories = [
     {
       id: 'cakes',
@@ -33,8 +35,7 @@ const FeaturedCategories = ({ language, setCurrentPage, setFilter }) => {
   ];
 
   const handleCategoryClick = (categoryId) => {
-    setFilter(categoryId);
-    setCurrentPage('shop');
+    navigate(`/shop?filter=${categoryId}`);
   };
 
   return (

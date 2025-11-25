@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { translations } from '../../data/translations';
 
-const Footer = ({ language, setCurrentPage }) => {
+const Footer = ({ language }) => {
+  const navigate = useNavigate();
   const t = translations[language];
   
   return (
@@ -24,27 +26,27 @@ const Footer = ({ language, setCurrentPage }) => {
             <h4 className="text-xl font-semibold mb-4">{t.quickLinks}</h4>
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
-                <button onClick={() => setCurrentPage('home')} className="hover:text-white transition">
+                <button onClick={() => navigate('/')} className="hover:text-white transition">
                   {t.home}
                 </button>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('shop')} className="hover:text-white transition">
+                <button onClick={() => navigate('/shop')} className="hover:text-white transition">
                   {t.shop}
                 </button>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('events')} className="hover:text-white transition">
+                <button onClick={() => navigate('/events')} className="hover:text-white transition">
                   {t.events}
                 </button>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('about')} className="hover:text-white transition">
+                <button onClick={() => navigate('/about')} className="hover:text-white transition">
                   {t.about}
                 </button>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('contact')} className="hover:text-white transition">
+                <button onClick={() => navigate('/contact')} className="hover:text-white transition">
                   {t.contact}
                 </button>
               </li>

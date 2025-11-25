@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Check } from 'lucide-react';
+import { Heart, Check, ShoppingCart } from 'lucide-react';
 import { translations } from '../../data/translations';
 
 const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
@@ -70,10 +70,10 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
               e.stopPropagation();
               addToCart(product);
             }}
-            className="flex-1 text-white py-2 rounded-lg font-medium hover:opacity-90 transition"
+            className="flex-1 text-white py-2 rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center"
             style={{ backgroundColor: '#1e3a8a' }}
           >
-            {t.addToCart}
+            <ShoppingCart className="w-5 h-5" />
           </button>
         </div>
       </div>

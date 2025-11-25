@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 
-const CheckoutPage = ({ language, cartItems, onOrderComplete }) => {
+const CheckoutPage = ({ language, cartItems }) => {
+  const navigate = useNavigate();
   const t = translations[language];
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +35,10 @@ const CheckoutPage = ({ language, cartItems, onOrderComplete }) => {
       alert(language === 'ro' ? 'Vă rugăm să acceptați termenii și condițiile' : 'Please accept terms and conditions');
       return;
     }
-    onOrderComplete(formData);
+    // Generate a random order number
+    const orderNumber = Math.floor(100000 + Math.random() * 900000);
+    // Navigate to order confirmation page with order number
+    navigate(`/order-confirmation/${orderNumber}`);
   };
 
   const handleChange = (e) => {

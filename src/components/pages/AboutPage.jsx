@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Heart, Award, Users, Clock } from 'lucide-react';
 
-const AboutPage = ({ language, setCurrentPage }) => {
+const AboutPage = ({ language }) => {
+  const navigate = useNavigate();
   const content = {
     ro: {
       title: 'Despre Odette',
@@ -192,7 +194,7 @@ const AboutPage = ({ language, setCurrentPage }) => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">{t.cta}</h2>
           <button
-            onClick={() => setCurrentPage('shop')}
+            onClick={() => navigate('/shop')}
             className="px-8 py-4 text-lg font-semibold rounded-lg hover:opacity-90 transition"
             style={{ backgroundColor: '#d4af37', color: 'white' }}
           >
