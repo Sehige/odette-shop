@@ -35,8 +35,8 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
         className="p-6"
         onClick={() => setSelectedProduct(product)}
       >
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="text-xl font-semibold text-gray-900">
+        <div className="flex items-center gap-2 mb-3 h-12">
+          <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
             {language === 'ro' ? product.name_ro : product.name_en}
           </h3>
           {/* Vegan/Vegetarian Indicators */}
@@ -57,11 +57,13 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
             </div>
           )}
         </div>
-        <p className="text-gray-600 text-sm mb-4">
-          {product.description}
-        </p>
-        
-        <div className="flex gap-4">
+        <div className="mb-4 h-10">
+          <p className="text-gray-600 text-sm line-clamp-2">
+            {product.description}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
           <span className="text-2xl font-bold" style={{ color: '#d4af37' }}>
             {product.price} {t.lei}
           </span>
@@ -70,7 +72,7 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
               e.stopPropagation();
               addToCart(product);
             }}
-            className="flex-1 text-white py-2 rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center"
+            className="w-12 h-12 text-white rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: '#1e3a8a' }}
           >
             <ShoppingCart className="w-5 h-5" />
