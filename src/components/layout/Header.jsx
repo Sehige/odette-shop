@@ -11,10 +11,10 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
 
   return (
     <header className="fixed w-full top-0 z-40 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-[80px_auto_1fr_auto] items-center h-20 gap-6">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[80px_auto_1fr_auto] items-center h-20 gap-2 sm:gap-4 lg:gap-6">
           {/* Container 1: Social Media Icons */}
-          <div className="flex items-center justify-start gap-2">
+          <div className="hidden sm:flex items-center justify-start gap-2">
             <a
               href="https://www.instagram.com/odette.confiserie/"
               target="_blank"
@@ -34,9 +34,9 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
           </div>
 
           {/* Container 2: Logo and Brand Name */}
-          <div className="flex items-center justify-start gap-3">
+          <div className="flex items-center justify-start gap-2 sm:gap-3">
             {/* Generic Logo Placeholder */}
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
               <img
                 src={`${process.env.PUBLIC_URL}/logo_swan.png`}
                 alt="Odette Logo"
@@ -87,11 +87,11 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
           </nav>
 
           {/* Container 4: Language Toggle and Shopping Cart */}
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-2 sm:gap-4">
             {/* Language Toggle */}
             <button
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
-              className="w-10 text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase text-center"
+              className="w-8 sm:w-10 text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase text-center"
             >
               {language === 'ro' ? 'RO' : 'EN'}
             </button>
@@ -99,9 +99,9 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
             {/* Shopping Cart */}
             <button
               onClick={() => setShowCart(true)}
-              className="relative w-12 h-12 flex items-center justify-center text-gray-700 hover:text-blue-900 transition"
+              className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-gray-700 hover:text-blue-900 transition"
             >
-              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
               {cartItemsCount > 0 && (
                 <span className="absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
                   style={{ backgroundColor: '#d4af37' }}>
