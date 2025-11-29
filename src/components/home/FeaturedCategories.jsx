@@ -1,42 +1,61 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
-import { CAKE_IMAGE, ECLAIR_IMAGE, MACARON_IMAGE, HERO_IMAGE } from '../../data/imageConstants';
+import { useFeaturedCategories } from '../../hooks/useProducts';
 
 const FeaturedCategories = ({ language }) => {
   const navigate = useNavigate();
   const t = translations[language];
-
-  const categories = [
-    {
-      id: 'cakes',
-      name: { ro: 'Torturi', en: 'Cakes' },
-      image: CAKE_IMAGE,
-      description: { ro: 'Torturi premium pentru orice ocazie', en: 'Premium cakes for any occasion' }
-    },
-    {
-      id: 'pastries',
-      name: { ro: 'Prăjituri', en: 'Pastries' },
-      image: ECLAIR_IMAGE,
-      description: { ro: 'Prăjituri fine și delicioase', en: 'Fine and delicious pastries' }
-    },
-    {
-      id: 'cookies',
-      name: { ro: 'Cookies & Macarons', en: 'Cookies & Macarons' },
-      image: MACARON_IMAGE,
-      description: { ro: 'Delicii mici pentru momente dulci', en: 'Small delights for sweet moments' }
-    },
-    {
-      id: 'events',
-      name: { ro: 'Evenimente Speciale', en: 'Special Events' },
-      image: HERO_IMAGE,
-      description: { ro: 'Comenzi personalizate pentru evenimente', en: 'Custom orders for events' }
-    }
-  ];
+  const { categories, loading, error } = useFeaturedCategories();
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/shop?filter=${categoryId}`);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              {t.categories}
+            </h2>
+            <p className="text-xl text-gray-600">{t.categoriesSubtitle}</p>
+          </div>
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-900"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              {t.categories}
+            </h2>
+            <p className="text-xl text-gray-600">{t.categoriesSubtitle}</p>
+          </div>
+          <div className="text-center py-12">
+            <p className="text-red-600 text-lg">
+              {language === 'ro' ? 'Eroare la încărcarea categoriilor' : 'Error loading categories'}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Empty state
+  if (!categories || categories.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-20 bg-white">
@@ -55,15 +74,18 @@ const FeaturedCategories = ({ language }) => {
               onClick={() => handleCategoryClick(category.id)}
               className="relative rounded-2xl overflow-hidden cursor-pointer group aspect-square"
             >
-              <img
-                src={category.image}
-                alt={category.name[language]}
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
-              />
+              {category.imageURL && (
+                <img
+                  src={category.imageURL}
+                  alt={language === 'ro' ? category.name_ro : category.name_en}
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                 <div className="text-white">
-                  <h3 className="text-2xl font-bold mb-2">{category.name[language]}</h3>
-                  <p className="text-white/90 text-sm">{category.description[language]}</p>
+                  <h3 className="text-2xl font-bold mb-2">
+                    {language === 'ro' ? category.name_ro : category.name_en}
+                  </h3>
                 </div>
               </div>
             </div>

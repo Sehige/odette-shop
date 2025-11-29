@@ -16,6 +16,7 @@ import {
   searchProducts,
   getProductsByPriceRange,
   getCategories,
+  getFeaturedCategories,
   getFilteredProducts
 } from '../services/productService';
 
@@ -225,7 +226,7 @@ export const useProductSearch = () => {
 
 /**
  * Custom hook to get all categories
- * 
+ *
  * @returns {Object} { categories, loading, error, refetch }
  */
 export const useCategories = () => {
@@ -236,16 +237,16 @@ export const useCategories = () => {
   const fetchCategories = async () => {
     setLoading(true);
     setError(null);
-    
+
     const { data, error } = await getCategories();
-    
+
     if (error) {
       setError(error);
       setCategories([]);
     } else {
       setCategories(data || []);
     }
-    
+
     setLoading(false);
   };
 
@@ -253,9 +254,47 @@ export const useCategories = () => {
     fetchCategories();
   }, []);
 
-  return { 
-    categories, 
-    loading, 
+  return {
+    categories,
+    loading,
+    error,
+    refetch: fetchCategories
+  };
+};
+
+/**
+ * Custom hook to get featured categories for home page
+ *
+ * @returns {Object} { categories, loading, error, refetch }
+ */
+export const useFeaturedCategories = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchCategories = async () => {
+    setLoading(true);
+    setError(null);
+
+    const { data, error } = await getFeaturedCategories();
+
+    if (error) {
+      setError(error);
+      setCategories([]);
+    } else {
+      setCategories(data || []);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  return {
+    categories,
+    loading,
     error,
     refetch: fetchCategories
   };

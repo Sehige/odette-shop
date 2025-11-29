@@ -5,8 +5,8 @@
 export const siteConfig = {
   // Contact Information
   contact: {
-    phone: '+40 769 690 111',
-    email: 'comenzi@odette.ro',
+    phone: '+40 756 157 067',
+    email: 'odette.confiserie@gmail.com',
     address: {
       ro: 'Strada Câmpului 133, Cluj-Napoca, România',
       en: '133 Câmpului Street, Cluj-Napoca, Romania'

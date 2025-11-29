@@ -148,7 +148,7 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
 
 /**
  * Get unique categories from products
- * 
+ *
  * @returns {Promise<{data: Array, error: Error|null}>}
  */
 export const getCategories = async () => {
@@ -180,6 +180,28 @@ export const getCategories = async () => {
 
   } catch (error) {
     console.error('Error fetching categories:', error);
+    return { data: [], error };
+  }
+};
+
+/**
+ * Get featured categories for home page
+ *
+ * @returns {Promise<{data: Array, error: Error|null}>}
+ */
+export const getFeaturedCategories = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('id, name_ro, name_en, imageURL')
+      .eq('isFeatured', true)
+      .order('name_en', { ascending: true });
+
+    if (error) throw error;
+
+    return { data, error: null };
+  } catch (error) {
+    console.error('Error fetching featured categories:', error);
     return { data: [], error };
   }
 };
