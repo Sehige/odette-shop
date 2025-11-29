@@ -6,6 +6,7 @@ import { productsData } from './data/productsData';
 
 // Layout components
 import Layout from './components/layout/Layout';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Product components
 import ProductDetail from './components/products/ProductDetail';
@@ -56,6 +57,7 @@ function App() {
 
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <ScrollToTop />
       <div className="min-h-screen bg-white">
         <Routes>
           <Route
