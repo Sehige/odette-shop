@@ -1,101 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Award, Users, Clock } from 'lucide-react';
+import { translations } from '../../data/translations';
 
 const AboutPage = ({ language }) => {
   const navigate = useNavigate();
-  const content = {
-    ro: {
-      title: 'Despre Odette',
-      subtitle: 'Patiserie Artizanală din Inimă',
-      story: {
-        title: 'Povestea Noastră',
-        text: `Odette a luat naștere din pasiunea pentru patiserie fină și dorința de a aduce bucurie prin fiecare creație. 
-        Începută ca un vis modest, astăzi suntem mândri să oferim cele mai delicioase torturi și prăjituri din orașul nostru. 
-        Fiecare produs este realizat cu ingrediente premium și multă dragoste, respectând rețete tradiționale dar și inovând constant.`
-      },
-      mission: {
-        title: 'Misiunea Noastră',
-        text: 'Să creăm momente dulci și memorabile pentru fiecare client, oferind produse de cea mai înaltă calitate, realizate cu pasiune și dedicare.'
-      },
-      values: {
-        title: 'Valorile Noastre',
-        items: [
-          {
-            icon: Heart,
-            title: 'Pasiune',
-            description: 'Fiecare produs este făcut cu dragoste și atenție la detalii'
-          },
-          {
-            icon: Award,
-            title: 'Calitate Premium',
-            description: 'Folosim doar cele mai bune ingrediente, multe dintre ele importate'
-          },
-          {
-            icon: Users,
-            title: 'Orientare către Client',
-            description: 'Satisfacția clientului este prioritatea noastră numărul unu'
-          },
-          {
-            icon: Clock,
-            title: 'Prospeţime',
-            description: 'Produsele noastre sunt preparate zilnic, proaspete și delicioase'
-          }
-        ]
-      },
-      team: {
-        title: 'Echipa Noastră',
-        description: 'Suntem o echipă de patiseri pasionați, fiecare cu propria specialitate și dragostea pentru arta culinară.'
-      },
-      cta: 'Descoperă Produsele Noastre'
-    },
-    en: {
-      title: 'About Odette',
-      subtitle: 'Artisan Pastries from the Heart',
-      story: {
-        title: 'Our Story',
-        text: `Odette was born from a passion for fine pastries and the desire to bring joy through every creation. 
-        Started as a modest dream, today we are proud to offer the most delicious cakes and pastries in our city. 
-        Each product is made with premium ingredients and lots of love, respecting traditional recipes while constantly innovating.`
-      },
-      mission: {
-        title: 'Our Mission',
-        text: 'To create sweet and memorable moments for every customer, offering the highest quality products, made with passion and dedication.'
-      },
-      values: {
-        title: 'Our Values',
-        items: [
-          {
-            icon: Heart,
-            title: 'Passion',
-            description: 'Every product is made with love and attention to detail'
-          },
-          {
-            icon: Award,
-            title: 'Premium Quality',
-            description: 'We use only the best ingredients, many of them imported'
-          },
-          {
-            icon: Users,
-            title: 'Customer Oriented',
-            description: 'Customer satisfaction is our number one priority'
-          },
-          {
-            icon: Clock,
-            title: 'Freshness',
-            description: 'Our products are prepared daily, fresh and delicious'
-          }
-        ]
-      },
-      team: {
-        title: 'Our Team',
-        description: 'We are a team of passionate pastry chefs, each with their own specialty and love for culinary arts.'
-      },
-      cta: 'Discover Our Products'
-    }
-  };
+  const t = translations[language].about;
 
-  const t = content[language];
+  // Map the icons to the values from translations
+  const valuesWithIcons = [
+    { ...t.values.passion, icon: Heart },
+    { ...t.values.quality, icon: Award },
+    { ...t.values.customer, icon: Users },
+    { ...t.values.freshness, icon: Clock }
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -149,7 +67,7 @@ const AboutPage = ({ language }) => {
             {t.values.title}
           </h2>
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.values.items.map((value, index) => {
+            {valuesWithIcons.map((value, index) => {
               const Icon = value.icon;
               return (
                 <div key={index} className="bg-white p-8 rounded-2xl text-center hover:shadow-xl transition border-2 border-gray-100">

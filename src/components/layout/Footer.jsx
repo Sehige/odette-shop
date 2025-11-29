@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { translations } from '../../data/translations';
+import { siteConfig } from '../../data/siteConfig';
+import { getGoogleMapsUrl } from '../../utils/mapUtils';
 
 const Footer = ({ language }) => {
   const navigate = useNavigate();
@@ -32,22 +34,22 @@ const Footer = ({ language }) => {
               </li>
               <li>
                 <button onClick={() => navigate('/shop')} className="hover:text-white transition">
-                  {t.shop}
+                  {t.shopNav}
                 </button>
               </li>
               <li>
                 <button onClick={() => navigate('/events')} className="hover:text-white transition">
-                  {t.events}
+                  {t.eventsNav}
                 </button>
               </li>
               <li>
                 <button onClick={() => navigate('/about')} className="hover:text-white transition">
-                  {t.about}
+                  {t.aboutNav}
                 </button>
               </li>
               <li>
                 <button onClick={() => navigate('/contact')} className="hover:text-white transition">
-                  {t.contact}
+                  {t.contactNav}
                 </button>
               </li>
             </ul>
@@ -55,19 +57,30 @@ const Footer = ({ language }) => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-xl font-semibold mb-4">{t.contact}</h4>
+            <h4 className="text-xl font-semibold mb-4">{t.contactNav}</h4>
             <ul className="space-y-3 text-blue-100 text-base">
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5" />
-                <span>+40 123 456 789</span>
+                <a href={`tel:${siteConfig.contact.phone}`} className="hover:text-white transition">
+                  {siteConfig.contact.phone}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5" />
-                <span>contact@odette.ro</span>
+                <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-white transition">
+                  {siteConfig.contact.email}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <MapPin className="w-5 h-5" />
-                <span>Cluj-Napoca, Romania</span>
+                <a
+                  href={getGoogleMapsUrl(siteConfig.contact.address[language])}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition"
+                >
+                  {siteConfig.contact.address[language]}
+                </a>
               </li>
             </ul>
           </div>

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-react';
+import { translations } from '../../data/translations';
+import { siteConfig } from '../../data/siteConfig';
+import { getGoogleMapsUrl } from '../../utils/mapUtils';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
@@ -11,67 +14,14 @@ const ContactPage = ({ language }) => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const content = {
-    ro: {
-      title: 'Contactează-ne',
-      subtitle: 'Suntem aici să te ajutăm',
-      form: {
-        title: 'Trimite-ne un mesaj',
-        name: 'Nume Complet',
-        email: 'Email',
-        phone: 'Telefon',
-        subject: 'Subiect',
-        message: 'Mesaj',
-        send: 'Trimite Mesaj',
-        success: 'Mulțumim! Mesajul tău a fost trimis cu succes. Te vom contacta în curând.'
-      },
-      info: {
-        title: 'Informații Contact',
-        address: 'Strada Exemplu nr. 123, Cluj-Napoca, România',
-        phone: '+40 123 456 789',
-        email: 'contact@odette.ro',
-        hours: 'Luni - Vineri: 9:00 - 18:00\nSâmbătă: 10:00 - 16:00\nDuminică: Închis'
-      },
-      social: {
-        title: 'Urmărește-ne',
-        description: 'Rămâi la curent cu cele mai noi creații'
-      }
-    },
-    en: {
-      title: 'Contact Us',
-      subtitle: 'We\'re here to help',
-      form: {
-        title: 'Send us a message',
-        name: 'Full Name',
-        email: 'Email',
-        phone: 'Phone',
-        subject: 'Subject',
-        message: 'Message',
-        send: 'Send Message',
-        success: 'Thank you! Your message has been sent successfully. We will contact you soon.'
-      },
-      info: {
-        title: 'Contact Information',
-        address: '123 Example Street, Cluj-Napoca, Romania',
-        phone: '+40 123 456 789',
-        email: 'contact@odette.ro',
-        hours: 'Monday - Friday: 9:00 - 18:00\nSaturday: 10:00 - 16:00\nSunday: Closed'
-      },
-      social: {
-        title: 'Follow Us',
-        description: 'Stay updated with our latest creations'
-      }
-    }
-  };
-
-  const t = content[language];
+  const t = translations[language].contact;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // In a real app, this would send the data to a backend
     console.log('Form submitted:', formData);
     setSubmitted(true);
-    
+
     // Reset form after 3 seconds
     setTimeout(() => {
       setSubmitted(false);
@@ -93,14 +43,16 @@ const ContactPage = ({ language }) => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      
+    <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
-            {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
+            {t.title}
           </h1>
           <p className="text-xl text-gray-600">
+            {t.subtitle}
           </p>
         </div>
 
@@ -113,7 +65,7 @@ const ContactPage = ({ language }) => {
               {/* Map Container - Hidden on mobile */}
               <div className="hidden md:block bg-gray-200 rounded-2xl overflow-hidden h-[500px]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d672.8753447668936!2d23.565536321524463!3d46.75195891545976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47490e709572c49f%3A0x6b715e9d951f019!2sStrada%20C%C3%A2mpului%20133%2C%20Cluj-Napoca%20400394%2C%20Romania!5e0!3m2!1sen!2sro!4v1732634400000!5m2!1sen!2sro"
+                  src={siteConfig.mapUrl}
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -127,7 +79,7 @@ const ContactPage = ({ language }) => {
               {/* Contact Information Container */}
               <div className="space-y-6">
                 <h2 className="text-3xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
-                  {t.info.title}
+                  {t.infoTitle}
                 </h2>
 
                 <div className="space-y-6">
@@ -137,8 +89,15 @@ const ContactPage = ({ language }) => {
                       <MapPin className="text-white" size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Adresă / Address</h3>
-                      <p className="text-gray-600">{t.info.address}</p>
+                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.address}</h3>
+                      <a
+                        href={getGoogleMapsUrl(siteConfig.contact.address[language])}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-blue-900 hover:underline transition"
+                      >
+                        {siteConfig.contact.address[language]}
+                      </a>
                     </div>
                   </div>
 
@@ -148,9 +107,9 @@ const ContactPage = ({ language }) => {
                       <Phone className="text-white" size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Telefon / Phone</h3>
-                      <a href={`tel:${t.info.phone}`} className="text-gray-600 hover:text-blue-900 transition">
-                        {t.info.phone}
+                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.phone}</h3>
+                      <a href={`tel:${siteConfig.contact.phone}`} className="text-gray-600 hover:text-blue-900 transition">
+                        {siteConfig.contact.phone}
                       </a>
                     </div>
                   </div>
@@ -161,9 +120,9 @@ const ContactPage = ({ language }) => {
                       <Mail className="text-white" size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                      <a href={`mailto:${t.info.email}`} className="text-gray-600 hover:text-blue-900 transition">
-                        {t.info.email}
+                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.email}</h3>
+                      <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-600 hover:text-blue-900 transition">
+                        {siteConfig.contact.email}
                       </a>
                     </div>
                   </div>
@@ -174,20 +133,20 @@ const ContactPage = ({ language }) => {
                       <Clock className="text-white" size={24} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">Program / Hours</h3>
-                      <p className="text-gray-600 whitespace-pre-line">{t.info.hours}</p>
+                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.hours}</h3>
+                      <p className="text-gray-600 whitespace-pre-line">{siteConfig.hours[language]}</p>
                     </div>
                   </div>
 
                   {/* Social Media */}
                   <div className="pt-4 border-t border-gray-200">
                     <h3 className="text-xl font-bold mb-3" style={{ color: '#1e3a8a' }}>
-                      {t.social.title}
+                      {t.socialTitle}
                     </h3>
-                    <p className="text-gray-600 mb-4">{t.social.description}</p>
+                    <p className="text-gray-600 mb-4">{t.socialDescription}</p>
                     <div className="flex gap-4">
                       <a
-                        href="https://instagram.com/odettepastry"
+                        href={siteConfig.social.instagram}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
@@ -196,7 +155,7 @@ const ContactPage = ({ language }) => {
                         <Instagram className="text-white" size={24} />
                       </a>
                       <a
-                        href="https://facebook.com/odettepastry"
+                        href={siteConfig.social.facebook}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
@@ -213,7 +172,7 @@ const ContactPage = ({ language }) => {
             {/* Bottom Section: Contact Form */}
             <div className="max-w-3xl mx-auto bg-gray-50 p-8 rounded-2xl">
               <h2 className="text-3xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
-                {t.form.title}
+                {t.formTitle}
               </h2>
 
               {submitted ? (
@@ -222,14 +181,14 @@ const ContactPage = ({ language }) => {
                     <Send className="text-white" size={32} />
                   </div>
                   <p className="text-green-700 font-medium">
-                    {t.form.success}
+                    {t.success}
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.form.name} *
+                      {t.labels.name} *
                     </label>
                     <input
                       type="text"
@@ -243,7 +202,7 @@ const ContactPage = ({ language }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.form.email} *
+                      {t.labels.email} *
                     </label>
                     <input
                       type="email"
@@ -257,7 +216,7 @@ const ContactPage = ({ language }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.form.phone}
+                      {t.labels.phone}
                     </label>
                     <input
                       type="tel"
@@ -270,7 +229,7 @@ const ContactPage = ({ language }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.form.subject} *
+                      {t.labels.subject} *
                     </label>
                     <input
                       type="text"
@@ -284,7 +243,7 @@ const ContactPage = ({ language }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.form.message} *
+                      {t.labels.message} *
                     </label>
                     <textarea
                       name="message"
@@ -302,7 +261,7 @@ const ContactPage = ({ language }) => {
                     style={{ backgroundColor: '#d4af37' }}
                   >
                     <Send size={20} />
-                    {t.form.send}
+                    {t.send}
                   </button>
                 </form>
               )}
@@ -310,6 +269,7 @@ const ContactPage = ({ language }) => {
           </div>
         </div>
       </section>
+    </div>
     </div>
   );
 };

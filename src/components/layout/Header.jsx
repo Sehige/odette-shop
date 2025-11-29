@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
+import { siteConfig } from '../../data/siteConfig';
 
 const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
           {/* Container 1: Social Media Icons */}
           <div className="hidden sm:flex items-center justify-start gap-2">
             <a
-              href="https://www.instagram.com/odette.confiserie/"
+              href={siteConfig.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-pink-600 transition"
@@ -24,7 +25,7 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="https://www.facebook.com/profile.php?id=61581913980330"
+              href={siteConfig.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-blue-600 transition"
@@ -64,25 +65,25 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
               onClick={() => navigate('/shop')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
-              {t.shop}
+              {t.shopNav}
             </button>
             <button
               onClick={() => navigate('/events')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
-              {t.events}
+              {t.eventsNav}
             </button>
             <button
               onClick={() => navigate('/about')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
-              {t.about}
+              {t.aboutNav}
             </button>
             <button
               onClick={() => navigate('/contact')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
-              {t.contact}
+              {t.contactNav}
             </button>
           </nav>
 
@@ -128,16 +129,16 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
                 {t.home}
               </button>
               <button onClick={() => { navigate('/shop'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.shop}
+                {t.shopNav}
               </button>
               <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.events}
+                {t.eventsNav}
               </button>
               <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.about}
+                {t.aboutNav}
               </button>
               <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.contact}
+                {t.contactNav}
               </button>
             </nav>
           </div>

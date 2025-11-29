@@ -8,6 +8,7 @@ import { useAllProducts, useCategories } from '../../hooks/useProducts';
 
 const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
   const t = translations[language];
+  const shopT = translations[language].shop;
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
@@ -35,7 +36,7 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-900 mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">
-            {language === 'ro' ? 'Se încarcă produsele...' : 'Loading products...'}
+            {shopT.loading}
           </p>
         </div>
       </div>
@@ -48,13 +49,13 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-lg mb-4">
-            {language === 'ro' ? 'Eroare la încărcarea produselor' : 'Error loading products'}
+            {shopT.error}
           </p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800"
           >
-            {language === 'ro' ? 'Încercați din nou' : 'Try Again'}
+            {shopT.tryAgain}
           </button>
         </div>
       </div>
@@ -69,12 +70,12 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
-            {language === 'ro' ? 'Magazin' : 'Shop'}
+            {shopT.title}
           </h1>
           <p className="text-xl text-gray-600">
-            {language === 'ro' 
-              ? `Descoperă ${allProducts.length} produse delicioase` 
-              : `Discover ${allProducts.length} delicious products`}
+            {language === 'ro'
+              ? `Descoperă ${allProducts.length} ${shopT.productsCount}`
+              : `Discover ${allProducts.length} ${shopT.productsCount}`}
           </p>
         </div>
         
@@ -89,7 +90,7 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
                 : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
           >
-            {language === 'ro' ? 'Toate' : 'All'} ({allProducts.length})
+            {shopT.all} ({allProducts.length})
           </button>
           
           {/* Category Buttons */}
@@ -128,9 +129,7 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
           // Empty state
           <div className="text-center py-16">
             <p className="text-gray-600 text-lg">
-              {language === 'ro' 
-                ? 'Nu am găsit produse în această categorie' 
-                : 'No products found in this category'}
+              {shopT.noProducts}
             </p>
           </div>
         )}

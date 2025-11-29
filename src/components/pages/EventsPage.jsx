@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   Calendar,
   Users,
   DollarSign,
@@ -15,6 +15,7 @@ import {
   Award,
   Crown
 } from 'lucide-react';
+import { translations } from '../../data/translations';
 
 const EventsPage = ({ language = 'ro' }) => {
   const [formData, setFormData] = useState({
@@ -32,6 +33,18 @@ const EventsPage = ({ language = 'ro' }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [formStatus, setFormStatus] = useState(null);
 
+  // Use centralized translations
+  const t = translations[language].events;
+
+  // Icons mapping for features section
+  const featuresWithIcons = [
+    { ...t.featuresExperience, icon: Award },
+    { ...t.featuresAttention, icon: Heart },
+    { ...t.featuresResponse, icon: Clock },
+    { ...t.featuresTasting, icon: Cake }
+  ];
+
+  /* OLD LOCAL CONTENT REMOVED - Now using centralized translations
   const content = {
     ro: {
       title: "Evenimente Speciale & Comenzi Personalizate",
@@ -269,9 +282,7 @@ const EventsPage = ({ language = 'ro' }) => {
       successMessage: "Your request has been sent successfully! We'll contact you soon for details.",
       errorMessage: "Oops! An error occurred. Please try again."
     }
-  };
-
-  const t = content[language];
+  }; */
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -360,14 +371,14 @@ const EventsPage = ({ language = 'ro' }) => {
             {t.featuresTitle}
           </h2>
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.features.map((feature, index) => {
+            {featuresWithIcons.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div 
+                <div
                   key={index}
                   className="bg-white p-6 rounded-2xl text-center hover:shadow-lg transition border-2 border-gray-100"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" 
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
                     style={{ backgroundColor: '#d4af37' }}>
                     <Icon className="text-white" size={32} />
                   </div>
