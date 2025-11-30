@@ -22,6 +22,9 @@ import OrderConfirmation from './components/checkout/OrderConfirmation';
 import AboutPage from './components/pages/AboutPage';
 import ContactPage from './components/pages/ContactPage';
 import EventsPage from './components/pages/EventsPage';
+import TermsAndConditionsPage from './components/pages/TermsAndConditionsPage';
+import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
+import CookiePolicyPage from './components/pages/CookiePolicyPage';
 
 
 function App() {
@@ -103,6 +106,18 @@ function App() {
             <Route
               path="contact"
               element={<ContactPage language={language} />}
+            />
+            <Route
+              path="terms-and-conditions"
+              element={<TermsAndConditionsPage language={language} />}
+            />
+            <Route
+              path="privacy-policy"
+              element={<PrivacyPolicyPage language={language} />}
+            />
+            <Route
+              path="cookie-policy"
+              element={<CookiePolicyPage language={language} />}
             />
             <Route
               path="checkout"

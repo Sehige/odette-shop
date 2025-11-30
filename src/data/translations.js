@@ -85,6 +85,12 @@ export const translations = {
     quickLinks: 'Link-uri Rapide',
     followUs: 'Urmărește-ne',
     allRightsReserved: 'Toate drepturile rezervate',
+    legalInfo: 'Informații Legale',
+    termsAndConditions: 'Termeni și Condiții',
+    privacyPolicy: 'Politica de Confidențialitate',
+    cookiePolicy: 'Politica de Cookies',
+    anpc: 'ANPC',
+    euDispute: 'Soluționare Litigii UE',
     
     // Common
     lei: 'lei',
@@ -375,6 +381,12 @@ export const translations = {
     quickLinks: 'Quick Links',
     followUs: 'Follow Us',
     allRightsReserved: 'All rights reserved',
+    legalInfo: 'Legal Information',
+    termsAndConditions: 'Terms and Conditions',
+    privacyPolicy: 'Privacy Policy',
+    cookiePolicy: 'Cookie Policy',
+    anpc: 'ANPC',
+    euDispute: 'EU Dispute Resolution',
     
     // Common
     lei: 'RON',
