@@ -98,6 +98,10 @@ export const translations = {
     newsletterSubscribe: 'Abonează-te',
     newsletterAgree: 'Accept',
     newsletterPrivacy: 'politica de confidențialitate',
+    stayUpdated: 'Rămâi la Curent',
+    newsletterModalTitle: 'Abonează-te la Newsletter',
+    newsletterModalDescription: 'Primește în avans informații despre noile colecții, oferte exclusive și evenimente speciale.',
+    newsletterButtonDescription: 'Fii la curent cu noutățile și ofertele noastre exclusive.',
     
     // Common
     lei: 'lei',
@@ -401,6 +405,10 @@ export const translations = {
     newsletterSubscribe: 'Subscribe',
     newsletterAgree: 'I accept the',
     newsletterPrivacy: 'privacy policy',
+    stayUpdated: 'Stay Updated',
+    newsletterModalTitle: 'Subscribe to Our Newsletter',
+    newsletterModalDescription: 'Get early access to new collections, exclusive offers, and special events.',
+    newsletterButtonDescription: 'Stay informed about our latest news and exclusive offers.',
 
     // Common
     lei: 'RON',
