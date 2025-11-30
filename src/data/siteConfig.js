@@ -16,7 +16,8 @@ export const siteConfig = {
   // Social Media Links
   social: {
     instagram: 'https://www.instagram.com/odette.confiserie/',
-    facebook: 'https://www.facebook.com/profile.php?id=61581913980330'
+    facebook: 'https://www.facebook.com/profile.php?id=61581913980330',
+    tiktok: 'https://www.tiktok.com/'
   },
 
   // Business Hours (bilingual because format differs by language)
