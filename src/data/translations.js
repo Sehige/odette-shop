@@ -6,7 +6,6 @@ export const translations = {
     cakes: 'Torturi',
     pastries: 'Prăjituri',
     cookies: 'Cookies',
-    eventsNav: 'Evenimente',
     aboutNav: 'Despre Noi',
     contactNav: 'Contact',
     
@@ -18,7 +17,6 @@ export const translations = {
     // Best Sellers
     bestSellers: 'Cele Mai Vândute',
     bestSellersSubtitle: 'Produsele noastre cele mai iubite',
-    addToCart: 'Adaugă în Coș',
     viewDetails: 'Vezi Detalii',
     
     // Categories
@@ -38,49 +36,7 @@ export const translations = {
     ingredients: 'Ingrediente',
     allergens: 'Alergeni',
     goesWellWith: 'Se Potrivește Bine Cu',
-    
-    // Cart
-    cart: 'Coș de Cumpărături',
-    cartEmpty: 'Coșul tău este gol',
-    continueShopping: 'Continuă Cumpărăturile',
-    subtotal: 'Subtotal',
-    deliveryFee: 'Taxa de Livrare',
-    total: 'Total',
-    checkout: 'Finalizează Comanda',
-    
-    // Checkout
-    checkoutTitle: 'Finalizare Comandă',
-    customerInfo: 'Informații Client',
-    name: 'Nume Complet',
-    email: 'Email',
-    phone: 'Telefon',
-    deliveryAddress: 'Adresă de Livrare',
-    street: 'Strada și Numărul',
-    city: 'Oraș',
-    postalCode: 'Cod Poștal',
-    deliveryDate: 'Data Livrării',
-    selectDate: 'Selectează Data',
-    deliveryTime: 'Interval Orar (opțional)',
-    specialInstructions: 'Observații Speciale',
-    instructionsPlaceholder: 'Ex: Doresc mesaj personalizat, alergii, preferințe',
-    paymentMethod: 'Metodă de Plată',
-    cardOnline: 'Card Online',
-    cashOnDelivery: 'Cash la Livrare',
-    bankTransfer: 'Transfer Bancar',
-    agreeTerms: 'Sunt de acord cu',
-    termsConditions: 'Termenii și Condițiile',
-    subscribeNewsletter: 'Doresc să primesc oferte și noutăți',
-    placeOrder: 'Plasează Comanda',
-    orderSummary: 'Sumar Comandă',
-    
-    // Order Confirmation
-    orderConfirmed: 'Comandă Confirmată!',
-    orderNumber: 'Număr Comandă',
-    thankYou: 'Mulțumim pentru comandă!',
-    orderEmail: 'Veți primi un email de confirmare cu detaliile comenzii.',
-    estimatedDelivery: 'Dată estimată de livrare',
-    backToHome: 'Înapoi la Pagina Principală',
-    
+
     // Footer
     quickLinks: 'Link-uri Rapide',
     followUs: 'Urmărește-ne',
@@ -167,122 +123,6 @@ export const translations = {
       cta: 'Descoperă Produsele Noastre'
     },
 
-    // ===== EVENTS PAGE =====
-    events: {
-      title: 'Evenimente Speciale & Comenzi Personalizate',
-      subtitle: 'Transformăm visele tale dulci în realitate pentru evenimente de neuitat',
-      heroText: 'Torturi personalizate pentru nunți, botezuri, corporate events și orice moment special',
-      formTitle: 'Creează Comanda Ta Personalizată',
-      eventTypeLabel: 'Tip Eveniment',
-      eventTypes: [
-        { value: 'wedding', label: 'Nuntă' },
-        { value: 'birthday', label: 'Aniversare' },
-        { value: 'baptism', label: 'Botez' },
-        { value: 'corporate', label: 'Corporate' },
-        { value: 'other', label: 'Altele' }
-      ],
-      eventDateLabel: 'Data Evenimentului',
-      guestCountLabel: 'Număr Invitați',
-      budgetLabel: 'Buget Estimat',
-      budgetRanges: [
-        { value: '200-500', label: '200 - 500 RON' },
-        { value: '500-1000', label: '500 - 1,000 RON' },
-        { value: '1000-2000', label: '1,000 - 2,000 RON' },
-        { value: '2000+', label: '2,000+ RON' }
-      ],
-      requirementsLabel: 'Cerințe Specifice',
-      requirementsPlaceholder: 'Descrie tortul dorit: teme, culori, design, dimensiuni...',
-      dietaryLabel: 'Restricții Dietetice',
-      dietaryPlaceholder: 'Ex: fără gluten, vegan, fără zahăr...',
-      deliveryTypeLabel: 'Livrare sau Ridicare',
-      deliveryOption: 'Livrare la adresă',
-      pickupOption: 'Ridicare de la magazin',
-      nameLabel: 'Numele Tău',
-      emailLabel: 'Email',
-      phoneLabel: 'Telefon',
-      uploadLabel: 'Încarcă Poze de Inspirație',
-      uploadText: 'Trage fișierele aici sau click pentru a încărca',
-      submitButton: 'Trimite Cererea',
-      responseTime: 'Răspundem în 24 de ore',
-      whatsappQuick: 'Contact rapid pe WhatsApp',
-      galleryTitle: 'Portofoliu Evenimente',
-      gallerySubtitle: 'Câteva dintre creațiile noastre pentru evenimente speciale',
-      pricingTitle: 'Ghid de Prețuri',
-      pricingSubtitle: 'Prețurile orientative pentru comenzi personalizate',
-      pricingTiers: [
-        {
-          title: 'Tort Small',
-          price: '250 - 400 RON',
-          features: [
-            '10-20 persoane',
-            'Design simplu',
-            '1-2 nivele',
-            'Decorațiuni clasice'
-          ]
-        },
-        {
-          title: 'Tort Medium',
-          price: '450 - 800 RON',
-          features: [
-            '20-40 persoane',
-            'Design elaborat',
-            '2-3 nivele',
-            'Decorațiuni premium',
-            'Toppere personalizate'
-          ]
-        },
-        {
-          title: 'Tort Large',
-          price: '850 - 1,500 RON',
-          features: [
-            '40-80 persoane',
-            'Design complex',
-            '3+ nivele',
-            'Decorațiuni artistice',
-            'Figurine personalizate',
-            'Stand inclus'
-          ]
-        },
-        {
-          title: 'Tort Premium',
-          price: '1,500+ RON',
-          features: [
-            '80+ persoane',
-            'Design unic',
-            'Orice număr nivele',
-            'Arte comestibile',
-            'Consultant dedicat',
-            'Degustare gratuită'
-          ]
-        }
-      ],
-      featuresTitle: 'De Ce Să Alegi Odette?',
-      featuresExperience: {
-        title: 'Experiență',
-        description: 'Peste 500 de evenimente realizate cu succes'
-      },
-      featuresAttention: {
-        title: 'Atenție la Detalii',
-        description: 'Fiecare tort este o operă de artă unică'
-      },
-      featuresResponse: {
-        title: 'Răspuns Rapid',
-        description: 'Îți răspundem în maxim 24 de ore'
-      },
-      featuresTasting: {
-        title: 'Degustare Gratuită',
-        description: 'Pentru comenzi peste 1,000 RON'
-      },
-      successMessage: 'Cererea ta a fost trimisă cu succes! Te vom contacta în curând pentru detalii.',
-      errorMessage: 'Oops! A apărut o eroare. Te rugăm să încerci din nou.',
-      contactCta: {
-        title: 'Informații de Contact',
-        description: 'Gata să creăm ceva special împreună?',
-        subtitle: 'Contactează-ne astăzi și hai să discutăm despre visul tău dulce!',
-        button: 'Începe Comanda'
-      }
-    },
-
     // ===== SHOP PAGE =====
     shop: {
       title: 'Magazin',
@@ -313,7 +153,6 @@ export const translations = {
     cakes: 'Cakes',
     pastries: 'Pastries',
     cookies: 'Cookies',
-    eventsNav: 'Events',
     aboutNav: 'About',
     contactNav: 'Contact',
     
@@ -325,7 +164,6 @@ export const translations = {
     // Best Sellers
     bestSellers: 'Best Sellers',
     bestSellersSubtitle: 'Our most loved products',
-    addToCart: 'Add to Cart',
     viewDetails: 'View Details',
     
     // Categories
@@ -345,49 +183,7 @@ export const translations = {
     ingredients: 'Ingredients',
     allergens: 'Allergens',
     goesWellWith: 'Goes Well With',
-    
-    // Cart
-    cart: 'Shopping Cart',
-    cartEmpty: 'Your cart is empty',
-    continueShopping: 'Continue Shopping',
-    subtotal: 'Subtotal',
-    deliveryFee: 'Delivery Fee',
-    total: 'Total',
-    checkout: 'Checkout',
-    
-    // Checkout
-    checkoutTitle: 'Checkout',
-    customerInfo: 'Customer Information',
-    name: 'Full Name',
-    email: 'Email',
-    phone: 'Phone',
-    deliveryAddress: 'Delivery Address',
-    street: 'Street and Number',
-    city: 'City',
-    postalCode: 'Postal Code',
-    deliveryDate: 'Delivery Date',
-    selectDate: 'Select Date',
-    deliveryTime: 'Time Window (optional)',
-    specialInstructions: 'Special Instructions',
-    instructionsPlaceholder: 'E.g., Custom message, allergies, preferences',
-    paymentMethod: 'Payment Method',
-    cardOnline: 'Card Online',
-    cashOnDelivery: 'Cash on Delivery',
-    bankTransfer: 'Bank Transfer',
-    agreeTerms: 'I agree to the',
-    termsConditions: 'Terms and Conditions',
-    subscribeNewsletter: 'I want to receive offers and news',
-    placeOrder: 'Place Order',
-    orderSummary: 'Order Summary',
-    
-    // Order Confirmation
-    orderConfirmed: 'Order Confirmed!',
-    orderNumber: 'Order Number',
-    thankYou: 'Thank you for your order!',
-    orderEmail: 'You will receive a confirmation email with order details.',
-    estimatedDelivery: 'Estimated delivery date',
-    backToHome: 'Back to Home',
-    
+
     // Footer
     quickLinks: 'Quick Links',
     followUs: 'Follow Us',
@@ -472,122 +268,6 @@ export const translations = {
         description: 'We are a team of passionate pastry chefs, each with their own specialty and love for culinary arts.'
       },
       cta: 'Discover Our Products'
-    },
-
-    // ===== EVENTS PAGE =====
-    events: {
-      title: 'Special Events & Custom Orders',
-      subtitle: 'We transform your sweet dreams into reality for unforgettable events',
-      heroText: 'Custom cakes for weddings, baptisms, corporate events, and any special moment',
-      formTitle: 'Create Your Custom Order',
-      eventTypeLabel: 'Event Type',
-      eventTypes: [
-        { value: 'wedding', label: 'Wedding' },
-        { value: 'birthday', label: 'Birthday' },
-        { value: 'baptism', label: 'Baptism' },
-        { value: 'corporate', label: 'Corporate' },
-        { value: 'other', label: 'Other' }
-      ],
-      eventDateLabel: 'Event Date',
-      guestCountLabel: 'Number of Guests',
-      budgetLabel: 'Estimated Budget',
-      budgetRanges: [
-        { value: '200-500', label: '200 - 500 RON' },
-        { value: '500-1000', label: '500 - 1,000 RON' },
-        { value: '1000-2000', label: '1,000 - 2,000 RON' },
-        { value: '2000+', label: '2,000+ RON' }
-      ],
-      requirementsLabel: 'Specific Requirements',
-      requirementsPlaceholder: 'Describe your desired cake: themes, colors, design, dimensions...',
-      dietaryLabel: 'Dietary Restrictions',
-      dietaryPlaceholder: 'E.g., gluten-free, vegan, sugar-free...',
-      deliveryTypeLabel: 'Delivery or Pickup',
-      deliveryOption: 'Delivery to address',
-      pickupOption: 'Pickup from store',
-      nameLabel: 'Your Name',
-      emailLabel: 'Email',
-      phoneLabel: 'Phone',
-      uploadLabel: 'Upload Inspiration Photos',
-      uploadText: 'Drag files here or click to upload',
-      submitButton: 'Submit Request',
-      responseTime: 'We respond within 24 hours',
-      whatsappQuick: 'Quick contact on WhatsApp',
-      galleryTitle: 'Events Portfolio',
-      gallerySubtitle: 'Some of our creations for special events',
-      pricingTitle: 'Pricing Guide',
-      pricingSubtitle: 'Indicative prices for custom orders',
-      pricingTiers: [
-        {
-          title: 'Small Cake',
-          price: '250 - 400 RON',
-          features: [
-            '10-20 servings',
-            'Simple design',
-            '1-2 tiers',
-            'Classic decorations'
-          ]
-        },
-        {
-          title: 'Medium Cake',
-          price: '450 - 800 RON',
-          features: [
-            '20-40 servings',
-            'Elaborate design',
-            '2-3 tiers',
-            'Premium decorations',
-            'Custom toppers'
-          ]
-        },
-        {
-          title: 'Large Cake',
-          price: '850 - 1,500 RON',
-          features: [
-            '40-80 servings',
-            'Complex design',
-            '3+ tiers',
-            'Artistic decorations',
-            'Custom figurines',
-            'Stand included'
-          ]
-        },
-        {
-          title: 'Premium Cake',
-          price: '1,500+ RON',
-          features: [
-            '80+ servings',
-            'Unique design',
-            'Any number of tiers',
-            'Edible art',
-            'Dedicated consultant',
-            'Free tasting'
-          ]
-        }
-      ],
-      featuresTitle: 'Why Choose Odette?',
-      featuresExperience: {
-        title: 'Experience',
-        description: 'Over 500 events successfully completed'
-      },
-      featuresAttention: {
-        title: 'Attention to Detail',
-        description: 'Each cake is a unique work of art'
-      },
-      featuresResponse: {
-        title: 'Quick Response',
-        description: 'We respond within 24 hours'
-      },
-      featuresTasting: {
-        title: 'Free Tasting',
-        description: 'For orders over 1,000 RON'
-      },
-      successMessage: 'Your request has been sent successfully! We\'ll contact you soon for details.',
-      errorMessage: 'Oops! An error occurred. Please try again.',
-      contactCta: {
-        title: 'Contact Information',
-        description: 'Ready to create something special together?',
-        subtitle: 'Contact us today and let\'s discuss your sweet dream!',
-        button: 'Start Order'
-      }
     },
 
     // ===== SHOP PAGE =====

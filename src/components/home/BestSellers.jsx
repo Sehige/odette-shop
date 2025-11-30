@@ -4,7 +4,7 @@ import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
 import { useBestSellers } from '../../hooks/useProducts';
 
-const BestSellers = ({ language, addToCart, setSelectedProduct }) => {
+const BestSellers = ({ language, setSelectedProduct }) => {
   const [currentIndex, setCurrentIndex] = useState(true);
   const t = translations[language];
   
@@ -71,11 +71,10 @@ const BestSellers = ({ language, addToCart, setSelectedProduct }) => {
           {/* Carousel - Always shows 4 products */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {getVisibleProducts().map((product, idx) => (
-              <ProductCard 
+              <ProductCard
                 key={`${product.id}-${currentIndex}-${idx}`}
                 product={product}
                 language={language}
-                addToCart={addToCart}
                 setSelectedProduct={setSelectedProduct}
               />
             ))}

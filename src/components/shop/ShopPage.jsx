@@ -6,7 +6,7 @@ import TrustBadges from '../home/TrustBadges';
 
 import { useAllProducts, useCategories } from '../../hooks/useProducts';
 
-const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
+const ShopPage = ({ language, setSelectedProduct }) => {
   const t = translations[language];
   const shopT = translations[language].shop;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -120,7 +120,6 @@ const ShopPage = ({ language, addToCart, setSelectedProduct }) => {
                 key={product.id}
                 product={product}
                 language={language}
-                addToCart={addToCart}
                 setSelectedProduct={setSelectedProduct}
               />
             ))}

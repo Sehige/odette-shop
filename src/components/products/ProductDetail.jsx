@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
-import ProductCard from './ProductCard';
-import { createCartItem, validateCartItem } from '../../services/cartOrderService';
 import { useAuth } from '../../hooks/useAuth';
 
-const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) => {
+const ProductDetail = ({ product, language, onClose }) => {
+  const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : null);
   const [selectedFlavor, setSelectedFlavor] = useState(
     product.flavors ? product.flavors[language][0] : null
   );
-  const [quantity, setQuantity] = useState(1);
   const { isAuthenticated } = useAuth();
   const t = translations[language];
   
@@ -35,51 +34,11 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
     }
   };
 
-  const handleAddToCart = () => {
-    try {
-      // Validate before adding to cart
-      const options = { 
-        size: selectedSize, 
-        flavor: selectedFlavor, 
-        quantity 
-      };
-      
-      // This will throw an error if validation fails
-      validateCartItem(product, options);
-      
-      // Add to cart
-      addToCart(product, options);
-      
-      // Close modal
-      onClose();
-    } catch (error) {
-      // Show error to user (you can enhance this with a toast notification later)
-      alert(error.message);
-    }
+  const handleContactUs = () => {
+    // Close modal and navigate to contact page
+    onClose();
+    navigate('/contact');
   };
-
-  // Calculate total price based on size multiplier
-  const calculateTotalPrice = () => {
-    const basePrice = product.price || 0;
-    const sizeMultiplier = selectedSize?.priceMultiplier || 1;
-    return (basePrice * sizeMultiplier * quantity).toFixed(2);
-  };
-
-  // Get related/paired products
-  const getRelatedProducts = () => {
-    if (!allProducts) return [];
-    
-    // Simple logic: show 3 random products from the same category or complementary items
-    // In a real app, this would be based on actual pairing data
-    const related = allProducts
-      .filter(p => p.id !== product.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
-    
-    return related;
-  };
-
-  const relatedProducts = getRelatedProducts();
 
   return (
     <div 
@@ -175,40 +134,13 @@ const ProductDetail = ({ product, language, addToCart, onClose, allProducts }) =
                 </div>
               )}
 
-              {/* Quantity */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  {t.quantity || 'Quantity'}
-                </label>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-full border-2 flex items-center justify-center hover:bg-gray-100 transition"
-                    style={{ borderColor: '#1e3a8a', color: '#1e3a8a' }}
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="text-2xl font-semibold w-12 text-center">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded-full border-2 flex items-center justify-center hover:bg-gray-100 transition"
-                    style={{ borderColor: '#1e3a8a', color: '#1e3a8a' }}
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Add to Cart Button */}
+              {/* Contact Us Button */}
               <button
-                onClick={handleAddToCart}
+                onClick={handleContactUs}
                 className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
                 style={{ backgroundColor: '#d4af37' }}
               >
-                <ShoppingCart className="w-5 h-5" />
-                {calculateTotalPrice()} {t.lei}
+                {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
               </button>
 
               {/* User Authentication Prompt (Optional) */}

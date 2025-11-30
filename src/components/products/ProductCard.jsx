@@ -1,8 +1,8 @@
 import React from 'react';
-import { Heart, Check, ShoppingCart } from 'lucide-react';
+import { Heart, Check } from 'lucide-react';
 import { translations } from '../../data/translations';
 
-const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
+const ProductCard = ({ product, language, setSelectedProduct }) => {
   const t = translations[language];
   
   return (
@@ -63,20 +63,10 @@ const ProductCard = ({ product, language, addToCart, setSelectedProduct }) => {
           </p>
         </div>
 
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-center">
           <span className="text-2xl font-bold" style={{ color: '#d4af37' }}>
             {product.price} {t.lei}
           </span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product);
-            }}
-            className="w-12 h-12 text-white rounded-lg font-medium hover:opacity-90 transition flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: '#1e3a8a' }}
-          >
-            <ShoppingCart className="w-5 h-5" />
-          </button>
         </div>
       </div>
     </div>

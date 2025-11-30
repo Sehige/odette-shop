@@ -5,17 +5,13 @@ import Footer from './Footer';
 
 const Layout = ({
   language,
-  setLanguage,
-  cartItemsCount,
-  setShowCart
+  setLanguage
 }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header
         language={language}
         setLanguage={setLanguage}
-        cartItemsCount={cartItemsCount}
-        setShowCart={setShowCart}
       />
       <main>
         <Outlet />

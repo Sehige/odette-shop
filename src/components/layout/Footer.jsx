@@ -31,11 +31,6 @@ const Footer = ({ language }) => {
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate('/events')} className="hover:text-white transition">
-                  {t.eventsNav}
-                </button>
-              </li>
-              <li>
                 <button onClick={() => navigate('/about')} className="hover:text-white transition">
                   {t.aboutNav}
                 </button>

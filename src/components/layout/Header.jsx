@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
 
-const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
+const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const t = translations[language];
@@ -83,12 +83,6 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
               {t.shopNav}
             </button>
             <button
-              onClick={() => navigate('/events')}
-              className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-            >
-              {t.eventsNav}
-            </button>
-            <button
               onClick={() => navigate('/about')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
@@ -102,7 +96,7 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
             </button>
           </nav>
 
-          {/* Container 4: Language Toggle and Shopping Cart */}
+          {/* Container 4: Language Toggle and Mobile Menu */}
           <div className="flex items-center justify-end gap-2 sm:gap-4">
             {/* Language Toggle */}
             <button
@@ -110,20 +104,6 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
               className="w-8 sm:w-10 text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase text-center"
             >
               {language === 'ro' ? 'RO' : 'EN'}
-            </button>
-
-            {/* Shopping Cart */}
-            <button
-              onClick={() => setShowCart(true)}
-              className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-gray-700 hover:text-blue-900 transition"
-            >
-              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6" />
-              {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
-                  style={{ backgroundColor: '#d4af37' }}>
-                  {cartItemsCount}
-                </span>
-              )}
             </button>
 
             {/* Mobile menu button */}
@@ -145,9 +125,6 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
               </button>
               <button onClick={() => { navigate('/shop'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.shopNav}
-              </button>
-              <button onClick={() => { navigate('/events'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.eventsNav}
               </button>
               <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.aboutNav}
