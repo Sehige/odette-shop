@@ -245,20 +245,6 @@ const ContactPage = ({ language }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.labels.subject} *
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.message} *
                     </label>
                     <textarea

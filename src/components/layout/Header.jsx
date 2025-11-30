@@ -54,7 +54,7 @@ const Header = ({ language, setLanguage, cartItemsCount, setShowCart }) => {
             {/* Generic Logo Placeholder */}
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
               <img
-                src={`${process.env.PUBLIC_URL}/logo_swan.png`}
+                src={`${process.env.PUBLIC_URL}/odette_logo.svg`}
                 alt="Odette Logo"
                 className="w-full h-full object-cover"
               />
