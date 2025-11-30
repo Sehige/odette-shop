@@ -91,6 +91,13 @@ export const translations = {
     cookiePolicy: 'Politica de Cookies',
     anpc: 'ANPC',
     euDispute: 'Soluționare Litigii UE',
+    newsletter: 'Newsletter',
+    newsletterDescription: 'Abonează-te pentru oferte exclusive și noutăți',
+    newsletterNamePlaceholder: 'Numele tău',
+    newsletterEmailPlaceholder: 'Adresa ta de email',
+    newsletterSubscribe: 'Abonează-te',
+    newsletterAgree: 'Accept',
+    newsletterPrivacy: 'politica de confidențialitate',
     
     // Common
     lei: 'lei',
@@ -387,7 +394,14 @@ export const translations = {
     cookiePolicy: 'Cookie Policy',
     anpc: 'ANPC',
     euDispute: 'EU Dispute Resolution',
-    
+    newsletter: 'Newsletter',
+    newsletterDescription: 'Subscribe for exclusive offers and news',
+    newsletterNamePlaceholder: 'Your name',
+    newsletterEmailPlaceholder: 'Your email address',
+    newsletterSubscribe: 'Subscribe',
+    newsletterAgree: 'I accept the',
+    newsletterPrivacy: 'privacy policy',
+
     // Common
     lei: 'RON',
     piece: 'piece',

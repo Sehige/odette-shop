@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
+import { subscribeToNewsletter } from '../../services/newsletterService';
 
 const CheckoutPage = ({ language, cartItems }) => {
   const navigate = useNavigate();
@@ -29,12 +30,28 @@ const CheckoutPage = ({ language, cartItems }) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.agreeTerms) {
       alert(language === 'ro' ? 'Vă rugăm să acceptați termenii și condițiile' : 'Please accept terms and conditions');
       return;
     }
+
+    // If newsletter checkbox is checked, subscribe
+    if (formData.subscribeNewsletter && formData.email && formData.name) {
+      try {
+        await subscribeToNewsletter({
+          email: formData.email,
+          name: formData.name,
+          language: language
+        });
+        console.log('Newsletter subscription successful');
+      } catch (error) {
+        console.error('Newsletter subscription failed:', error);
+        // Don't block order if newsletter fails
+      }
+    }
+
     // Generate a random order number
     const orderNumber = Math.floor(100000 + Math.random() * 900000);
     // Navigate to order confirmation page with order number
