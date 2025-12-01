@@ -1,7 +1,6 @@
 {
   "name": "odette-shop",
   "version": "0.1.0",
-  "homepage": "https://sehige.github.io/odette-shop/",
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1",
