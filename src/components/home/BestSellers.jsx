@@ -67,9 +67,25 @@ const BestSellers = ({ language, setSelectedProduct }) => {
           <p className="text-xl text-gray-600">{t.bestSellersSubtitle}</p>
         </div>
 
-        <div className="relative">
+        {/* Mobile: Horizontal Scrollable Layout */}
+        <div className="md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+          <div className="flex gap-4">
+            {bestSellers.map((product) => (
+              <div key={product.id} className="flex-shrink-0 w-[calc(50%-8px)] snap-start">
+                <ProductCard
+                  product={product}
+                  language={language}
+                  setSelectedProduct={setSelectedProduct}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Grid with Navigation */}
+        <div className="hidden md:block relative">
           {/* Carousel - Always shows 4 products */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-4 gap-8">
             {getVisibleProducts().map((product, idx) => (
               <ProductCard
                 key={`${product.id}-${currentIndex}-${idx}`}
@@ -95,23 +111,23 @@ const BestSellers = ({ language, setSelectedProduct }) => {
           >
             <ChevronRight className="w-6 h-6 text-gray-700" />
           </button>
-        </div>
 
-        {/* Carousel Dots */}
-        <div className="flex justify-center gap-2 mt-8">
-          {bestSellers.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 rounded-full transition ${
-                index === currentIndex ? 'w-8' : ''
-              }`}
-              style={{ 
-                backgroundColor: index === currentIndex ? '#d4af37' : '#d1d5db' 
-              }}
-              aria-label={`Go to product ${index + 1}`}
-            />
-          ))}
+          {/* Carousel Dots */}
+          <div className="flex justify-center gap-2 mt-8">
+            {bestSellers.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2 h-2 rounded-full transition ${
+                  index === currentIndex ? 'w-8' : ''
+                }`}
+                style={{
+                  backgroundColor: index === currentIndex ? '#d4af37' : '#d1d5db'
+                }}
+                aria-label={`Go to product ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

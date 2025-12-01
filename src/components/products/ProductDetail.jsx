@@ -143,15 +143,6 @@ const ProductDetail = ({ product, language, onClose }) => {
                 {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
               </button>
 
-              {/* User Authentication Prompt (Optional) */}
-              {!isAuthenticated && (
-                <p className="mt-3 text-sm text-gray-500 text-center">
-                  {language === 'ro' 
-                    ? 'Creează un cont pentru a salva preferințele tale' 
-                    : 'Create an account to save your preferences'}
-                </p>
-              )}
-
               {/* Product Info */}
               <div className="mt-8 space-y-4">
                 {product.ingredients && (
