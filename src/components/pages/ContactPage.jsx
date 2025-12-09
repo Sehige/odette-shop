@@ -62,6 +62,7 @@ const ContactPage = ({ language }) => {
       const { data, error } = await contactService.submitContactForm(formData);
 
       if (error) {
+        console.error('Supabase error details:', error);
         setToast({
           message: language === 'ro'
             ? 'A apărut o eroare. Vă rugăm încercați din nou.'

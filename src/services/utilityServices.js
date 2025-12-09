@@ -2,7 +2,7 @@
 // UTILITY SERVICES (Reviews, Custom Orders, Newsletter, Contact)
 // ========================================
 
-import { supabase } from '../lib/supabase'
+import { supabase } from '../config/supabaseClient'
 
 /**
  * Review Service
