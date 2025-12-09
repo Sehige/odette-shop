@@ -3,16 +3,19 @@ import { Mail, Phone, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-re
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
+import { contactService } from '../../services/utilityServices';
+import Toast from '../common/Toast';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const t = translations[language].contact;
 
@@ -23,23 +26,76 @@ const ContactPage = ({ language }) => {
     </svg>
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, this would send the data to a backend
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    // Prevent double submission
+    if (isSubmitting) return;
+
+    // Basic validation (browser handles required fields, but double-check)
+    if (!formData.name || !formData.email || !formData.message) {
+      setToast({
+        message: language === 'ro'
+          ? 'Vă rugăm completați toate câmpurile obligatorii'
+          : 'Please fill in all required fields',
+        type: 'error'
       });
-    }, 3000);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setToast({
+        message: language === 'ro'
+          ? 'Vă rugăm introduceți o adresă de email validă'
+          : 'Please enter a valid email address',
+        type: 'error'
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Call the existing service
+      const { data, error } = await contactService.submitContactForm(formData);
+
+      if (error) {
+        setToast({
+          message: language === 'ro'
+            ? 'A apărut o eroare. Vă rugăm încercați din nou.'
+            : 'An error occurred. Please try again.',
+          type: 'error'
+        });
+        return;
+      }
+
+      // Success! Show success message
+      setSubmitted(true);
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: ''
+        });
+      }, 3000);
+
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      setToast({
+        message: language === 'ro'
+          ? 'A apărut o eroare. Vă rugăm încercați din nou.'
+          : 'An error occurred. Please try again.',
+        type: 'error'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -212,7 +268,8 @@ const ContactPage = ({ language }) => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
                     />
                   </div>
 
@@ -226,7 +283,8 @@ const ContactPage = ({ language }) => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
                     />
                   </div>
 
@@ -239,7 +297,8 @@ const ContactPage = ({ language }) => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
                     />
                   </div>
 
@@ -253,17 +312,22 @@ const ContactPage = ({ language }) => {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition resize-none"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition resize-none disabled:opacity-50"
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-lg font-semibold text-white hover:opacity-90 transition flex items-center justify-center gap-2"
-                    style={{ backgroundColor: '#d4af37' }}
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-lg font-semibold text-white hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: isSubmitting ? '#6b7280' : '#d4af37' }}
                   >
                     <Send size={20} />
-                    {t.send}
+                    {isSubmitting
+                      ? (language === 'ro' ? 'Se trimite...' : 'Sending...')
+                      : t.send
+                    }
                   </button>
                 </form>
               )}
@@ -271,6 +335,15 @@ const ContactPage = ({ language }) => {
           </div>
         </div>
       </section>
+
+      {/* Toast Notifications */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
     </div>
   );

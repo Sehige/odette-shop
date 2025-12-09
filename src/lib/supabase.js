@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js'
 
 // 🔑 Get credentials from environment variables
 // These come from your .env file
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
 
 // ⚠️ Validate that credentials exist
 if (!supabaseUrl || !supabaseAnonKey) {
