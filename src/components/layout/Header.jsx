@@ -82,12 +82,12 @@ const Header = ({ language, setLanguage }) => {
             >
               {t.shopNav}
             </button>
-            <button
+            {/* <button
               onClick={() => navigate('/about')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
             >
               {t.aboutNav}
-            </button>
+            </button> */}
             <button
               onClick={() => navigate('/contact')}
               className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
@@ -126,9 +126,9 @@ const Header = ({ language, setLanguage }) => {
               <button onClick={() => { navigate('/shop'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.shopNav}
               </button>
-              <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
+              {/* <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.aboutNav}
-              </button>
+              </button> */}
               <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.contactNav}
               </button>

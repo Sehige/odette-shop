@@ -14,7 +14,7 @@ import ProductDetail from './components/products/ProductDetail';
 // Page components
 import HomePage from './components/pages/HomePage';
 import ShopPage from './components/shop/ShopPage';
-import AboutPage from './components/pages/AboutPage';
+// import AboutPage from './components/pages/AboutPage';
 import ContactPage from './components/pages/ContactPage';
 import TermsAndConditionsPage from './components/pages/TermsAndConditionsPage';
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
@@ -58,10 +58,10 @@ function App() {
                 />
               }
             />
-            <Route
+            {/* <Route
               path="about"
               element={<AboutPage language={language} />}
-            />
+            /> */}
             <Route
               path="contact"
               element={<ContactPage language={language} />}

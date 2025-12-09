@@ -60,11 +60,11 @@ const Footer = ({ language }) => {
                   {t.shopNav}
                 </button>
               </li>
-              <li>
+              {/* <li>
                 <button onClick={() => navigate('/about')} className="hover:text-white transition">
                   {t.aboutNav}
                 </button>
-              </li>
+              </li> */}
               <li>
                 <button onClick={() => navigate('/contact')} className="hover:text-white transition">
                   {t.contactNav}

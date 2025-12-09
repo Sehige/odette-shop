@@ -7,7 +7,7 @@ const BASE_URL = 'https://www.odette.ro';
 const staticPages = [
   { url: '', changefreq: 'daily', priority: '1.0' },
   { url: '/shop', changefreq: 'daily', priority: '0.9' },
-  { url: '/about', changefreq: 'monthly', priority: '0.7' },
+  // { url: '/about', changefreq: 'monthly', priority: '0.7' },
   { url: '/contact', changefreq: 'monthly', priority: '0.7' },
   { url: '/events', changefreq: 'monthly', priority: '0.8' },
   { url: '/faq', changefreq: 'monthly', priority: '0.6' },
