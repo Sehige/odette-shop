@@ -136,7 +136,7 @@ const Footer = ({ language }) => {
 
         {/* Copyright */}
         <div className="border-t border-blue-800 pt-8 text-center text-blue-100 text-base">
-          <p>© 2025 Odette. {t.allRightsReserved}</p>
+          <p>© 2026 Odette. {t.allRightsReserved}</p>
         </div>
       </div>
 
