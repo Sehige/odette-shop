@@ -19,6 +19,7 @@ export const getAllProducts = async () => {
     const { data, error } = await supabase
       .from('products')
       .select('*')
+      .eq('isActive', true)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -42,6 +43,7 @@ export const getProductsByCategory = async (category) => {
       .from('products')
       .select('*')
       .eq('category', category)
+      .eq('isActive', true)
       .order('name', { ascending: true });
 
     if (error) throw error;
@@ -64,6 +66,7 @@ export const getBestSellers = async () => {
       .from('products')
       .select('*')
       .eq('best_seller_flag', true)
+      .eq('isActive', true)
       .order('name_ro', { ascending: true });
 
     if (error) throw error;
@@ -87,6 +90,7 @@ export const getProductById = async (productId) => {
       .from('products')
       .select('*')
       .eq('id', productId)
+      .eq('isActive', true)
       .single(); // Returns single object instead of array
 
     if (error) throw error;
@@ -110,6 +114,7 @@ export const searchProducts = async (searchTerm) => {
       .from('products')
       .select('*')
       .ilike('name', `%${searchTerm}%`) // Case-insensitive search
+      .eq('isActive', true)
       .order('name', { ascending: true });
 
     if (error) throw error;
@@ -135,6 +140,7 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
       .select('*')
       .gte('price', minPrice)
       .lte('price', maxPrice)
+      .eq('isActive', true)
       .order('price', { ascending: true });
 
     if (error) throw error;
@@ -156,7 +162,8 @@ export const getCategories = async () => {
       // Step 1: Get all unique category UUIDs from products
       const { data: productsData, error: productsError } = await supabase
         .from('products')
-        .select('category');
+        .select('category')
+        .eq('isActive', true);
 
       if (productsError) throw productsError;
 
@@ -164,6 +171,12 @@ export const getCategories = async () => {
       const uniqueCategoryIds = [...new Set(productsData.map(p => p.category).filter(Boolean))];
 
       console.log('Unique category UUIDs from products:', uniqueCategoryIds);
+
+      // If no valid categories found, return empty array
+      if (uniqueCategoryIds.length === 0) {
+        console.log('No categories found with active products');
+        return { data: [], error: null };
+      }
 
       // Step 3: Fetch the full category data (id, name_ro, name_en) from categories table
       const { data: categoriesData, error: categoriesError } = await supabase
@@ -218,7 +231,7 @@ export const getFeaturedCategories = async () => {
  */
 export const getFilteredProducts = async (filters = {}) => {
   try {
-    let query = supabase.from('products').select('*');
+    let query = supabase.from('products').select('*').eq('isActive', true);
 
     // Apply filters conditionally
     if (filters.category) {
