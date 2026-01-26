@@ -3,6 +3,7 @@ export const translations = {
     // Header
     home: 'Acasă',
     shopNav: 'Magazin',
+    weddingNav: 'Ofertă Nunți',
     cakes: 'Torturi',
     pastries: 'Prăjituri',
     cookies: 'Cookies',
@@ -144,12 +145,41 @@ export const translations = {
       confirm: 'Confirmă',
       anyTime: 'Oricând',
       minimumNextDay: '(minim următoarea zi)'
+    },
+
+    // ===== COOKIE CONSENT =====
+    cookieConsent: {
+      // Banner
+      bannerTitle: 'Utilizăm cookies',
+      bannerDescription: 'Utilizăm cookie-uri pentru a vă îmbunătăți experiența pe site-ul nostru. Cookie-urile esențiale sunt necesare pentru funcționarea site-ului, în timp ce cookie-urile opționale ne ajută să analizăm traficul și să personalizăm conținutul.',
+      learnMore: 'Află mai multe despre politica noastră de cookies',
+      acceptAll: 'Acceptă toate',
+      rejectAll: 'Respinge opționale',
+      managePreferences: 'Personalizează',
+
+      // Preferences Modal
+      preferencesTitle: 'Preferințe Cookie-uri',
+      preferencesDescription: 'Alegeți ce tipuri de cookie-uri acceptați. Cookie-urile esențiale sunt necesare pentru funcționarea site-ului.',
+      savePreferences: 'Salvează preferințele',
+      alwaysActive: 'Mereu activ',
+
+      // Categories
+      essentialTitle: 'Cookie-uri Esențiale',
+      essentialDescription: 'Necesare pentru funcționarea de bază a site-ului. Include autentificare, coș de cumpărături și securitate. Nu pot fi dezactivate.',
+      analyticsTitle: 'Cookie-uri de Analiză',
+      analyticsDescription: 'Ne ajută să înțelegem cum este utilizat site-ul nostru prin colectarea de informații anonime despre vizite și comportament.',
+      marketingTitle: 'Cookie-uri de Marketing',
+      marketingDescription: 'Folosite pentru a afișa reclame relevante pe alte site-uri și platforme de social media.',
+
+      // Footer link
+      manageCookies: 'Gestionează cookie-urile'
     }
   },
   en: {
     // Header
     home: 'Home',
     shopNav: 'Shop',
+    weddingNav: 'Wedding Offer',
     cakes: 'Cakes',
     pastries: 'Pastries',
     cookies: 'Cookies',
@@ -291,6 +321,34 @@ export const translations = {
       confirm: 'Confirm',
       anyTime: 'Any time',
       minimumNextDay: '(minimum next-day)'
+    },
+
+    // ===== COOKIE CONSENT =====
+    cookieConsent: {
+      // Banner
+      bannerTitle: 'We use cookies',
+      bannerDescription: 'We use cookies to improve your experience on our website. Essential cookies are necessary for the site to function, while optional cookies help us analyze traffic and personalize content.',
+      learnMore: 'Learn more about our cookie policy',
+      acceptAll: 'Accept all',
+      rejectAll: 'Reject optional',
+      managePreferences: 'Customize',
+
+      // Preferences Modal
+      preferencesTitle: 'Cookie Preferences',
+      preferencesDescription: 'Choose which types of cookies you accept. Essential cookies are required for the website to function.',
+      savePreferences: 'Save preferences',
+      alwaysActive: 'Always active',
+
+      // Categories
+      essentialTitle: 'Essential Cookies',
+      essentialDescription: 'Required for basic website functionality. Includes authentication, shopping cart, and security. Cannot be disabled.',
+      analyticsTitle: 'Analytics Cookies',
+      analyticsDescription: 'Help us understand how our website is used by collecting anonymous information about visits and behavior.',
+      marketingTitle: 'Marketing Cookies',
+      marketingDescription: 'Used to display relevant advertisements on other websites and social media platforms.',
+
+      // Footer link
+      manageCookies: 'Manage cookies'
     }
   }
 };

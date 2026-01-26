@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
+import { Phone, Mail, MapPin, ExternalLink, Cookie } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import NewsletterModal from '../common/NewsletterModal';
+import { useCookieConsent } from '../../context/CookieConsentContext';
 
 const Footer = ({ language }) => {
   const navigate = useNavigate();
   const t = translations[language];
+  const { openPreferences } = useCookieConsent();
 
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
   
@@ -116,6 +118,12 @@ const Footer = ({ language }) => {
               <li>
                 <button onClick={() => navigate('/cookie-policy')} className="hover:text-white transition">
                   {t.cookiePolicy}
+                </button>
+              </li>
+              <li>
+                <button onClick={openPreferences} className="hover:text-white transition flex items-center gap-2">
+                  <Cookie className="w-4 h-4" />
+                  {t.cookieConsent?.manageCookies || 'Manage cookies'}
                 </button>
               </li>
               <li>
