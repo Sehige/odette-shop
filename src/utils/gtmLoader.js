@@ -1,7 +1,10 @@
 // GTM Container ID
 const GTM_ID = 'GTM-PQZXG9RP';
+// GA4 Measurement ID
+const GA4_ID = 'G-MCEGYL73SH';
 
 let gtmLoaded = false;
+let ga4Loaded = false;
 
 /**
  * Initialize Google Consent Mode v2 with default denied state
@@ -29,10 +32,34 @@ export const initializeConsentMode = () => {
 };
 
 /**
+ * Dynamically loads GA4 only when analytics consent is given
+ * @param {Object} consent - Consent object with analytics flag
+ */
+const loadGA4 = (consent) => {
+  if (ga4Loaded) return;
+  if (!consent.analytics) return;
+
+  // Load gtag.js script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
+  document.head.appendChild(script);
+
+  // Initialize gtag
+  window.gtag('js', new Date());
+  window.gtag('config', GA4_ID);
+
+  ga4Loaded = true;
+};
+
+/**
  * Dynamically loads Google Tag Manager only when consent is given
  * @param {Object} consent - Consent object with analytics and marketing flags
  */
 export const loadGTM = (consent) => {
+  // Load GA4 if analytics consent given
+  loadGA4(consent);
+
   if (gtmLoaded) return;
   if (!consent.analytics && !consent.marketing) return;
 
