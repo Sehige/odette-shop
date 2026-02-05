@@ -16,7 +16,7 @@ const HeroSection = ({ language }) => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(30, 58, 138, 0.65)' }}></div>
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(30, 58, 138, 0.85)' }}></div>
       </div>
 
       {/* Content */}

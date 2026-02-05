@@ -10,6 +10,9 @@ const Header = ({ language, setLanguage }) => {
   const navigate = useNavigate();
   const t = translations[language];
 
+  // Wedding offer URL
+  const weddingOfferUrl = 'https://www.canva.com/design/DAG9eAIoAiU/4Wzi004UggxTwSxsU1Wp8Q/view';
+
   // TikTok Icon Component
   const TikTokIcon = ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -20,9 +23,9 @@ const Header = ({ language, setLanguage }) => {
   return (
     <header className="fixed w-full top-0 z-40 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[80px_auto_1fr_auto] items-center h-20 gap-2 sm:gap-4 lg:gap-6">
-          {/* Container 1: Social Media Icons */}
-          <div className="hidden sm:flex items-center justify-start gap-2">
+        <div className="flex items-center justify-between h-20">
+          {/* LEFT: Social Media Icons */}
+          <div className="hidden lg:flex items-center gap-3 w-24">
             <a
               href={siteConfig.social.instagram}
               target="_blank"
@@ -49,59 +52,63 @@ const Header = ({ language, setLanguage }) => {
             </a>
           </div>
 
-          {/* Container 2: Logo and Brand Name */}
-          <div className="flex items-center justify-start gap-2 sm:gap-3">
-            {/* Generic Logo Placeholder */}
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
-              <img
-                src={`${process.env.PUBLIC_URL}/odette_logo.svg`}
-                alt="Odette Logo"
-                className="w-full h-full object-cover"
-              />
+          {/* CENTER: Logo + Odette + Navigation */}
+          <div className="flex items-center gap-4 lg:gap-8">
+            {/* Logo and Brand Name */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/odette_logo.svg`}
+                  alt="Odette Logo"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <button
+                onClick={() => navigate('/')}
+                className="text-2xl md:text-3xl font-serif font-bold transition"
+                style={{ color: '#1e3a8a' }}
+              >
+                Odette
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/')}
-              className="text-2xl md:text-3xl font-serif font-bold transition"
-              style={{ color: '#1e3a8a' }}
-            >
-              Odette
-            </button>
+
+            {/* Navigation Menu - Desktop Only */}
+            <nav className="hidden lg:flex items-center gap-8">
+              <button
+                onClick={() => navigate('/')}
+                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
+              >
+                {t.home}
+              </button>
+              <button
+                onClick={() => navigate('/shop')}
+                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
+              >
+                {t.shopNav}
+              </button>
+              <a
+                href={weddingOfferUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
+              >
+                {t.weddingNav}
+              </a>
+              <button
+                onClick={() => navigate('/contact')}
+                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
+              >
+                {t.contactNav}
+              </button>
+            </nav>
           </div>
 
-          {/* Container 3: Navigation Menu - Desktop Only */}
-          <nav className="hidden lg:flex items-center gap-8">
-            <button
-              onClick={() => navigate('/')}
-              className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-            >
-              {t.home}
-            </button>
-            <button
-              onClick={() => navigate('/shop')}
-              className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-            >
-              {t.shopNav}
-            </button>
-            {/* <button
-              onClick={() => navigate('/about')}
-              className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-            >
-              {t.aboutNav}
-            </button> */}
-            <button
-              onClick={() => navigate('/contact')}
-              className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-            >
-              {t.contactNav}
-            </button>
-          </nav>
-
-          {/* Container 4: Language Toggle and Mobile Menu */}
-          <div className="flex items-center justify-end gap-2 sm:gap-4">
+          {/* RIGHT: Language Toggle and Mobile Menu */}
+          <div className="flex items-center gap-2 sm:gap-4 w-24 justify-end">
             {/* Language Toggle */}
             <button
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
-              className="w-8 sm:w-10 text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase text-center"
+              className="text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase"
             >
               {language === 'ro' ? 'RO' : 'EN'}
             </button>
@@ -126,9 +133,15 @@ const Header = ({ language, setLanguage }) => {
               <button onClick={() => { navigate('/shop'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.shopNav}
               </button>
-              {/* <button onClick={() => { navigate('/about'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
-                {t.aboutNav}
-              </button> */}
+              <a
+                href={weddingOfferUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap"
+              >
+                {t.weddingNav}
+              </a>
               <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
                 {t.contactNav}
               </button>
