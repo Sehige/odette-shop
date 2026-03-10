@@ -111,23 +111,6 @@ const BestSellers = ({ language, setSelectedProduct }) => {
           >
             <ChevronRight className="w-6 h-6 text-gray-700" />
           </button>
-
-          {/* Carousel Dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {bestSellers.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition ${
-                  index === currentIndex ? 'w-8' : ''
-                }`}
-                style={{
-                  backgroundColor: index === currentIndex ? '#d4af37' : '#d1d5db'
-                }}
-                aria-label={`Go to product ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </div>
     </section>

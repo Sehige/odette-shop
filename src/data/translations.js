@@ -38,6 +38,17 @@ export const translations = {
     allergens: 'Alergeni',
     goesWellWith: 'Se Potrivește Bine Cu',
 
+    // Nutritional Info
+    nutritionalInfo: 'Informații Nutriționale',
+    per100g: 'per 100g',
+    calories: 'Calorii',
+    fat: 'Grăsimi',
+    saturatedFat: 'Grăsimi saturate',
+    carbs: 'Carbohidrați',
+    sugars: 'Zaharuri',
+    protein: 'Proteine',
+    salt: 'Sare',
+
     // Footer
     quickLinks: 'Link-uri Rapide',
     followUs: 'Urmărește-ne',
@@ -213,6 +224,17 @@ export const translations = {
     ingredients: 'Ingredients',
     allergens: 'Allergens',
     goesWellWith: 'Goes Well With',
+
+    // Nutritional Info
+    nutritionalInfo: 'Nutritional Information',
+    per100g: 'per 100g',
+    calories: 'Calories',
+    fat: 'Fat',
+    saturatedFat: 'Saturated Fat',
+    carbs: 'Carbohydrates',
+    sugars: 'Sugars',
+    protein: 'Protein',
+    salt: 'Salt',
 
     // Footer
     quickLinks: 'Quick Links',

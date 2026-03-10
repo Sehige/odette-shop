@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { X, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { useAuth } from '../../hooks/useAuth';
@@ -12,8 +12,29 @@ const ProductDetail = ({ product, language, onClose }) => {
   );
   const { isAuthenticated } = useAuth();
   const t = translations[language];
-  
+
   const modalContentRef = useRef(null);
+
+  // Image carousel state
+  const images = product.images && product.images.length > 0
+    ? product.images
+    : [product.image_url];
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const nextImage = () => {
+    setSelectedImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  // Dropdown states
+  const [openDropdown, setOpenDropdown] = useState(null);
+
+  const toggleDropdown = (dropdown) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
 
   // ✅ NEW: Handle ESC key press
   useEffect(() => {
@@ -45,131 +66,232 @@ const ProductDetail = ({ product, language, onClose }) => {
       className="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4"
       onClick={handleBackdropClick}
     >
-      <div 
+      <div
         ref={modalContentRef}
-        className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative"
       >
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center z-10">
-          <h2 className="text-2xl font-bold text-gray-900">{language === 'ro' ? product.name_ro : product.name_en}</h2>
-          <button 
-            onClick={onClose} 
-            className="p-2 hover:bg-gray-100 rounded-full transition"
-            aria-label="Close"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition z-10"
+          aria-label="Close"
+        >
+          <X className="w-6 h-6" />
+        </button>
 
         <div className="p-6">
           <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {/* Image */}
-            <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
-              <img
-                src={product.image_url}
-                alt={language === 'ro' ? product.name_ro : product.name_en}
-                className="w-full h-full object-cover"
-              />
+            {/* Image Carousel */}
+            <div>
+              {/* Main Image with Navigation */}
+              <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
+                <img
+                  src={images[selectedImageIndex]}
+                  alt={language === 'ro' ? product.name_ro : product.name_en}
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Navigation Arrows - only show if multiple images */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md transition"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-gray-700" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md transition"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-700" />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnail Strip - only show if multiple images */}
+              {images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border-2 transition ${
+                        selectedImageIndex === index
+                          ? 'border-blue-600'
+                          : 'border-transparent hover:border-gray-300'
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`${language === 'ro' ? product.name_ro : product.name_en} - ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Details */}
             <div>
-              <p className="text-3xl font-bold mb-4" style={{ color: '#d4af37' }}>
-                {product.price} {t.lei}
-                {selectedSize?.priceMultiplier && selectedSize.priceMultiplier !== 1 && (
-                  <span className="text-lg ml-2 text-gray-600">
-                    ({selectedSize.priceMultiplier})
-                  </span>
-                )}
-              </p>
-              
-              <p className="text-gray-600 mb-6">{language === 'ro' ? product.description_ro : product.description_en}</p>
-              {/* Size Selection */}
-              {product.sizes && product.sizes.length > 0 && (
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.selectSize || 'Select Size'}
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {product.sizes.map((size) => (
-                      <button
-                        key={size.value || size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`px-4 py-2 rounded-lg border-2 transition ${
-                          selectedSize === size
-                            ? 'border-blue-900 bg-blue-50'
-                            : 'border-gray-300 hover:border-blue-300'
-                        }`}
-                        style={selectedSize === size ? { borderColor: '#1e3a8a', backgroundColor: '#eff6ff' } : {}}
-                      >
-                        {size.label ? size.label : size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Product Name */}
+              <h2 className="text-3xl md:text-6xl font-bold text-gray-900 mb-3">
+                {language === 'ro' ? product.name_ro : product.name_en}
+              </h2>
 
-              {/* Flavor Selection */}
-              {product.flavors && product.flavors && product.flavors.length > 0 && (
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.selectFlavor || 'Select Flavor'}
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {product.flavors.map((flavor) => (
-                      <button
-                        key={flavor}
-                        onClick={() => setSelectedFlavor(flavor)}
-                        className={`px-4 py-2 rounded-lg border-2 transition ${
-                          selectedFlavor === flavor
-                            ? 'border-blue-900 bg-blue-50'
-                            : 'border-gray-300 hover:border-blue-300'
-                        }`}
-                        style={selectedFlavor === flavor ? { borderColor: '#1e3a8a', backgroundColor: '#eff6ff' } : {}}
-                      >
-                        {flavor}
-                      </button>
-                    ))}
+              {/* Description */}
+              <div className="mb-4">
+                <p className="text-gray-600">{language === 'ro' ? product.description_ro : product.description_en}</p>
+              </div>
+
+              {/* Quantity and Price - same line, opposite sides */}
+              <div className="flex justify-between items-center mb-6 py-3 ">
+                {product.quantity && (
+                  <span className="text-gray-600 font-medium">{product.quantity}</span>
+                )}
+                {!product.quantity && <span></span>}
+                <span className="text-2xl font-bold" style={{ color: '#1e40af' }}>
+                  {product.price} {t.lei}{product.price_unit && `/${product.price_unit}`}
+                </span>
+              </div>
+
+              {/* Dropdown Menus */}
+              <div className="border-t border-gray-200 mb-6">
+                {/* Ingredients Dropdown */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleDropdown('ingredients')}
+                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                  >
+                    <span className="text-sm font-medium text-gray-900">{t.ingredients}</span>
+                    {openDropdown === 'ingredients' ? (
+                      <Minus className="w-4 h-4 text-gray-900" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-gray-900" />
+                    )}
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'ingredients' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {(product.ingredients_ro || product.ingredients_en)
+                        ? (language === 'ro' ? product.ingredients_ro : product.ingredients_en)
+                        : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
+                    </p>
                   </div>
                 </div>
-              )}
+
+                {/* Allergens Dropdown */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleDropdown('allergens')}
+                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                  >
+                    <span className="text-sm font-medium text-gray-900">{t.allergens}</span>
+                    {openDropdown === 'allergens' ? (
+                      <Minus className="w-4 h-4 text-gray-600" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-gray-600" />
+                    )}
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'allergens' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {(product.allergens_ro || product.allergens_en)
+                        ? (language === 'ro' ? product.allergens_ro : product.allergens_en)
+                        : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Nutritional Values Dropdown */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleDropdown('nutritional')}
+                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                  >
+                    <span className="text-sm font-medium text-gray-900">{t.nutritionalInfo}</span>
+                    {openDropdown === 'nutritional' ? (
+                      <Minus className="w-4 h-4 text-gray-900" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-gray-900" />
+                    )}
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'nutritional' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                    {product.nutritional_info ? (
+                      <table className="w-full text-sm text-gray-900">
+                        <tbody>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.calories}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.energy_kcal} kcal</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.fat}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.fat_g}g</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.saturatedFat}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.saturated_fat_g}g</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.carbs}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.carbohydrates_g}g</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.sugars}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.sugars_g}g</td>
+                          </tr>
+                          <tr className="border-b border-gray-100">
+                            <td className="py-2">{t.protein}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.protein_g}g</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2">{t.salt}</td>
+                            <td className="py-2 text-right">{product.nutritional_info.salt_g}g</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    ) : (
+                      <p className="text-gray-900 text-sm">
+                        {language === 'ro' ? 'Informații indisponibile' : 'Information unavailable'}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Transport Dropdown */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleDropdown('transport')}
+                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                  >
+                    <span className="text-sm font-medium text-gray-900">{language === 'ro' ? 'Transport' : 'Shipping'}</span>
+                    {openDropdown === 'transport' ? (
+                      <Minus className="w-4 h-4 text-gray-600" />
+                    ) : (
+                      <Plus className="w-4 h-4 text-gray-600" />
+                    )}
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'transport' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {language === 'ro'
+                        ? 'Livrare gratuită pentru comenzi peste 200 lei. Livrare în 24-48 ore în București și 2-3 zile lucrătoare în restul țării.'
+                        : 'Free delivery for orders over 200 RON. Delivery within 24-48 hours in Bucharest and 2-3 business days nationwide.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
               {/* Contact Us Button */}
               <button
                 onClick={handleContactUs}
                 className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#d4af37' }}
+                style={{ backgroundColor: '#1e40af' }}
               >
                 {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
               </button>
 
-              {/* Product Info */}
-              <div className="mt-8 space-y-4">
-                {product.ingredients && (
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">
-                      {t.ingredients || 'Ingredients'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">{product.ingredients}</p>
-                  </div>
-                )}
-                {product.allergens && (
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">
-                      {t.allergens || 'Allergens'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">{product.allergens}</p>
-                  </div>
-                )}
-                {product.storage && (
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">
-                      {t.storage || 'Storage'}
-                    </h4>
-                    <p className="text-gray-600 text-sm">{product.storage}</p>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 

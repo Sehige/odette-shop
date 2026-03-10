@@ -23,10 +23,10 @@ const HeroSection = ({ language }) => {
       <div className="relative z-10 h-full flex items-center justify-center text-center text-white max-w-4xl mx-auto px-4">
         <div>
           <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight drop-shadow-lg">
-            {language === 'ro' ? 'Patiserie Artizanală, Preparată Zilnic Proaspătă' : 'Artisan Pastries, Made Fresh Daily'}
+            {language === 'ro' ? 'Locul unde eleganța franceză întâlnește exigența germană.' : 'The place where French elegance meets German precision.'}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white/95 drop-shadow">
-            {language === 'ro' ? 'Descoperă eleganța în fiecare mușcătură. Torturi și prăjituri premium făcute cu dragoste.' : 'Discover elegance in every bite. Premium cakes and pastries made with love.'}
+            {language === 'ro' ? 'Deserturi artizanale din ingrediente premium.' : 'Artisanal products made with premium ingredients.'}
           </p>
           <button
             onClick={() => navigate('/shop')}

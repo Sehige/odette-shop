@@ -13,7 +13,7 @@ export const productsData = [
     id: 1,
     name: { ro: 'Tort Ciocolată Premium', en: 'Premium Chocolate Cake' },
     category: 'cakes',
-    description: { 
+    description: {
       ro: 'Tort cu ciocolată belgiană, cremă fină și glazură lucioasă',
       en: 'Cake with Belgian chocolate, fine cream and glossy glaze'
     },
@@ -21,7 +21,7 @@ export const productsData = [
     image: CAKE_IMAGE,
     sizes: ['1kg', '1.5kg', '2kg'],
     flavors: { ro: ['Ciocolată', 'Ciocolată cu Vișine'], en: ['Chocolate', 'Chocolate Cherry'] },
-    ingredients: { 
+    ingredients: {
       ro: 'Ciocolată belgiană, făină, ou, zahăr, unt, cremă de lapte',
       en: 'Belgian chocolate, flour, eggs, sugar, butter, cream'
     },
@@ -34,14 +34,14 @@ export const productsData = [
     id: 2,
     name: { ro: 'Ecler Vanilie', en: 'Vanilla Eclair' },
     category: 'pastries',
-    description: { 
+    description: {
       ro: 'Ecler clasic cu cremă de vanilie Madagascar și glazură de ciocolată',
       en: 'Classic eclair with Madagascar vanilla cream and chocolate glaze'
     },
     price: 15,
     image: ECLAIR_IMAGE,
     flavors: { ro: ['Vanilie', 'Caramel', 'Cafea'], en: ['Vanilla', 'Caramel', 'Coffee'] },
-    ingredients: { 
+    ingredients: {
       ro: 'Făină, ou, unt, lapte, vanilie Madagascar, ciocolată',
       en: 'Flour, eggs, butter, milk, Madagascar vanilla, chocolate'
     },
@@ -54,14 +54,14 @@ export const productsData = [
     id: 3,
     name: { ro: 'Macarons Asortate', en: 'Assorted Macarons' },
     category: 'cookies',
-    description: { 
+    description: {
       ro: 'Set de 6 macarons în arome variate: zmeură, ciocolată, vanilie',
       en: 'Set of 6 macarons in various flavors: raspberry, chocolate, vanilla'
     },
     price: 35,
     image: MACARON_IMAGE,
     flavors: { ro: ['Mix Clasic', 'Mix Exotic'], en: ['Classic Mix', 'Exotic Mix'] },
-    ingredients: { 
+    ingredients: {
       ro: 'Migdale, albuș, zahăr, coloranți naturali',
       en: 'Almonds, egg white, sugar, natural colorants'
     },
@@ -89,7 +89,7 @@ export const productsData = [
     id: 5,
     name: { ro: 'Croissant Unt', en: 'Butter Croissant' },
     category: 'pastries',
-    description: { 
+    description: {
       ro: 'Croissant franțuzesc cu unt de Normandia, crocant și aromat',
       en: 'French croissant with Normandy butter, crispy and aromatic'
     },

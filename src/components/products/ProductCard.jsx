@@ -64,7 +64,7 @@ const ProductCard = ({ product, language, setSelectedProduct }) => {
         </div>
 
         <div className="flex items-center justify-center">
-          <span className="text-2xl font-bold" style={{ color: '#d4af37' }}>
+          <span className="text-2xl font-bold" style={{ color: '#1e40af' }}>
             {product.price} {t.lei}
           </span>
         </div>

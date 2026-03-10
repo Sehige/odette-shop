@@ -5,4 +5,4 @@ export const MACARON_IMAGE = 'https://images.unsplash.com/photo-1569864358642-9d
 export const RED_VELVET_IMAGE = 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=800&q=80'; // Red Velvet Cake
 export const CROISSANT_IMAGE = 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=80'; // Croissant
 export const BERRY_TART_IMAGE = 'https://images.unsplash.com/photo-1519915212116-7cfef71f1d3e?w=800&q=80'; // Berry Tart
-export const HERO_IMAGE = 'https://ovajkmagjddlujgegcon.supabase.co/storage/v1/object/public/product-images/cover.jpg';
+export const HERO_IMAGE = 'https://ovajkmagjddlujgegcon.supabase.co/storage/v1/object/public/product-images/cover_2.jpg';
