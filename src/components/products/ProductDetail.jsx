@@ -276,8 +276,8 @@ const ProductDetail = ({ product, language, onClose }) => {
                   <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'transport' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       {language === 'ro'
-                        ? 'Livrare gratuită pentru comenzi peste 200 lei. Livrare în 24-48 ore în București și 2-3 zile lucrătoare în restul țării.'
-                        : 'Free delivery for orders over 200 RON. Delivery within 24-48 hours in Bucharest and 2-3 business days nationwide.'}
+                        ? 'Beneficiezi de livrare gratuită pentru comenzile de peste 200 lei. Pentru comenzile sub această valoare se percepe o taxă de transport de 15 lei în Cluj-Napoca și 25 lei în afara orașului.'
+                        : 'Free delivery for orders over 200 RON. For orders below this amount, the delivery fee is 15 RON in Cluj-Napoca and 25 RON outside the city.'}
                     </p>
                   </div>
                 </div>
