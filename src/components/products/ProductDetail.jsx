@@ -3,7 +3,6 @@ import { X, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { useAuth } from '../../hooks/useAuth';
-import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const ProductDetail = ({ product, language, onClose }) => {
   const navigate = useNavigate();
@@ -87,7 +86,7 @@ const ProductDetail = ({ product, language, onClose }) => {
               {/* Main Image with Navigation */}
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
                 <img
-                  src={getOptimizedImageUrl(images[selectedImageIndex], { width: 800 })}
+                  src={images[selectedImageIndex]}
                   alt={language === 'ro' ? product.name_ro : product.name_en}
                   className="w-full h-full object-cover"
                 />
@@ -127,7 +126,7 @@ const ProductDetail = ({ product, language, onClose }) => {
                       }`}
                     >
                       <img
-                        src={getOptimizedImageUrl(img, { width: 100 })}
+                        src={img}
                         alt={`${language === 'ro' ? product.name_ro : product.name_en} - ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
