@@ -1,6 +1,5 @@
 import React from 'react';
 import { Heart, Sparkles } from 'lucide-react';
-import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const WeddingBanner = ({ language }) => {
   // Wedding offer URL
@@ -53,7 +52,7 @@ const WeddingBanner = ({ language }) => {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
               {/* Background image */}
               <img
-                src={getOptimizedImageUrl(weddingImage, { width: 800, quality: 80 })}
+                src={weddingImage}
                 alt={t.collectionName}
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover"
