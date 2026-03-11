@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HERO_IMAGE } from '../../data/imageConstants';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const HeroSection = ({ language }) => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const HeroSection = ({ language }) => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: `url(${HERO_IMAGE})`,
+          backgroundImage: `url(${getOptimizedImageUrl(HERO_IMAGE, { width: 1920 })})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

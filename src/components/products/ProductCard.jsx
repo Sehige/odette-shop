@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, Check } from 'lucide-react';
 import { translations } from '../../data/translations';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const ProductCard = ({ product, language, setSelectedProduct }) => {
   const t = translations[language];
@@ -15,7 +16,7 @@ const ProductCard = ({ product, language, setSelectedProduct }) => {
         onClick={() => setSelectedProduct(product)}
       >
         <img
-          src={product.image_url}
+          src={getOptimizedImageUrl(product.image_url, { width: 400 })}
           alt={product.name_ro}
           loading="lazy"
           className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
