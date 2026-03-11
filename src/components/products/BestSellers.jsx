@@ -9,6 +9,7 @@
 
 import React from 'react';
 import { useBestSellers } from '../../hooks/useProducts';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const BestSellers = () => {
   const { bestSellers, loading, error } = useBestSellers();
@@ -87,8 +88,9 @@ const BestSellerCard = ({ product }) => {
       <div className="relative h-56 bg-gray-100 overflow-hidden">
         {product.image_url ? (
           <img
-            src={product.image_url}
-            alt={language === 'ro' ? product.name_ro : product.name_en}
+            src={getOptimizedImageUrl(product.image_url, { width: 400, quality: 80 })}
+            alt={product.name_ro || product.name_en}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         ) : (

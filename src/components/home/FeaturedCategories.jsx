@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { useFeaturedCategories } from '../../hooks/useProducts';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const FeaturedCategories = ({ language }) => {
   const navigate = useNavigate();
@@ -76,8 +77,9 @@ const FeaturedCategories = ({ language }) => {
             >
               {category.imageURL && (
                 <img
-                  src={category.imageURL}
+                  src={getOptimizedImageUrl(category.imageURL, { width: 500, quality: 80 })}
                   alt={language === 'ro' ? category.name_ro : category.name_en}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                 />
               )}

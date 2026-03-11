@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { useProductsByCategory, useCategories } from '../../hooks/useProducts';
+import { getOptimizedImageUrl } from '../../utils/imageOptimizer';
 
 const ProductsByCategory = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -126,8 +127,9 @@ const CategoryProductCard = ({ product }) => {
       <div className="relative h-48 bg-gray-100">
         {product.image_url ? (
           <img
-            src={product.image_url}
+            src={getOptimizedImageUrl(product.image_url, { width: 400, quality: 80 })}
             alt={product.name}
+            loading="lazy"
             className="w-full h-full object-cover"
           />
         ) : (
