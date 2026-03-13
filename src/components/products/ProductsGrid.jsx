@@ -9,6 +9,7 @@
 
 import React from 'react';
 import { useAllProducts } from '../../hooks/useProducts';
+import { getProductCardImageUrl } from '../../utils/imageOptimizer';
 
 const ProductsGrid = () => {
   const { products, loading, error, refetch } = useAllProducts();
@@ -91,7 +92,7 @@ const ProductCard = ({ product }) => {
       <div className="relative h-48 bg-gray-100 overflow-hidden">
         {product.image_url ? (
           <img
-            src={product.image_url}
+            src={getProductCardImageUrl(product.image_url)}
             alt={product.name}
             loading="lazy"
             className="w-full h-full object-cover"
