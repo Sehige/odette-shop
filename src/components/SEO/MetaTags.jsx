@@ -12,7 +12,7 @@ const MetaTags = ({
   lang = 'ro'
 }) => {
   const siteTitle = title ? `${title} | Odette` : 'Odette - Prăjituri Artizanale și Torturi Premium';
-  const siteDescription = description || 'Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Satu Mare.';
+  const siteDescription = description || 'Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca.';
   const siteImage = image || 'https://www.odette.ro/default-og-image.jpg';
   const siteUrl = url || 'https://www.odette.ro';
   
