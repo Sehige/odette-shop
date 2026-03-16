@@ -54,34 +54,46 @@ const loadGA4 = (consent) => {
 
 /**
  * Dynamically loads Google Tag Manager only when consent is given
+ * Delays loading to not block initial page load
  * @param {Object} consent - Consent object with analytics and marketing flags
  */
 export const loadGTM = (consent) => {
-  // Load GA4 if analytics consent given
-  loadGA4(consent);
-
   if (gtmLoaded) return;
   if (!consent.analytics && !consent.marketing) return;
 
-  // Initialize dataLayer if not exists
-  window.dataLayer = window.dataLayer || [];
+  // Delay GTM loading to not block initial page performance
+  // Uses requestIdleCallback if available, otherwise setTimeout
+  const delayLoad = () => {
+    // Load GA4 if analytics consent given
+    loadGA4(consent);
 
-  // Update consent before loading GTM
-  updateGTMConsent(consent);
+    // Initialize dataLayer if not exists
+    window.dataLayer = window.dataLayer || [];
 
-  // Push GTM start event
-  window.dataLayer.push({
-    'gtm.start': new Date().getTime(),
-    event: 'gtm.js'
-  });
+    // Update consent before loading GTM
+    updateGTMConsent(consent);
 
-  // Create and inject GTM script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
-  document.head.appendChild(script);
+    // Push GTM start event
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js'
+    });
 
-  gtmLoaded = true;
+    // Create and inject GTM script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
+    document.head.appendChild(script);
+
+    gtmLoaded = true;
+  };
+
+  // Use requestIdleCallback to load when browser is idle, fallback to 2s delay
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(delayLoad, { timeout: 3000 });
+  } else {
+    setTimeout(delayLoad, 2000);
+  }
 };
 
 /**
