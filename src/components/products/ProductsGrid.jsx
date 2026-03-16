@@ -64,8 +64,8 @@ const ProductsGrid = () => {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {products.map((product, index) => (
+          <ProductCard key={product.id} product={product} priority={index < 4} />
         ))}
       </div>
     </div>
@@ -76,7 +76,7 @@ const ProductsGrid = () => {
  * ProductCard Component
  * Individual product card with Odette's navy blue, white, and gold theme
  */
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, priority = false }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       {/* Best Seller Badge */}
@@ -94,7 +94,8 @@ const ProductCard = ({ product }) => {
           <img
             src={getProductCardImageUrl(product.image_url)}
             alt={product.name}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
             className="w-full h-full object-cover"
           />
         ) : (

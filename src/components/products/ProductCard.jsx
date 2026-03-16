@@ -3,22 +3,23 @@ import { Heart, Check } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { getProductCardImageUrl } from '../../utils/imageOptimizer';
 
-const ProductCard = ({ product, language, setSelectedProduct }) => {
+const ProductCard = ({ product, language, setSelectedProduct, priority = false }) => {
   const t = translations[language];
-  
+
   return (
-    <div 
+    <div
       className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
     >
       {/* Image - Clickable */}
-      <div 
+      <div
         className="relative overflow-hidden aspect-square"
         onClick={() => setSelectedProduct(product)}
       >
         <img
           src={getProductCardImageUrl(product.image_url)}
           alt={product.name_ro}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
         />
         {/* Add to Favorites Button (future feature) */}

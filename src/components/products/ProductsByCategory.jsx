@@ -83,8 +83,8 @@ const ProductsByCategory = () => {
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {products.map((product) => (
-                      <CategoryProductCard key={product.id} product={product} />
+                    {products.map((product, index) => (
+                      <CategoryProductCard key={product.id} product={product} priority={index < 4} />
                     ))}
                   </div>
                 </>
@@ -120,7 +120,7 @@ const ProductsByCategory = () => {
  * CategoryProductCard Component
  * Simple product card for category view
  */
-const CategoryProductCard = ({ product }) => {
+const CategoryProductCard = ({ product, priority = false }) => {
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
       {/* Image */}
@@ -129,7 +129,8 @@ const CategoryProductCard = ({ product }) => {
           <img
             src={getProductCardImageUrl(product.image_url)}
             alt={product.name}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
             className="w-full h-full object-cover"
           />
         ) : (

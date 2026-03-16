@@ -60,8 +60,8 @@ const BestSellers = () => {
 
         {/* Best Sellers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {bestSellers.map((product) => (
-            <BestSellerCard key={product.id} product={product} />
+          {bestSellers.map((product, index) => (
+            <BestSellerCard key={product.id} product={product} priority={index < 4} />
           ))}
         </div>
       </div>
@@ -73,7 +73,7 @@ const BestSellers = () => {
  * BestSellerCard Component
  * Styled card specifically for best seller products
  */
-const BestSellerCard = ({ product }) => {
+const BestSellerCard = ({ product, priority = false }) => {
   return (
     <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
       {/* Gold Border on Hover */}
@@ -90,7 +90,8 @@ const BestSellerCard = ({ product }) => {
           <img
             src={getProductCardImageUrl(product.image_url)}
             alt={product.name_ro || product.name_en}
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
         ) : (
