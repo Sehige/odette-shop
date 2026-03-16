@@ -97,15 +97,50 @@ export const getProductDetailImageUrl = (imageUrl) => {
 };
 
 /**
- * Get optimized image URL for banner images
+ * Get optimized image URL for banner images (single size, for non-hero banners)
  */
 export const getBannerImageUrl = (imageUrl) => {
   return getOptimizedImageUrl(imageUrl, {
-    width: 1200,
-    height: 800,
+    width: 800,
+    height: 600,
     quality: 'auto:good',
     crop: 'fill'
   });
+};
+
+/**
+ * Get responsive banner image props for srcset
+ * Use this for banners that need different sizes on mobile/desktop
+ */
+export const getResponsiveBannerProps = (imageUrl) => {
+  const sizes = [
+    { width: 480, height: 360 },   // Mobile
+    { width: 800, height: 600 },   // Tablet
+    { width: 1200, height: 800 },  // Desktop
+  ];
+
+  const srcSet = sizes.map(({ width, height }) => {
+    const url = getOptimizedImageUrl(imageUrl, {
+      width,
+      height,
+      quality: 'auto:good',
+      crop: 'fill'
+    });
+    return `${url} ${width}w`;
+  }).join(', ');
+
+  const src = getOptimizedImageUrl(imageUrl, {
+    width: 800,
+    height: 600,
+    quality: 'auto:good',
+    crop: 'fill'
+  });
+
+  return {
+    src,
+    srcSet,
+    sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px'
+  };
 };
 
 /**

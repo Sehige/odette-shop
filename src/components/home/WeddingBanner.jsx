@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heart, Sparkles } from 'lucide-react';
-import { getBannerImageUrl } from '../../utils/imageOptimizer';
+import { getResponsiveBannerProps } from '../../utils/imageOptimizer';
 
 const WeddingBanner = ({ language }) => {
   // Wedding offer URL
@@ -40,6 +40,9 @@ const WeddingBanner = ({ language }) => {
 
   const t = translations[language] || translations.ro;
 
+  // Get responsive image props for the wedding banner
+  const bannerImageProps = getResponsiveBannerProps(weddingImage);
+
   return (
     <section className="relative bg-gradient-to-br from-pink-50 via-white to-blue-50 py-16 md:py-20 overflow-hidden">
       {/* Decorative elements */}
@@ -53,7 +56,9 @@ const WeddingBanner = ({ language }) => {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
               {/* Background image */}
               <img
-                src={getBannerImageUrl(weddingImage)}
+                src={bannerImageProps.src}
+                srcSet={bannerImageProps.srcSet}
+                sizes={bannerImageProps.sizes}
                 alt={t.collectionName}
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover"
