@@ -8,15 +8,15 @@ const HeroSection = ({ language }) => {
 
   return (
     <section className="relative h-screen min-h-[600px] overflow-hidden">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url(${getBannerImageUrl(HERO_IMAGE)})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+      {/* Background Image - using img tag for better LCP */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={getBannerImageUrl(HERO_IMAGE)}
+          alt=""
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0" style={{ backgroundColor: 'rgba(30, 58, 138, 0.85)' }}></div>
       </div>
 
