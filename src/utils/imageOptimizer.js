@@ -5,7 +5,7 @@
  */
 
 // Cloudinary cloud name - replace with your own after creating account at cloudinary.com
-const CLOUDINARY_CLOUD_NAME = 'demo'; // Using 'demo' for testing, replace with your cloud name
+const CLOUDINARY_CLOUD_NAME = 'dszlfdr5f'; // Using 'demo' for testing, replace with your cloud name
 
 /**
  * Get optimized image URL using Cloudinary's fetch API
