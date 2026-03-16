@@ -35,27 +35,27 @@ const ShopPage = ({ language, setSelectedProduct }) => {
       <div className="pt-32 pb-16 min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Skeleton Header */}
-          <div className="text-center mb-12 min-h-[120px]">
-            <div className="h-12 bg-gray-200 rounded-lg w-48 mx-auto mb-4 animate-pulse"></div>
-            <div className="h-6 bg-gray-200 rounded w-64 mx-auto animate-pulse"></div>
+          <div className="text-center mb-6 sm:mb-12 min-h-[80px] sm:min-h-[120px]">
+            <div className="h-8 sm:h-12 bg-gray-200 rounded-lg w-36 sm:w-48 mx-auto mb-2 sm:mb-4 animate-pulse"></div>
+            <div className="h-5 sm:h-6 bg-gray-200 rounded w-48 sm:w-64 mx-auto animate-pulse"></div>
           </div>
 
           {/* Skeleton Filter */}
-          <div className="mb-8 flex flex-wrap justify-center gap-3 min-h-[44px]">
+          <div className="mb-4 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[36px] sm:min-h-[44px]">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-10 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+              <div key={i} className="h-8 sm:h-10 w-20 sm:w-24 bg-gray-200 rounded-full animate-pulse"></div>
             ))}
           </div>
 
           {/* Skeleton Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
               <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg">
                 <div className="aspect-square bg-gray-200 animate-pulse"></div>
-                <div className="p-6">
-                  <div className="h-6 bg-gray-200 rounded mb-3 animate-pulse"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4 animate-pulse"></div>
-                  <div className="h-8 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
+                <div className="p-3 sm:p-6">
+                  <div className="h-4 sm:h-6 bg-gray-200 rounded mb-2 sm:mb-3 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 sm:mb-4 hidden sm:block animate-pulse"></div>
+                  <div className="h-6 sm:h-8 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
                 </div>
               </div>
             ))}
@@ -90,11 +90,11 @@ const ShopPage = ({ language, setSelectedProduct }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header - min-height matches skeleton to prevent CLS */}
-        <div className="text-center mb-12 min-h-[120px]">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6 sm:mb-12 min-h-[80px] sm:min-h-[120px]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2 sm:mb-4">
             {shopT.title}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-base sm:text-xl text-gray-600">
             {language === 'ro'
               ? `Descoperă ${allProducts.length} ${shopT.productsCount}`
               : `Discover ${allProducts.length} ${shopT.productsCount}`}
@@ -102,11 +102,11 @@ const ShopPage = ({ language, setSelectedProduct }) => {
         </div>
         
         {/* Category Filter - min-height to prevent CLS */}
-        <div className="mb-8 flex flex-wrap justify-center gap-3 min-h-[44px]">
+        <div className="mb-4 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[36px] sm:min-h-[44px]">
           {/* All Products Button */}
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-6 py-2 rounded-full font-medium transition ${
+            className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
               selectedCategory === 'all'
                 ? 'bg-blue-900 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -114,7 +114,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
           >
             {shopT.all} ({allProducts.length})
           </button>
-          
+
           {/* Category Buttons */}
           {categories.map(category => {
             const count = allProducts.filter(p => p.category === category.id).length;
@@ -122,7 +122,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-6 py-2 rounded-full font-medium transition ${
+                className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
                   selectedCategory === category.id
                     ? 'bg-blue-900 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -136,7 +136,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
                 
         {/* Products Grid */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {filteredProducts.map((product, index) => (
               <ProductCard
                 key={product.id}

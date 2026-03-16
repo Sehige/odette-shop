@@ -34,41 +34,33 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
       </div>
       
       {/* Product Info - Clickable */}
-      <div 
-        className="p-6"
+      <div
+        className="p-3 sm:p-6"
         onClick={() => setSelectedProduct(product)}
       >
-        <div className="flex items-center gap-2 mb-3 h-12">
-          <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
+        <div className="flex flex-col items-center mb-2 sm:mb-3 min-h-[2rem] sm:min-h-[3rem]">
+          <h3 className="text-sm sm:text-xl font-semibold text-gray-900 line-clamp-2 text-center">
             {language === 'ro' ? product.name_ro : product.name_en}
           </h3>
-          {/* Vegan/Vegetarian Indicators */}
+          {/* Vegan/Vegetarian Indicators - hidden on mobile */}
           {product.isVegetarian && (
-            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
+            <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full mt-1">
               <Check className="w-3 h-3 text-green-600" />
               <span className="text-xs font-medium text-green-600">
                 {language === 'ro' ? 'Vegan' : 'Vegan'}
               </span>
             </div>
           )}
-          {product.isVegetarian && !product.isVegetarian && (
-            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full">
-              <Check className="w-3 h-3 text-green-600" />
-              <span className="text-xs font-medium text-green-600">
-                {language === 'ro' ? 'Vegetarian' : 'Vegetarian'}
-              </span>
-            </div>
-          )}
         </div>
-        <div className="mb-4 h-10">
+        <div className="mb-2 sm:mb-4 hidden sm:block h-10">
           <p className="text-gray-600 text-sm line-clamp-2">
             {product.description}
           </p>
         </div>
 
         <div className="flex items-center justify-center">
-          <span className="text-2xl font-bold" style={{ color: '#1e40af' }}>
-            {product.price} {t.lei}
+          <span className="text-lg sm:text-2xl font-bold" style={{ color: '#1e40af' }}>
+            {product.price} {t.lei}{product.price_unit && `/${product.price_unit}`}
           </span>
         </div>
       </div>

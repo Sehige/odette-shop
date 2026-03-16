@@ -27,10 +27,10 @@ const HeroSection = ({ language }) => {
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-center text-center text-white max-w-4xl mx-auto px-4">
         <div>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight drop-shadow-lg">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight drop-shadow-lg">
             {language === 'ro' ? 'Locul unde eleganța franceză întâlnește exigența germană.' : 'The place where French elegance meets German precision.'}
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-white/95 drop-shadow">
+          <p className="text-lg sm:text-xl md:text-2xl mb-8 text-white/95 drop-shadow">
             {language === 'ro' ? 'Deserturi artizanale din ingrediente premium.' : 'Artisanal products made with premium ingredients.'}
           </p>
           <button
