@@ -49,7 +49,7 @@
     <meta name="language" content="Romanian" />
     
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- Manifest loaded after page to avoid blocking critical path -->
 
     <!-- Preconnect to Cloudinary for optimized image loading -->
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
@@ -123,5 +123,14 @@
   <body>
     <noscript>Trebuie să activați JavaScript pentru a rula această aplicație.</noscript>
     <div id="root"></div>
+    <!-- Load manifest after page to avoid blocking critical path -->
+    <script>
+      window.addEventListener('load', function() {
+        var link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = '%PUBLIC_URL%/manifest.json';
+        document.head.appendChild(link);
+      });
+    </script>
   </body>
 </html>
