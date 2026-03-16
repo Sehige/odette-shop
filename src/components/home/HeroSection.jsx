@@ -1,17 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HERO_IMAGE } from '../../data/imageConstants';
-import { getBannerImageUrl } from '../../utils/imageOptimizer';
+import { getHeroImageProps } from '../../utils/imageOptimizer';
 
 const HeroSection = ({ language }) => {
   const navigate = useNavigate();
+
+  const heroImageProps = getHeroImageProps(HERO_IMAGE);
 
   return (
     <section className="relative h-screen min-h-[600px] overflow-hidden">
       {/* Background Image - using img tag for better LCP */}
       <div className="absolute inset-0 z-0">
         <img
-          src={getBannerImageUrl(HERO_IMAGE)}
+          src={heroImageProps.src}
+          srcSet={heroImageProps.srcSet}
+          sizes={heroImageProps.sizes}
           alt=""
           fetchPriority="high"
           decoding="async"
