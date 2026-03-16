@@ -109,6 +109,42 @@ export const getBannerImageUrl = (imageUrl) => {
 };
 
 /**
+ * Get hero image URLs for responsive srcset
+ * Returns object with src, srcSet, and sizes for responsive loading
+ */
+export const getHeroImageProps = (imageUrl) => {
+  const sizes = [
+    { width: 640, height: 427 },   // Mobile
+    { width: 1024, height: 683 },  // Tablet
+    { width: 1920, height: 1280 }, // Desktop
+  ];
+
+  const srcSet = sizes.map(({ width, height }) => {
+    const url = getOptimizedImageUrl(imageUrl, {
+      width,
+      height,
+      quality: 'auto:good',
+      crop: 'fill'
+    });
+    return `${url} ${width}w`;
+  }).join(', ');
+
+  // Default src for browsers without srcset support
+  const src = getOptimizedImageUrl(imageUrl, {
+    width: 1024,
+    height: 683,
+    quality: 'auto:good',
+    crop: 'fill'
+  });
+
+  return {
+    src,
+    srcSet,
+    sizes: '100vw' // Hero is always full viewport width
+  };
+};
+
+/**
  * Get optimized thumbnail URL
  */
 export const getThumbnailUrl = (imageUrl) => {
