@@ -2,7 +2,7 @@ export const translations = {
   ro: {
     // Header
     home: 'Acasă',
-    shopNav: 'Magazin',
+    shopNav: 'Produse',
     weddingNav: 'Ofertă Nunți',
     cakes: 'Torturi',
     pastries: 'Prăjituri',
@@ -137,7 +137,7 @@ export const translations = {
 
     // ===== SHOP PAGE =====
     shop: {
-      title: 'Magazin',
+      title: 'Produse',
       loading: 'Se încarcă produsele...',
       error: 'Eroare la încărcarea produselor',
       tryAgain: 'Încercați din nou',
@@ -189,7 +189,7 @@ export const translations = {
   en: {
     // Header
     home: 'Home',
-    shopNav: 'Shop',
+    shopNav: 'Products',
     weddingNav: 'Wedding Offer',
     cakes: 'Cakes',
     pastries: 'Pastries',
@@ -324,7 +324,7 @@ export const translations = {
 
     // ===== SHOP PAGE =====
     shop: {
-      title: 'Shop',
+      title: 'Products',
       loading: 'Loading products...',
       error: 'Error loading products',
       tryAgain: 'Try Again',
