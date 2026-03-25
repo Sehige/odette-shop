@@ -120,8 +120,12 @@ const ShopPage = ({ language, setSelectedProduct }) => {
             {shopT.all} ({allProducts.length})
           </button>
 
-          {/* Category Buttons */}
-          {categories.map(category => {
+          {/* Category Buttons - sorted alphabetically */}
+          {[...categories].sort((a, b) => {
+            const nameA = (language === 'ro' ? a.name_ro : a.name_en) || '';
+            const nameB = (language === 'ro' ? b.name_ro : b.name_en) || '';
+            return nameA.localeCompare(nameB, language);
+          }).map(category => {
             const count = allProducts.filter(p => p.category === category.id).length;
             return (
               <button
