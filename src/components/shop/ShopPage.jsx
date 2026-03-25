@@ -25,9 +25,14 @@ const ShopPage = ({ language, setSelectedProduct }) => {
 
   console.log('Categories in ShopPage:', categories);
   
-  const filteredProducts = selectedCategory === 'all' 
-    ? allProducts 
-    : allProducts.filter(p => p.category === selectedCategory);
+  const filteredProducts = (selectedCategory === 'all'
+    ? allProducts
+    : allProducts.filter(p => p.category === selectedCategory)
+  ).sort((a, b) => {
+    const nameA = (language === 'ro' ? a.name_ro : a.name_en) || '';
+    const nameB = (language === 'ro' ? b.name_ro : b.name_en) || '';
+    return nameA.localeCompare(nameB, language);
+  });
 
   // Loading state - use skeleton that matches final layout to prevent CLS
   if (productsLoading || categoriesLoading) {
