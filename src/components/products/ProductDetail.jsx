@@ -191,8 +191,8 @@ const ProductDetail = ({ product, language, onClose }) => {
 
               {/* Dropdown Menus */}
               <div className="border-t border-gray-200 mb-6">
-                {/* Ingredients, Allergens, Nutritional - Hidden for Easter products */}
-                {!product.isEasterFeatured && (
+                {/* Ingredients, Allergens, Nutritional - Hidden for Easter Boxes category */}
+                {!(product.categoryName?.toLowerCase().includes('easter') || product.categoryNameRo?.toLowerCase().includes('paște')) && (
                   <>
                     {/* Ingredients Dropdown */}
                     <div className="border-b border-gray-200">
