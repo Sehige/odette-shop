@@ -18,13 +18,19 @@ export const getAllProducts = async () => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .eq('isActive', true)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error('Error fetching all products:', error);
     return { data: null, error };
@@ -41,14 +47,20 @@ export const getProductsByCategory = async (category) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .eq('category', category)
       .eq('isActive', true)
       .order('name', { ascending: true });
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error(`Error fetching products for category "${category}":`, error);
     return { data: null, error };
@@ -64,14 +76,20 @@ export const getBestSellers = async () => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .eq('best_seller_flag', true)
       .eq('isActive', true)
       .order('name_ro', { ascending: true });
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error('Error fetching best sellers:', error);
     return { data: null, error };
@@ -88,14 +106,20 @@ export const getProductById = async (productId) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .eq('id', productId)
       .eq('isActive', true)
       .single(); // Returns single object instead of array
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productWithEasterFlag = data ? {
+      ...data,
+      isEasterFeatured: data.categories?.isEasterFeatured || false
+    } : null;
+
+    return { data: productWithEasterFlag, error: null };
   } catch (error) {
     console.error(`Error fetching product with ID ${productId}:`, error);
     return { data: null, error };
@@ -112,14 +136,20 @@ export const searchProducts = async (searchTerm) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .ilike('name', `%${searchTerm}%`) // Case-insensitive search
       .eq('isActive', true)
       .order('name', { ascending: true });
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error(`Error searching products with term "${searchTerm}":`, error);
     return { data: null, error };
@@ -137,7 +167,7 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
       .gte('price', minPrice)
       .lte('price', maxPrice)
       .eq('isActive', true)
@@ -145,7 +175,13 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error(`Error fetching products in price range ${minPrice}-${maxPrice}:`, error);
     return { data: null, error };
@@ -231,7 +267,7 @@ export const getFeaturedCategories = async () => {
  */
 export const getFilteredProducts = async (filters = {}) => {
   try {
-    let query = supabase.from('products').select('*, nutritional_info(*)').eq('isActive', true);
+    let query = supabase.from('products').select('*, nutritional_info(*), categories:category(isEasterFeatured)').eq('isActive', true);
 
     // Apply filters conditionally
     if (filters.category) {
@@ -255,7 +291,13 @@ export const getFilteredProducts = async (filters = {}) => {
 
     if (error) throw error;
 
-    return { data, error: null };
+    // Flatten the category data for easier access
+    const productsWithEasterFlag = data?.map(product => ({
+      ...product,
+      isEasterFeatured: product.categories?.isEasterFeatured || false
+    }));
+
+    return { data: productsWithEasterFlag, error: null };
   } catch (error) {
     console.error('Error fetching filtered products:', error);
     return { data: null, error };

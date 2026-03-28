@@ -111,6 +111,16 @@ const ProductDetail = ({ product, language, onClose }) => {
                   className="w-full h-full object-cover"
                 />
 
+                {/* Easter Special Badge */}
+                {product.isEasterFeatured && (
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-md flex items-center gap-2">
+                      <span className="text-lg">🐰</span>
+                      <span>{language === 'ro' ? 'Ediție de Paște' : 'Easter Edition'}</span>
+                    </span>
+                  </div>
+                )}
+
                 {/* Navigation Arrows - only show if multiple images */}
                 {images.length > 1 && (
                   <>
@@ -181,104 +191,109 @@ const ProductDetail = ({ product, language, onClose }) => {
 
               {/* Dropdown Menus */}
               <div className="border-t border-gray-200 mb-6">
-                {/* Ingredients Dropdown */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleDropdown('ingredients')}
-                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
-                  >
-                    <span className="text-sm font-medium text-gray-900">{t.ingredients}</span>
-                    {openDropdown === 'ingredients' ? (
-                      <Minus className="w-4 h-4 text-gray-900" />
-                    ) : (
-                      <Plus className="w-4 h-4 text-gray-900" />
-                    )}
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'ingredients' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {(product.ingredients_ro || product.ingredients_en)
-                        ? (language === 'ro' ? product.ingredients_ro : product.ingredients_en)
-                        : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
-                    </p>
-                  </div>
-                </div>
+                {/* Ingredients, Allergens, Nutritional - Hidden for Easter products */}
+                {!product.isEasterFeatured && (
+                  <>
+                    {/* Ingredients Dropdown */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleDropdown('ingredients')}
+                        className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                      >
+                        <span className="text-sm font-medium text-gray-900">{t.ingredients}</span>
+                        {openDropdown === 'ingredients' ? (
+                          <Minus className="w-4 h-4 text-gray-900" />
+                        ) : (
+                          <Plus className="w-4 h-4 text-gray-900" />
+                        )}
+                      </button>
+                      <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'ingredients' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          {(product.ingredients_ro || product.ingredients_en)
+                            ? (language === 'ro' ? product.ingredients_ro : product.ingredients_en)
+                            : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
+                        </p>
+                      </div>
+                    </div>
 
-                {/* Allergens Dropdown */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleDropdown('allergens')}
-                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
-                  >
-                    <span className="text-sm font-medium text-gray-900">{t.allergens}</span>
-                    {openDropdown === 'allergens' ? (
-                      <Minus className="w-4 h-4 text-gray-600" />
-                    ) : (
-                      <Plus className="w-4 h-4 text-gray-600" />
-                    )}
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'allergens' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {(product.allergens_ro || product.allergens_en)
-                        ? (language === 'ro' ? product.allergens_ro : product.allergens_en)
-                        : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
-                    </p>
-                  </div>
-                </div>
+                    {/* Allergens Dropdown */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleDropdown('allergens')}
+                        className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                      >
+                        <span className="text-sm font-medium text-gray-900">{t.allergens}</span>
+                        {openDropdown === 'allergens' ? (
+                          <Minus className="w-4 h-4 text-gray-600" />
+                        ) : (
+                          <Plus className="w-4 h-4 text-gray-600" />
+                        )}
+                      </button>
+                      <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'allergens' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          {(product.allergens_ro || product.allergens_en)
+                            ? (language === 'ro' ? product.allergens_ro : product.allergens_en)
+                            : (language === 'ro' ? 'Informații indisponibile' : 'Information unavailable')}
+                        </p>
+                      </div>
+                    </div>
 
-                {/* Nutritional Values Dropdown */}
-                <div className="border-b border-gray-200">
-                  <button
-                    onClick={() => toggleDropdown('nutritional')}
-                    className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
-                  >
-                    <span className="text-sm font-medium text-gray-900">{t.nutritionalInfo}</span>
-                    {openDropdown === 'nutritional' ? (
-                      <Minus className="w-4 h-4 text-gray-900" />
-                    ) : (
-                      <Plus className="w-4 h-4 text-gray-900" />
-                    )}
-                  </button>
-                  <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'nutritional' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                    {product.nutritional_info ? (
-                      <table className="w-full text-sm text-gray-900">
-                        <tbody>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.calories}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.energy_kcal} kcal</td>
-                          </tr>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.fat}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.fat_g}g</td>
-                          </tr>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.saturatedFat}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.saturated_fat_g}g</td>
-                          </tr>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.carbs}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.carbohydrates_g}g</td>
-                          </tr>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.sugars}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.sugars_g}g</td>
-                          </tr>
-                          <tr className="border-b border-gray-100">
-                            <td className="py-2">{t.protein}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.protein_g}g</td>
-                          </tr>
-                          <tr>
-                            <td className="py-2">{t.salt}</td>
-                            <td className="py-2 text-right">{product.nutritional_info.salt_g}g</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    ) : (
-                      <p className="text-gray-900 text-sm">
-                        {language === 'ro' ? 'Informații indisponibile' : 'Information unavailable'}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                    {/* Nutritional Values Dropdown */}
+                    <div className="border-b border-gray-200">
+                      <button
+                        onClick={() => toggleDropdown('nutritional')}
+                        className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
+                      >
+                        <span className="text-sm font-medium text-gray-900">{t.nutritionalInfo}</span>
+                        {openDropdown === 'nutritional' ? (
+                          <Minus className="w-4 h-4 text-gray-900" />
+                        ) : (
+                          <Plus className="w-4 h-4 text-gray-900" />
+                        )}
+                      </button>
+                      <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'nutritional' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        {product.nutritional_info ? (
+                          <table className="w-full text-sm text-gray-900">
+                            <tbody>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.calories}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.energy_kcal} kcal</td>
+                              </tr>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.fat}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.fat_g}g</td>
+                              </tr>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.saturatedFat}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.saturated_fat_g}g</td>
+                              </tr>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.carbs}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.carbohydrates_g}g</td>
+                              </tr>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.sugars}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.sugars_g}g</td>
+                              </tr>
+                              <tr className="border-b border-gray-100">
+                                <td className="py-2">{t.protein}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.protein_g}g</td>
+                              </tr>
+                              <tr>
+                                <td className="py-2">{t.salt}</td>
+                                <td className="py-2 text-right">{product.nutritional_info.salt_g}g</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        ) : (
+                          <p className="text-gray-900 text-sm">
+                            {language === 'ro' ? 'Informații indisponibile' : 'Information unavailable'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Transport Dropdown */}
                 <div className="border-b border-gray-200">

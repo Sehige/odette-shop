@@ -22,8 +22,17 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
           fetchPriority={priority ? "high" : "auto"}
           className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
         />
+        {/* Easter Special Badge */}
+        {product.isEasterFeatured && (
+          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10">
+            <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-xs font-bold px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-md flex items-center gap-1">
+              <span className="text-sm sm:text-base">🐰</span>
+              <span className="hidden sm:inline">{language === 'ro' ? 'Paște' : 'Easter'}</span>
+            </span>
+          </div>
+        )}
         {/* Add to Favorites Button (future feature) */}
-        {/*<button 
+        {/*<button
           onClick={(e) => {
             e.stopPropagation();
           }}
