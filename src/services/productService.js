@@ -18,7 +18,7 @@ export const getAllProducts = async () => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .eq('isActive', true)
       .order('created_at', { ascending: false });
 
@@ -27,7 +27,9 @@ export const getAllProducts = async () => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
@@ -47,7 +49,7 @@ export const getProductsByCategory = async (category) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .eq('category', category)
       .eq('isActive', true)
       .order('name', { ascending: true });
@@ -57,7 +59,9 @@ export const getProductsByCategory = async (category) => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
@@ -76,7 +80,7 @@ export const getBestSellers = async () => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .eq('best_seller_flag', true)
       .eq('isActive', true)
       .order('name_ro', { ascending: true });
@@ -86,7 +90,9 @@ export const getBestSellers = async () => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
@@ -106,7 +112,7 @@ export const getProductById = async (productId) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .eq('id', productId)
       .eq('isActive', true)
       .single(); // Returns single object instead of array
@@ -116,7 +122,9 @@ export const getProductById = async (productId) => {
     // Flatten the category data for easier access
     const productWithEasterFlag = data ? {
       ...data,
-      isEasterFeatured: data.categories?.isEasterFeatured || false
+      isEasterFeatured: data.categories?.isEasterFeatured || false,
+      categoryName: data.categories?.name_en || '',
+      categoryNameRo: data.categories?.name_ro || ''
     } : null;
 
     return { data: productWithEasterFlag, error: null };
@@ -136,7 +144,7 @@ export const searchProducts = async (searchTerm) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .ilike('name', `%${searchTerm}%`) // Case-insensitive search
       .eq('isActive', true)
       .order('name', { ascending: true });
@@ -146,7 +154,9 @@ export const searchProducts = async (searchTerm) => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
@@ -167,7 +177,7 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
       .gte('price', minPrice)
       .lte('price', maxPrice)
       .eq('isActive', true)
@@ -178,7 +188,9 @@ export const getProductsByPriceRange = async (minPrice, maxPrice) => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
@@ -267,7 +279,7 @@ export const getFeaturedCategories = async () => {
  */
 export const getFilteredProducts = async (filters = {}) => {
   try {
-    let query = supabase.from('products').select('*, nutritional_info(*), categories:category(isEasterFeatured)').eq('isActive', true);
+    let query = supabase.from('products').select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)').eq('isActive', true);
 
     // Apply filters conditionally
     if (filters.category) {
@@ -294,7 +306,9 @@ export const getFilteredProducts = async (filters = {}) => {
     // Flatten the category data for easier access
     const productsWithEasterFlag = data?.map(product => ({
       ...product,
-      isEasterFeatured: product.categories?.isEasterFeatured || false
+      isEasterFeatured: product.categories?.isEasterFeatured || false,
+      categoryName: product.categories?.name_en || '',
+      categoryNameRo: product.categories?.name_ro || ''
     }));
 
     return { data: productsWithEasterFlag, error: null };
