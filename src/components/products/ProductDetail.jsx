@@ -144,12 +144,12 @@ const ProductDetail = ({ product, language, onClose }) => {
 
               {/* Thumbnail Strip - only show if multiple images */}
               {images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-2">
+                <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide">
                   {images.map((img, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border-2 transition ${
+                      className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-md sm:rounded-lg overflow-hidden border-2 transition ${
                         selectedImageIndex === index
                           ? 'border-blue-600'
                           : 'border-transparent hover:border-gray-300'
