@@ -17,4 +17,4 @@ User-agent: Bingbot
 Allow: /
 
 # Sitemap location
-Sitemap: https://www.odette.ro/sitemap.xml
+Sitemap: https://www.odette-confiserie.ro/sitemap.xml
