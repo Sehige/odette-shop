@@ -5,6 +5,9 @@ import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { contactService } from '../../services/utilityServices';
 import Toast from '../common/Toast';
+import MetaTags from '../SEO/MetaTags';
+import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
+import { seoConfig } from '../../config/seoConfig';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
@@ -106,8 +109,48 @@ const ContactPage = ({ language }) => {
     });
   };
 
+  const pageData = {
+    title: 'Contact',
+    description: language === 'ro'
+      ? 'Contacteaza Odette Confiserie pentru comenzi de prajituri si torturi. Telefon, email, adresa in Cluj-Napoca.'
+      : 'Contact Odette Confiserie for pastry and cake orders. Phone, email, address in Cluj-Napoca.'
+  };
+
+  const breadcrumbItems = [
+    { name: language === 'ro' ? 'Acasa' : 'Home', url: seoConfig.siteUrl },
+    { name: 'Contact', url: `${seoConfig.siteUrl}/contact` }
+  ];
+
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": pageData.title,
+    "url": `${seoConfig.siteUrl}/contact`,
+    "mainEntity": {
+      "@type": "LocalBusiness",
+      "name": seoConfig.business.name,
+      "telephone": seoConfig.business.phone,
+      "email": seoConfig.business.email,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": seoConfig.business.address.street,
+        "addressLocality": seoConfig.business.address.city,
+        "addressCountry": seoConfig.business.address.country
+      }
+    }
+  };
+
   return (
-    <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+    <>
+      <MetaTags
+        title={pageData.title}
+        description={pageData.description}
+        url={`${seoConfig.siteUrl}/contact`}
+        structuredData={contactPageSchema}
+        lang={language}
+      />
+      <BreadcrumbSchema items={breadcrumbItems} />
+      <div className="pt-32 pb-16 min-h-screen bg-gray-50">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -347,6 +390,7 @@ const ContactPage = ({ language }) => {
       )}
     </div>
     </div>
+    </>
   );
 };
 

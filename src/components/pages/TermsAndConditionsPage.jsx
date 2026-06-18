@@ -1,6 +1,8 @@
 import React from 'react';
 import { FileText, ShoppingCart, CreditCard, Truck, RotateCcw, Shield } from 'lucide-react';
 import { siteConfig } from '../../data/siteConfig';
+import MetaTags from '../SEO/MetaTags';
+import { seoConfig } from '../../config/seoConfig';
 
 const TermsAndConditionsPage = ({ language }) => {
   const isRomanian = language === 'ro';
@@ -287,7 +289,17 @@ const TermsAndConditionsPage = ({ language }) => {
   const currentContent = isRomanian ? content.ro : content.en;
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <MetaTags
+        title={isRomanian ? 'Termeni si Conditii' : 'Terms and Conditions'}
+        description={isRomanian
+          ? 'Termeni si conditii de utilizare pentru Odette Confiserie.'
+          : 'Terms and conditions of use for Odette Confiserie.'}
+        url={`${seoConfig.siteUrl}/terms-and-conditions`}
+        lang={language}
+        noindex={true}
+      />
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>
         <div className="absolute inset-0 opacity-10">
@@ -352,6 +364,7 @@ const TermsAndConditionsPage = ({ language }) => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
