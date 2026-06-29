@@ -32,6 +32,9 @@ const ShopPage = ({ language, setSelectedProduct }) => {
     ? allProducts
     : allProducts.filter(p => p.category === selectedCategory)
   ).sort((a, b) => {
+    const orderA = a.order_index ?? 1000;
+    const orderB = b.order_index ?? 1000;
+    if (orderA !== orderB) return orderA - orderB;
     const nameA = (language === 'ro' ? a.name_ro : a.name_en) || '';
     const nameB = (language === 'ro' ? b.name_ro : b.name_en) || '';
     return nameA.localeCompare(nameB, language);
