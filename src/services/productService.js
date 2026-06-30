@@ -226,12 +226,11 @@ export const getCategories = async () => {
         return { data: [], error: null };
       }
 
-      // Step 3: Fetch the full category data (id, name_ro, name_en) from categories table
+      // Step 3: Fetch the full category data from categories table
       const { data: categoriesData, error: categoriesError } = await supabase
         .from('categories')
-        .select('id, name_ro, name_en')
-        .in('id', uniqueCategoryIds)
-        .order('name_en', { ascending: true });
+        .select('id, name_ro, name_en, order_index')
+        .in('id', uniqueCategoryIds);
 
       if (categoriesError) throw categoriesError;
 
@@ -254,9 +253,8 @@ export const getFeaturedCategories = async () => {
   try {
     const { data, error } = await supabase
       .from('categories')
-      .select('id, name_ro, name_en, imageURL')
-      .eq('isFeatured', true)
-      .order('name_en', { ascending: true });
+      .select('id, name_ro, name_en, imageURL, order_index')
+      .eq('isFeatured', true);
 
     if (error) throw error;
 
