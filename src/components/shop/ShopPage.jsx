@@ -160,20 +160,11 @@ const ShopPage = ({ language, setSelectedProduct }) => {
         
         {/* Category Filter - min-height to prevent CLS */}
         <div className="mb-4 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[36px] sm:min-h-[44px]">
-          {/* All Products Button */}
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
-              selectedCategory === 'all'
-                ? 'bg-blue-900 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            {shopT.all} ({allProducts.length})
-          </button>
-
-          {/* Category Buttons - sorted alphabetically */}
+          {/* Category Buttons - sorted by order_index then alphabetically */}
           {[...categories].sort((a, b) => {
+            const orderA = a.order_index ?? 1000;
+            const orderB = b.order_index ?? 1000;
+            if (orderA !== orderB) return orderA - orderB;
             const nameA = (language === 'ro' ? a.name_ro : a.name_en) || '';
             const nameB = (language === 'ro' ? b.name_ro : b.name_en) || '';
             return nameA.localeCompare(nameB, language);
@@ -193,6 +184,18 @@ const ShopPage = ({ language, setSelectedProduct }) => {
               </button>
             );
           })}
+
+          {/* All Products Button - at the end */}
+          <button
+            onClick={() => setSelectedCategory('all')}
+            className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
+              selectedCategory === 'all'
+                ? 'bg-blue-900 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            {shopT.all} ({allProducts.length})
+          </button>
         </div>
                 
         {/* Products Grid */}
