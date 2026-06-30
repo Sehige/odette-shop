@@ -15,12 +15,30 @@ const ProductDetail = ({ product, language, onClose }) => {
   const t = translations[language];
 
   const modalContentRef = useRef(null);
+  const thumbnailContainerRef = useRef(null);
 
   // Image carousel state
   const images = product.images && product.images.length > 0
     ? product.images
     : [product.image_url];
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Auto-scroll thumbnail strip when selected image changes
+  useEffect(() => {
+    if (thumbnailContainerRef.current && images.length > 1) {
+      const container = thumbnailContainerRef.current;
+      const thumbnails = container.children;
+      if (thumbnails[selectedImageIndex]) {
+        const thumbnail = thumbnails[selectedImageIndex];
+        const containerRect = container.getBoundingClientRect();
+        const thumbnailRect = thumbnail.getBoundingClientRect();
+
+        if (thumbnailRect.left < containerRect.left || thumbnailRect.right > containerRect.right) {
+          thumbnail.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }
+    }
+  }, [selectedImageIndex, images.length]);
 
   const nextImage = () => {
     setSelectedImageIndex((prev) => (prev + 1) % images.length);
@@ -126,42 +144,70 @@ const ProductDetail = ({ product, language, onClose }) => {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md transition"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 p-3 bg-white hover:bg-gray-100 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-200"
                       aria-label="Previous image"
                     >
-                      <ChevronLeft className="w-5 h-5 text-gray-700" />
+                      <ChevronLeft className="w-6 h-6 text-gray-800" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white rounded-full shadow-md transition"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-3 bg-white hover:bg-gray-100 rounded-full shadow-lg transition-all hover:scale-110 border border-gray-200"
                       aria-label="Next image"
                     >
-                      <ChevronRight className="w-5 h-5 text-gray-700" />
+                      <ChevronRight className="w-6 h-6 text-gray-800" />
                     </button>
+                    {/* Image counter */}
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm font-medium px-3 py-1 rounded-full">
+                      {selectedImageIndex + 1} / {images.length}
+                    </div>
                   </>
                 )}
               </div>
 
               {/* Thumbnail Strip - only show if multiple images */}
               {images.length > 1 && (
-                <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                  {images.map((img, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-md sm:rounded-lg overflow-hidden border-2 transition ${
-                        selectedImageIndex === index
-                          ? 'border-blue-600'
-                          : 'border-transparent hover:border-gray-300'
-                      }`}
-                    >
-                      <img
-                        src={getThumbnailUrl(img)}
-                        alt={`${language === 'ro' ? product.name_ro : product.name_en} - ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+                <div className="relative flex items-center gap-2">
+                  {/* Left arrow for thumbnails */}
+                  <button
+                    onClick={prevImage}
+                    className="flex-shrink-0 p-1.5 bg-white hover:bg-gray-100 rounded-full shadow-md border border-gray-200 transition-all hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-700" />
+                  </button>
+
+                  {/* Thumbnails container */}
+                  <div
+                    ref={thumbnailContainerRef}
+                    className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1"
+                  >
+                    {images.map((img, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-md sm:rounded-lg overflow-hidden border-2 transition ${
+                          selectedImageIndex === index
+                            ? 'border-blue-600'
+                            : 'border-transparent hover:border-gray-300'
+                        }`}
+                      >
+                        <img
+                          src={getThumbnailUrl(img)}
+                          alt={`${language === 'ro' ? product.name_ro : product.name_en} - ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Right arrow for thumbnails */}
+                  <button
+                    onClick={nextImage}
+                    className="flex-shrink-0 p-1.5 bg-white hover:bg-gray-100 rounded-full shadow-md border border-gray-200 transition-all hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-700" />
+                  </button>
                 </div>
               )}
             </div>
