@@ -8,11 +8,14 @@ import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
 import { seoConfig } from '../../config/seoConfig';
 
 import { useAllProducts, useCategories } from '../../hooks/useProducts';
+import useSupabaseSession from '../../hooks/useSupabaseSession';
 
 const ShopPage = ({ language, setSelectedProduct }) => {
   const t = translations[language];
   const shopT = translations[language].shop;
   const [searchParams, setSearchParams] = useSearchParams();
+  // Product counts in section titles are shown only to the logged-in admin
+  const { isAdmin } = useSupabaseSession();
 
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
@@ -152,9 +155,11 @@ const ShopPage = ({ language, setSelectedProduct }) => {
             {shopT.title}
           </h1>
           <p className="text-base sm:text-xl text-gray-600">
-            {language === 'ro'
-              ? `Descoperă ${allProducts.length} ${shopT.productsCount}`
-              : `Discover ${allProducts.length} ${shopT.productsCount}`}
+            {isAdmin
+              ? (language === 'ro'
+                  ? `Descoperă ${allProducts.length} ${shopT.productsCount}`
+                  : `Discover ${allProducts.length} ${shopT.productsCount}`)
+              : shopT.subtitle}
           </p>
         </div>
         
@@ -180,7 +185,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
                     : 'bg-white text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                {language === 'ro' ? category.name_ro : category.name_en} ({count})
+                {language === 'ro' ? category.name_ro : category.name_en}{isAdmin ? ` (${count})` : ''}
               </button>
             );
           })}
@@ -194,7 +199,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
                 : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
           >
-            {shopT.all} ({allProducts.length})
+            {shopT.all}{isAdmin ? ` (${allProducts.length})` : ''}
           </button>
         </div>
                 

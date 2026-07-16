@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, Check } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { getProductCardImageUrl } from '../../utils/imageOptimizer';
+import AdjustableImage from '../common/AdjustableImage';
 
 const ProductCard = ({ product, language, setSelectedProduct, priority = false }) => {
   const t = translations[language];
@@ -15,12 +16,15 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
         className="relative overflow-hidden aspect-square"
         onClick={() => setSelectedProduct(product)}
       >
-        <img
+        {/* editable=false: framing is edited from the product detail modal (same photo/setting) */}
+        <AdjustableImage
+          editable={false}
+          elementKey={product.image_url}
           src={getProductCardImageUrl(product.image_url)}
           alt={product.name_ro}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
-          className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+          className="w-full h-full group-hover:scale-110 transition duration-300"
         />
         {/* Easter Special Badge */}
         {product.isEasterFeatured && (

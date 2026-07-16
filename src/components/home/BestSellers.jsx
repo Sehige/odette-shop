@@ -12,11 +12,11 @@ const BestSellers = ({ language, setSelectedProduct }) => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-[#1e3a8a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-900 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading best sellers...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-white mx-auto"></div>
+            <p className="mt-4 text-white/80">Loading best sellers...</p>
           </div>
         </div>
       </section>
@@ -25,10 +25,10 @@ const BestSellers = ({ language, setSelectedProduct }) => {
 
   if (error) {
     return (
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-[#1e3a8a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-red-600">Failed to load best sellers</p>
+            <p className="text-red-300">Failed to load best sellers</p>
           </div>
         </div>
       </section>
@@ -58,13 +58,12 @@ const BestSellers = ({ language, setSelectedProduct }) => {
   };
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-[#1e3a8a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
-            {t.bestSellers}
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-white">
+            {t.landing.mostAppreciated}
           </h2>
-          <p className="text-xl text-gray-600">{t.bestSellersSubtitle}</p>
         </div>
 
         {/* Mobile: Horizontal Scrollable Layout */}

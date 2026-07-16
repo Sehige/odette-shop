@@ -61,6 +61,20 @@ export const getOptimizedImageUrl = (imageUrl, options = {}) => {
 };
 
 /**
+ * Get a scaled (never cropped) image URL.
+ * Used for all AdjustableImage surfaces: framing is done client-side via the
+ * focal-point system (object-position), so the source must keep its original
+ * aspect ratio — server-side crops would fight the stored focal settings.
+ */
+export const getScaledImageUrl = (imageUrl, width, quality = 'auto') => {
+  return getOptimizedImageUrl(imageUrl, {
+    width,
+    quality,
+    crop: 'limit'
+  });
+};
+
+/**
  * Get optimized image URL for category cards (square, medium size)
  */
 export const getCategoryImageUrl = (imageUrl) => {
@@ -74,26 +88,18 @@ export const getCategoryImageUrl = (imageUrl) => {
 
 /**
  * Get optimized image URL for product cards
+ * Width-only scaling: framing is handled by the focal-point system (AdjustableImage).
  */
 export const getProductCardImageUrl = (imageUrl) => {
-  return getOptimizedImageUrl(imageUrl, {
-    width: 400,
-    height: 300,
-    quality: 'auto:good',
-    crop: 'fill'
-  });
+  return getScaledImageUrl(imageUrl, 400, 'auto:good');
 };
 
 /**
  * Get optimized image URL for product detail page
+ * Width-only scaling: framing is handled by the focal-point system (AdjustableImage).
  */
 export const getProductDetailImageUrl = (imageUrl) => {
-  return getOptimizedImageUrl(imageUrl, {
-    width: 800,
-    height: 800,
-    quality: 'auto:best',
-    crop: 'fill'
-  });
+  return getScaledImageUrl(imageUrl, 800, 'auto:best');
 };
 
 /**
@@ -148,32 +154,16 @@ export const getResponsiveBannerProps = (imageUrl) => {
  * Returns object with src, srcSet, and sizes for responsive loading
  */
 export const getHeroImageProps = (imageUrl) => {
-  const sizes = [
-    { width: 640, height: 427 },   // Mobile
-    { width: 1024, height: 683 },  // Tablet
-    { width: 1920, height: 1280 }, // Desktop
-  ];
+  // Width-only scaling (no crop): the focal-point system needs the full
+  // original photo so the admin can pan vertically too.
+  const widths = [640, 1024, 1920];
 
-  const srcSet = sizes.map(({ width, height }) => {
-    const url = getOptimizedImageUrl(imageUrl, {
-      width,
-      height,
-      quality: 'auto:good',
-      crop: 'fill'
-    });
-    return `${url} ${width}w`;
-  }).join(', ');
-
-  // Default src for browsers without srcset support
-  const src = getOptimizedImageUrl(imageUrl, {
-    width: 1024,
-    height: 683,
-    quality: 'auto:good',
-    crop: 'fill'
-  });
+  const srcSet = widths
+    .map((width) => `${getScaledImageUrl(imageUrl, width, 'auto:good')} ${width}w`)
+    .join(', ');
 
   return {
-    src,
+    src: getScaledImageUrl(imageUrl, 1024, 'auto:good'),
     srcSet,
     sizes: '100vw' // Hero is always full viewport width
   };
@@ -181,12 +171,8 @@ export const getHeroImageProps = (imageUrl) => {
 
 /**
  * Get optimized thumbnail URL
+ * Width-only scaling: framing is handled by the focal-point system (AdjustableImage).
  */
 export const getThumbnailUrl = (imageUrl) => {
-  return getOptimizedImageUrl(imageUrl, {
-    width: 150,
-    height: 150,
-    quality: 'auto',
-    crop: 'thumb'
-  });
+  return getScaledImageUrl(imageUrl, 150, 'auto');
 };

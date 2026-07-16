@@ -6,6 +6,7 @@ import { productsData } from './data/productsData';
 
 // Context providers
 import { CookieConsentProvider } from './context/CookieConsentContext';
+import { ImageSettingsProvider } from './context/ImageSettingsContext';
 
 // Cookie consent components
 import CookieConsentBanner from './components/cookies/CookieConsentBanner';
@@ -26,6 +27,7 @@ import ContactPage from './components/pages/ContactPage';
 import TermsAndConditionsPage from './components/pages/TermsAndConditionsPage';
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
 import CookiePolicyPage from './components/pages/CookiePolicyPage';
+import AdminLoginPage from './components/pages/AdminLoginPage';
 
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
 
   return (
     <CookieConsentProvider>
+      <ImageSettingsProvider>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <ScrollToTop />
         <div className="min-h-screen bg-white">
@@ -86,6 +89,10 @@ function App() {
                 path="cookie-policy"
                 element={<CookiePolicyPage language={language} />}
               />
+              <Route
+                path="admin"
+                element={<AdminLoginPage language={language} />}
+              />
             </Route>
           </Routes>
 
@@ -104,6 +111,7 @@ function App() {
           <CookiePreferencesModal language={language} />
         </div>
       </BrowserRouter>
+      </ImageSettingsProvider>
     </CookieConsentProvider>
   );
 }

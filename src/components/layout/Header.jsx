@@ -4,6 +4,8 @@ import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
+// Navy variant for the white header; the original (white) SVG is for dark backgrounds
+import odetteLogo from '../../Odette_Confiserie_navy.svg';
 
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -54,23 +56,25 @@ const Header = ({ language, setLanguage }) => {
 
           {/* CENTER: Logo + Odette + Navigation */}
           <div className="flex items-center gap-4 lg:gap-8">
-            {/* Logo and Brand Name */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
+            {/* Swan logo (blue background, no ring) + Odette Confiserie wordmark */}
+            <button
+              onClick={() => navigate('/')}
+              aria-label="Odette Confiserie - Acasă"
+              className="flex items-center gap-2 sm:gap-3 flex-shrink-0"
+            >
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden">
                 <img
                   src={`${process.env.PUBLIC_URL}/odette_logo.svg`}
-                  alt="Odette Logo"
+                  alt=""
                   className="w-full h-full object-cover"
                 />
               </div>
-              <button
-                onClick={() => navigate('/')}
-                className="text-2xl md:text-3xl font-serif font-bold transition"
-                style={{ color: '#1e3a8a' }}
-              >
-                Odette
-              </button>
-            </div>
+              <img
+                src={odetteLogo}
+                alt="Odette Confiserie"
+                className="h-12 sm:h-16 w-auto"
+              />
+            </button>
 
             {/* Navigation Menu - Desktop Only */}
             <nav className="hidden lg:flex items-center gap-8">

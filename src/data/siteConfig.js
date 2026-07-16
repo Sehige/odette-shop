@@ -22,8 +22,8 @@ export const siteConfig = {
 
   // Business Hours (bilingual because format differs by language)
   hours: {
-    ro: 'Luni - Vineri: 9:00 - 18:00\nSâmbătă: 10:00 - 16:00\nDuminică: Închis',
-    en: 'Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed'
+    ro: 'Luni - Vineri: 9:00 - 19:00\nSâmbătă: 8:00 - 12:00\nDuminică: Închis',
+    en: 'Monday - Friday: 9:00 - 19:00\nSaturday: 8:00 - 12:00\nSunday: Closed'
   },
 
   // Delivery Settings
