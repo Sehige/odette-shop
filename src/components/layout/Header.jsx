@@ -1,136 +1,126 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { Facebook, Instagram } from 'lucide-react';
+import { Menu, X, Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
+// White wordmark for the navy header
+import odetteLogo from '../../Odette_Confiserie.svg';
+// White swan logo mark (sits left of the wordmark)
+import logoMark from '../../Stickere.svg';
+
+const NAVY = '#1e3a8a';
 
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const t = translations[language];
 
-  // Wedding offer URL
+  // Wedding / events offer URL
   const weddingOfferUrl = 'https://www.canva.com/design/DAG9eAIoAiU/4Wzi004UggxTwSxsU1Wp8Q/view';
 
-  // TikTok Icon Component
-  const TikTokIcon = ({ className }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-    </svg>
-  );
+  const go = (path) => {
+    navigate(path);
+    setMobileMenuOpen(false);
+  };
+
+  // Nav items (routes unchanged; only labels were renamed)
+  const navLinkClass = 'text-white/90 hover:text-white transition font-semibold whitespace-nowrap text-lg xl:text-xl';
 
   return (
-    <header className="fixed w-full top-0 z-40 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* LEFT: Social Media Icons */}
-          <div className="hidden lg:flex items-center gap-3 w-24">
+    <header
+      className="fixed w-full top-0 z-40 border-y border-white/40"
+      style={{ backgroundColor: NAVY }}
+    >
+      {/* Full-width with small safe padding: logo hugs the left, socials/lang hug the right */}
+      <div className="w-full px-4 sm:px-6 lg:px-10">
+        <div className="relative flex items-center justify-between h-20 lg:h-[124px]">
+          {/* LEFT: swan + Odette Confiserie wordmark (both white on navy) */}
+          <button
+            onClick={() => go('/')}
+            aria-label="Odette Confiserie - Acasă"
+            className="flex items-center gap-2 sm:gap-3 flex-shrink-0"
+          >
+            <img
+              src={logoMark}
+              alt=""
+              className="h-16 sm:h-[4.5rem] lg:h-[106px] w-auto object-contain"
+            />
+            <img
+              src={odetteLogo}
+              alt="Odette Confiserie"
+              className="h-12 sm:h-16 lg:h-[92px] w-auto"
+            />
+          </button>
+
+          {/* CENTER: navigation (desktop), absolutely centered on the header */}
+          <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <button onClick={() => go('/')} className={navLinkClass}>
+              {t.home}
+            </button>
+            <button onClick={() => go('/shop')} className={navLinkClass}>
+              {t.shopNav}
+            </button>
+            <a
+              href={weddingOfferUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={navLinkClass}
+            >
+              {t.weddingNav}
+            </a>
+            <button onClick={() => go('/contact')} className={navLinkClass}>
+              {t.contactNav}
+            </button>
+          </nav>
+
+          {/* RIGHT: socials + language (desktop) / menu button (mobile) */}
+          <div className="flex items-center gap-4 sm:gap-5">
             <a
               href={siteConfig.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-pink-600 transition"
+              aria-label="Instagram"
+              className="hidden lg:inline text-white/90 hover:text-white transition"
             >
-              <Instagram className="w-5 h-5" />
+              <Instagram className="w-6 h-6" />
             </a>
             <a
               href={siteConfig.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-blue-600 transition"
+              aria-label="Facebook"
+              className="hidden lg:inline text-white/90 hover:text-white transition"
             >
-              <Facebook className="w-5 h-5" />
+              <Facebook className="w-6 h-6" />
             </a>
-            <a
-              href={siteConfig.social.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-gray-900 transition"
-            >
-              <TikTokIcon className="w-5 h-5" />
-            </a>
-          </div>
 
-          {/* CENTER: Logo + Odette + Navigation */}
-          <div className="flex items-center gap-4 lg:gap-8">
-            {/* Logo and Brand Name */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2" style={{ borderColor: '#d4af37' }}>
-                <img
-                  src={`${process.env.PUBLIC_URL}/odette_logo.svg`}
-                  alt="Odette Logo"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <button
-                onClick={() => navigate('/')}
-                className="text-2xl md:text-3xl font-serif font-bold transition"
-                style={{ color: '#1e3a8a' }}
-              >
-                Odette
-              </button>
-            </div>
-
-            {/* Navigation Menu - Desktop Only */}
-            <nav className="hidden lg:flex items-center gap-8">
-              <button
-                onClick={() => navigate('/')}
-                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-              >
-                {t.home}
-              </button>
-              <button
-                onClick={() => navigate('/shop')}
-                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-              >
-                {t.shopNav}
-              </button>
-              <a
-                href={weddingOfferUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-              >
-                {t.weddingNav}
-              </a>
-              <button
-                onClick={() => navigate('/contact')}
-                className="text-gray-700 hover:text-blue-900 transition font-medium whitespace-nowrap"
-              >
-                {t.contactNav}
-              </button>
-            </nav>
-          </div>
-
-          {/* RIGHT: Language Toggle and Mobile Menu */}
-          <div className="flex items-center gap-2 sm:gap-4 w-24 justify-end">
-            {/* Language Toggle */}
+            {/* Language toggle */}
             <button
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
-              className="text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-900 transition uppercase"
+              className="text-lg font-semibold text-white/90 hover:text-white transition"
             >
-              {language === 'ro' ? 'RO' : 'EN'}
+              {language === 'ro' ? 'Ro' : 'En'}
             </button>
 
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-700"
+              className="lg:hidden p-2 text-white"
+              aria-label="Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t">
+          <div className="lg:hidden py-4 border-t border-white/30">
             <nav className="flex flex-col space-y-3">
-              <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
+              <button onClick={() => go('/')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
                 {t.home}
               </button>
-              <button onClick={() => { navigate('/shop'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
+              <button onClick={() => go('/shop')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
                 {t.shopNav}
               </button>
               <a
@@ -138,13 +128,23 @@ const Header = ({ language, setLanguage }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap"
+                className="text-left text-white/90 hover:text-white py-2 font-semibold"
               >
                 {t.weddingNav}
               </a>
-              <button onClick={() => { navigate('/contact'); setMobileMenuOpen(false); }} className="text-left text-gray-700 hover:text-blue-900 py-2 font-medium whitespace-nowrap">
+              <button onClick={() => go('/contact')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
                 {t.contactNav}
               </button>
+
+              {/* Socials in mobile menu */}
+              <div className="flex items-center gap-4 pt-2">
+                <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-white/90 hover:text-white">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-white/90 hover:text-white">
+                  <Facebook className="w-5 h-5" />
+                </a>
+              </div>
             </nav>
           </div>
         )}

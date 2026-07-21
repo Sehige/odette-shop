@@ -1,8 +1,8 @@
 import React from 'react';
 import HeroSection from '../home/HeroSection';
-import WeddingBanner from '../home/WeddingBanner';
+import AboutStory from '../home/AboutStory';
 import BestSellers from '../home/BestSellers';
-import FeaturedCategories from '../home/FeaturedCategories';
+import FAQ from '../home/FAQ';
 import MetaTags from '../SEO/MetaTags';
 import { seoConfig } from '../../config/seoConfig';
 
@@ -47,13 +47,13 @@ const HomePage = ({ language, setSelectedProduct }) => {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "opens": "09:00",
-        "closes": "18:00"
+        "closes": "19:00"
       },
       {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": "Saturday",
-        "opens": "10:00",
-        "closes": "16:00"
+        "opens": "08:00",
+        "closes": "12:00"
       }
     ],
     "sameAs": [
@@ -72,12 +72,12 @@ const HomePage = ({ language, setSelectedProduct }) => {
         lang={language}
       />
       <HeroSection language={language} />
-      <WeddingBanner language={language} />
+      <AboutStory language={language} />
       <BestSellers
         language={language}
         setSelectedProduct={setSelectedProduct}
       />
-      <FeaturedCategories language={language} />
+      <FAQ language={language} />
     </>
   );
 };

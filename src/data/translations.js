@@ -2,8 +2,8 @@ export const translations = {
   ro: {
     // Header
     home: 'Acasă',
-    shopNav: 'Produse',
-    weddingNav: 'Ofertă Nunți',
+    shopNav: 'Meniu',
+    weddingNav: 'Ofertă evenimente',
     cakes: 'Torturi',
     pastries: 'Prăjituri',
     cookies: 'Cookies',
@@ -19,6 +19,39 @@ export const translations = {
     bestSellers: 'Cele Mai Vândute',
     bestSellersSubtitle: 'Produsele noastre cele mai iubite',
     viewDetails: 'Vezi Detalii',
+
+    // ===== LANDING PAGE (home) =====
+    landing: {
+      heroTagline: 'Locul unde eleganța franceză întâlnește exigența germană.',
+      orderNow: 'Comandă Acum',
+      aboutTitle: 'Deserturi artizanale create cu drag pentru frumos',
+      aboutP1: 'Prăjiturile noastre îmbină cunoștințe de chimie, tehnici clasice de cofetărie și materie primă de cea mai bună calitate pentru a realiza deserturi memorabile pentru tine și invitații tăi.',
+      aboutP2: 'Ne place să realizăm deserturi personalizate inspirate din cofetăria franțuzească și cea românească.',
+      mostAppreciated: 'Cele mai apreciate produse',
+      faqTitle: 'Întrebări frecvente',
+      faq: [
+        {
+          title: 'Torturi personalizate',
+          text: 'Da, realizăm torturi cu decor și formă personalizată. Ne place să ne punem creativitatea la încercare.'
+        },
+        {
+          title: 'Transport',
+          text: 'Oferim transport pentru produsele noastre. Tariful în Cluj-Napoca este de 15 lei, iar în afara orașului este 25 lei. Comenzile de peste 250 de lei beneficiază de transport gratuit.'
+        },
+        {
+          title: 'Ingrediente',
+          text: 'Utilizăm doar materie primă de cea mai bună calitate și toate produsele sunt realizate artizanal în laboratorul nostru.'
+        },
+        {
+          title: 'Candybar',
+          text: 'Realizăm toate produsele dulci pentru evenimentul tău ca tu să te poți bucura de momentele cu cei dragi.'
+        },
+        {
+          title: 'Artizanal',
+          text: 'Produsele noastre sunt realizate în șarje mici pe comandă pentru a putea asigura aceeași prospețime și calitate de fiecare dată.'
+        }
+      ]
+    },
     
     // Categories
     categories: 'Categorii',
@@ -138,6 +171,7 @@ export const translations = {
     // ===== SHOP PAGE =====
     shop: {
       title: 'Produse',
+      subtitle: 'Descoperă produsele noastre delicioase',
       loading: 'Se încarcă produsele...',
       error: 'Eroare la încărcarea produselor',
       tryAgain: 'Încercați din nou',
@@ -189,8 +223,8 @@ export const translations = {
   en: {
     // Header
     home: 'Home',
-    shopNav: 'Products',
-    weddingNav: 'Wedding Offer',
+    shopNav: 'Menu',
+    weddingNav: 'Events Offer',
     cakes: 'Cakes',
     pastries: 'Pastries',
     cookies: 'Cookies',
@@ -206,6 +240,39 @@ export const translations = {
     bestSellers: 'Best Sellers',
     bestSellersSubtitle: 'Our most loved products',
     viewDetails: 'View Details',
+
+    // ===== LANDING PAGE (home) =====
+    landing: {
+      heroTagline: 'The place where French elegance meets German precision.',
+      orderNow: 'Order Now',
+      aboutTitle: 'Artisan desserts made with love, for beauty',
+      aboutP1: 'Our pastries combine knowledge of chemistry, classic confectionery techniques and the finest quality ingredients to create memorable desserts for you and your guests.',
+      aboutP2: 'We love creating personalized desserts inspired by French and Romanian confectionery.',
+      mostAppreciated: 'Our most appreciated products',
+      faqTitle: 'Frequently asked questions',
+      faq: [
+        {
+          title: 'Custom cakes',
+          text: 'Yes, we make cakes with custom decoration and shape. We love putting our creativity to the test.'
+        },
+        {
+          title: 'Delivery',
+          text: 'We offer delivery for our products. The fee in Cluj-Napoca is 15 lei, and outside the city it is 25 lei. Orders over 250 lei get free delivery.'
+        },
+        {
+          title: 'Ingredients',
+          text: 'We use only the finest quality ingredients and all products are handcrafted in our own laboratory.'
+        },
+        {
+          title: 'Candybar',
+          text: 'We make all the sweets for your event so you can enjoy the moments with your loved ones.'
+        },
+        {
+          title: 'Artisanal',
+          text: 'Our products are made in small batches to order so we can guarantee the same freshness and quality every time.'
+        }
+      ]
+    },
     
     // Categories
     categories: 'Categories',
@@ -325,6 +392,7 @@ export const translations = {
     // ===== SHOP PAGE =====
     shop: {
       title: 'Products',
+      subtitle: 'Discover our delicious products',
       loading: 'Loading products...',
       error: 'Error loading products',
       tryAgain: 'Try Again',

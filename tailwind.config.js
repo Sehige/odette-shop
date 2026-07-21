@@ -5,6 +5,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        script: ['Parisienne', 'cursive'],
+        // Upgrades every existing `font-serif` heading across the site to Playfair Display
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+      },
       keyframes: {
         'slide-up': {
           '0%': { transform: 'translateY(100%)', opacity: '0' },

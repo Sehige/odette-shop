@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductDetailImageUrl, getThumbnailUrl } from '../../utils/imageOptimizer';
+import AdjustableImage from '../common/AdjustableImage';
 
 const ProductDetail = ({ product, language, onClose }) => {
   const navigate = useNavigate();
@@ -123,10 +124,11 @@ const ProductDetail = ({ product, language, onClose }) => {
             <div>
               {/* Main Image with Navigation */}
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                <img
+                <AdjustableImage
+                  elementKey={images[selectedImageIndex]}
                   src={getProductDetailImageUrl(images[selectedImageIndex])}
                   alt={language === 'ro' ? product.name_ro : product.name_en}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full"
                 />
 
                 {/* Easter Special Badge */}
@@ -191,10 +193,12 @@ const ProductDetail = ({ product, language, onClose }) => {
                             : 'border-transparent hover:border-gray-300'
                         }`}
                       >
-                        <img
+                        <AdjustableImage
+                          editable={false}
+                          elementKey={img}
                           src={getThumbnailUrl(img)}
                           alt={`${language === 'ro' ? product.name_ro : product.name_en} - ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full"
                         />
                       </button>
                     ))}
