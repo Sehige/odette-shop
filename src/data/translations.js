@@ -2,8 +2,8 @@ export const translations = {
   ro: {
     // Header
     home: 'Acasă',
-    shopNav: 'Produse',
-    weddingNav: 'Ofertă Nunți',
+    shopNav: 'Meniu',
+    weddingNav: 'Ofertă evenimente',
     cakes: 'Torturi',
     pastries: 'Prăjituri',
     cookies: 'Cookies',
@@ -223,8 +223,8 @@ export const translations = {
   en: {
     // Header
     home: 'Home',
-    shopNav: 'Products',
-    weddingNav: 'Wedding Offer',
+    shopNav: 'Menu',
+    weddingNav: 'Events Offer',
     cakes: 'Cakes',
     pastries: 'Pastries',
     cookies: 'Cookies',

@@ -1,67 +1,45 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HERO_IMAGE } from '../../data/imageConstants';
-import { getHeroImageProps } from '../../utils/imageOptimizer';
 import { translations } from '../../data/translations';
 import AdjustableImage from '../common/AdjustableImage';
-
-// Gold ornamental flourish (mirrors the Canva divider above/below the tagline)
-const GoldFlourish = ({ className = '' }) => (
-  <svg
-    viewBox="0 0 240 24"
-    className={className}
-    fill="none"
-    stroke="#d4af37"
-    strokeWidth="1.5"
-    aria-hidden="true"
-  >
-    <path d="M10 12 H95" strokeLinecap="round" />
-    <path d="M230 12 H145" strokeLinecap="round" />
-    <path d="M95 12 c8 -9 18 -9 25 0 c7 9 17 9 25 0" strokeLinecap="round" />
-    <circle cx="120" cy="12" r="2.5" fill="#d4af37" stroke="none" />
-  </svg>
-);
+// Hero illustration (vector — scales to any size, no responsive srcset needed)
+import heroPicture from '../../hero_picture.svg';
 
 const HeroSection = ({ language }) => {
   const navigate = useNavigate();
   const t = translations[language] || translations.ro;
 
-  const heroImageProps = getHeroImageProps(HERO_IMAGE);
-
   return (
-    <section className="relative grid grid-cols-1 lg:grid-cols-2 min-h-[600px] lg:min-h-screen">
-      {/* Left: dessert photo (50%) */}
-      <AdjustableImage
-        elementKey="hero"
-        src={heroImageProps.src}
-        srcSet={heroImageProps.srcSet}
-        sizes={heroImageProps.sizes}
-        alt=""
-        fetchPriority="high"
-        decoding="async"
-        className="h-64 sm:h-80 lg:h-auto"
-      />
+    <section className="relative bg-[#1e3a8a] min-h-screen flex items-center pt-24 pb-16 lg:pt-20">
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-8 lg:gap-12">
+          {/* Left: tagline + CTA */}
+          <div className="text-center order-2 lg:order-1">
+            <h1 className="font-serif font-normal text-white leading-relaxed text-[32px] sm:text-[43px] lg:text-[54px]">
+              {t.landing.heroTagline}
+            </h1>
+            <div className="mt-10 flex justify-center">
+              <button
+                onClick={() => navigate('/shop')}
+                className="bg-[#f7f4ec] text-[#1e3a8a] px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase hover:opacity-90 transition transform hover:scale-105 shadow-xl"
+              >
+                {t.landing.orderNow}
+              </button>
+            </div>
+          </div>
 
-      {/* Right: navy panel (50%) */}
-      <div className="relative bg-[#1e3a8a] flex flex-col justify-center px-8 py-16 sm:px-12 lg:px-16">
-        <div className="max-w-xl mx-auto text-center w-full">
-          <GoldFlourish className="w-48 h-6 mx-auto mb-8" />
-
-          <h1 className="font-script text-white leading-relaxed text-4xl sm:text-5xl md:text-6xl">
-            {t.landing.heroTagline}
-          </h1>
-
-          <GoldFlourish className="w-48 h-6 mx-auto mt-8" />
-        </div>
-
-        {/* Cream pill CTA, bottom-right */}
-        <div className="mt-12 flex justify-center lg:justify-end lg:absolute lg:bottom-12 lg:right-16">
-          <button
-            onClick={() => navigate('/shop')}
-            className="bg-[#f7f4ec] text-[#1e3a8a] px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase hover:opacity-90 transition transform hover:scale-105 shadow-xl"
-          >
-            {t.landing.orderNow}
-          </button>
+          {/* Right: floating product image (cut-out PNG when provided) */}
+          <div className="order-1 lg:order-2">
+            <AdjustableImage
+              elementKey="hero"
+              src={heroPicture}
+              alt=""
+              fit="contain"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-80 sm:h-[30rem] lg:h-[44rem] drop-shadow-2xl"
+            />
+          </div>
         </div>
       </div>
     </section>

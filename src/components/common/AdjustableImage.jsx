@@ -29,8 +29,10 @@ const AdjustableImage = ({
   className = '',
   imgClassName = '',
   editable = true,
+  fit = 'cover', // 'cover' (fill+crop) or 'contain' (show whole image, e.g. cut-out PNGs)
   ...imgProps
 }) => {
+  const objectClass = fit === 'contain' ? 'object-contain' : 'object-cover';
   const { getSetting, saveSetting } = useImageSettings();
   const { isAdmin } = useSupabaseSession();
 
@@ -137,7 +139,7 @@ const AdjustableImage = ({
         src={src}
         alt={alt}
         draggable={false}
-        className={`w-full h-full object-cover ${imgClassName}`}
+        className={`w-full h-full ${objectClass} ${imgClassName}`}
         style={{
           objectPosition: `${shown.focalX}% ${shown.focalY}%`,
           transform: `scale(${shown.zoom})`,
