@@ -177,7 +177,9 @@ export const translations = {
       tryAgain: 'Încercați din nou',
       all: 'Toate',
       noProducts: 'Nu am găsit produse în această categorie',
-      productsCount: 'produse delicioase'
+      productsCount: 'produse delicioase',
+      galleryTitle: 'Modele decor',
+      flavorsTitle: 'Arome'
     },
 
     // ===== COMMON UI =====
@@ -398,7 +400,9 @@ export const translations = {
       tryAgain: 'Try Again',
       all: 'All',
       noProducts: 'No products found in this category',
-      productsCount: 'delicious products'
+      productsCount: 'delicious products',
+      galleryTitle: 'Designs models',
+      flavorsTitle: 'Flavors'
     },
 
     // ===== COMMON UI =====

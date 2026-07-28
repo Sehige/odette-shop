@@ -8,7 +8,9 @@ import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
 import { seoConfig } from '../../config/seoConfig';
 
 import { useAllProducts, useCategories } from '../../hooks/useProducts';
+import { useGalleryImages } from '../../hooks/useGallery';
 import useSupabaseSession from '../../hooks/useSupabaseSession';
+import CakeGalleryCarousel from './CakeGalleryCarousel';
 
 const ShopPage = ({ language, setSelectedProduct }) => {
   const t = translations[language];
@@ -19,7 +21,13 @@ const ShopPage = ({ language, setSelectedProduct }) => {
 
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
+  const { images: galleryImages } = useGalleryImages();
   const [selectedCategory, setSelectedCategory] = React.useState('all');
+
+  // Past-work photos for the selected category (e.g. Torturi). Empty on "all".
+  const galleryForCategory = selectedCategory === 'all'
+    ? []
+    : galleryImages.filter((g) => g.category_id === selectedCategory);
 
   // Read filter from URL on mount
   useEffect(() => {
@@ -203,6 +211,16 @@ const ShopPage = ({ language, setSelectedProduct }) => {
           </button>
         </div>
                 
+        {/* Past-work cake gallery (shown for categories that have gallery photos) */}
+        <CakeGalleryCarousel images={galleryForCategory} language={language} />
+
+        {/* "Arome" heading for the priced products, shown alongside the gallery */}
+        {galleryForCategory.length > 0 && (
+          <h2 className="text-left font-serif font-bold text-gray-900 text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6">
+            {shopT.flavorsTitle}
+          </h2>
+        )}
+
         {/* Products Grid */}
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
