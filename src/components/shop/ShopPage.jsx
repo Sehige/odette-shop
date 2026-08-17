@@ -13,7 +13,7 @@ import useSupabaseSession from '../../hooks/useSupabaseSession';
 import CakeGalleryCarousel from './CakeGalleryCarousel';
 import CakeOrderSteps from './CakeOrderSteps';
 
-const ShopPage = ({ language, setSelectedProduct }) => {
+const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
   const t = translations[language];
   const shopT = translations[language].shop;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,13 +37,59 @@ const ShopPage = ({ language, setSelectedProduct }) => {
     (selectedCategoryObj.name_en || '').toLowerCase().includes('cake')
   );
 
-  // Read filter from URL on mount
+  // Keep the selected category in sync with the URL (?filter=<categoryId>) so
+  // category selections are shareable and shared links land pre-filtered.
   useEffect(() => {
-    const filterParam = searchParams.get('filter');
-    if (filterParam) {
-      setSelectedCategory(filterParam);
-    }
+    setSelectedCategory(searchParams.get('filter') || 'all');
   }, [searchParams]);
+
+  // Select a category by writing it to the URL (state follows via the effect
+  // above). 'all' clears the filter param. Other params (e.g. product) are kept.
+  const selectCategory = (id) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (id && id !== 'all') params.set('filter', id);
+      else params.delete('filter');
+      return params;
+    });
+  };
+
+  // Open a product and reflect it in the URL (?product=<id>) so it's shareable.
+  // `replace` avoids stacking an extra history entry on top of the modal's own.
+  const openProduct = (product) => {
+    setSelectedProduct(product);
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      params.set('product', product.id);
+      return params;
+    }, { replace: true });
+  };
+
+  // Open the product named in the URL once products have loaded (shared link).
+  useEffect(() => {
+    const productId = searchParams.get('product');
+    if (!productId || !allProducts.length) return;
+    if (!selectedProduct || selectedProduct.id !== productId) {
+      const product = allProducts.find((p) => p.id === productId);
+      if (product) setSelectedProduct(product);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, allProducts]);
+
+  // When the modal closes (product -> null), drop the ?product param.
+  const prevProductRef = React.useRef(null);
+  useEffect(() => {
+    const prev = prevProductRef.current;
+    prevProductRef.current = selectedProduct;
+    if (prev && !selectedProduct && searchParams.get('product')) {
+      setSearchParams((params) => {
+        const next = new URLSearchParams(params);
+        next.delete('product');
+        return next;
+      }, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProduct]);
 
   console.log('Categories in ShopPage:', categories);
   
@@ -194,7 +240,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
             return (
               <button
                 key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
+                onClick={() => selectCategory(category.id)}
                 className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
                   selectedCategory === category.id
                     ? 'bg-blue-900 text-white'
@@ -208,7 +254,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
 
           {/* All Products Button - at the end */}
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => selectCategory('all')}
             className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
               selectedCategory === 'all'
                 ? 'bg-blue-900 text-white'
@@ -240,7 +286,7 @@ const ShopPage = ({ language, setSelectedProduct }) => {
                 key={product.id}
                 product={product}
                 language={language}
-                setSelectedProduct={setSelectedProduct}
+                setSelectedProduct={openProduct}
                 priority={index < 4}
               />
             ))}

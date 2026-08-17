@@ -65,6 +65,7 @@ function App() {
                   <ShopPage
                     language={language}
                     products={productsData}
+                    selectedProduct={selectedProduct}
                     setSelectedProduct={setSelectedProduct}
                   />
                 }

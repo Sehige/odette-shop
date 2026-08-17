@@ -180,7 +180,7 @@ export const translations = {
       productsCount: 'produse delicioase',
       galleryTitle: 'Modele decor',
       flavorsTitle: 'Arome',
-      decorNote: 'Pozele de mai jos sunt decorurile standard pentru fiecare tort, realizăm decoruri personalizate la cerere.',
+      decorNote: 'Pozele de la secțiunea "Arome" sunt decorurile standard pentru fiecare tort, realizăm decoruri personalizate la cerere.',
       orderTitle: 'Cum comand un tort?',
       orderCta: 'Contactează-ne',
       orderSteps: [
@@ -197,7 +197,7 @@ export const translations = {
         {
           step: 'Pasul 3',
           title: 'Alegi decorul',
-          text: 'Ne place foarte mult să încercăm decoruri noi și ne plac provocările. Așa că alege-ți orice decor de pe Pinterest sau de pe internet și hai să discutăm cum putem realiza tortul viselor tale.'
+          text: 'Ne place foarte mult să încercăm decoruri noi și ne plac provocările. Așa că alege-ți orice decor de pe Pinterest sau de pe internet și hai să discutăm cum putem realiza tortul visurilor tale.'
         },
         {
           step: 'Pasul 4',
@@ -429,7 +429,7 @@ export const translations = {
       productsCount: 'delicious products',
       galleryTitle: 'Designs models',
       flavorsTitle: 'Flavors',
-      decorNote: 'The photos below are the standard decorations for each cake; we make custom decorations on request.',
+      decorNote: 'The photos at the "Flavours" section are the standard decorations for each cake; we make custom decorations on request.',
       orderTitle: 'How do I order a cake?',
       orderCta: 'Contact us',
       orderSteps: [
