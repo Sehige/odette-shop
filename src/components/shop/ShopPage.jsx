@@ -11,6 +11,7 @@ import { useAllProducts, useCategories } from '../../hooks/useProducts';
 import { useGalleryImages } from '../../hooks/useGallery';
 import useSupabaseSession from '../../hooks/useSupabaseSession';
 import CakeGalleryCarousel from './CakeGalleryCarousel';
+import CakeOrderSteps from './CakeOrderSteps';
 
 const ShopPage = ({ language, setSelectedProduct }) => {
   const t = translations[language];
@@ -28,6 +29,13 @@ const ShopPage = ({ language, setSelectedProduct }) => {
   const galleryForCategory = selectedCategory === 'all'
     ? []
     : galleryImages.filter((g) => g.category_id === selectedCategory);
+
+  // Whether the selected category is cakes (Torturi), to show the how-to-order steps.
+  const selectedCategoryObj = categories.find((c) => c.id === selectedCategory);
+  const isCakeCategory = !!selectedCategoryObj && (
+    (selectedCategoryObj.name_ro || '').toLowerCase().includes('tort') ||
+    (selectedCategoryObj.name_en || '').toLowerCase().includes('cake')
+  );
 
   // Read filter from URL on mount
   useEffect(() => {
@@ -211,6 +219,9 @@ const ShopPage = ({ language, setSelectedProduct }) => {
           </button>
         </div>
                 
+        {/* "How to order a cake" steps — shown in the cakes (Torturi) category */}
+        {isCakeCategory && <CakeOrderSteps language={language} />}
+
         {/* Past-work cake gallery (shown for categories that have gallery photos) */}
         <CakeGalleryCarousel images={galleryForCategory} language={language} />
 

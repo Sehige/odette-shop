@@ -179,7 +179,33 @@ export const translations = {
       noProducts: 'Nu am găsit produse în această categorie',
       productsCount: 'produse delicioase',
       galleryTitle: 'Modele decor',
-      flavorsTitle: 'Arome'
+      flavorsTitle: 'Arome',
+      decorNote: 'Pozele de mai jos sunt decorurile standard pentru fiecare tort, realizăm decoruri personalizate la cerere.',
+      orderTitle: 'Cum comand un tort?',
+      orderCta: 'Contactează-ne',
+      orderSteps: [
+        {
+          step: 'Pasul 1',
+          title: 'Alegi aroma',
+          text: 'Putem realiza oricare din aromele de mai jos în formă de tort. Tu trebuie doar să decizi care din ele îți place cel mai mult și care le-ar plăcea invitaților tăi.'
+        },
+        {
+          step: 'Pasul 2',
+          title: 'Alegi dimensiunea',
+          text: 'Dimensiunea trebuie aleasă în funcție de numărul de invitați. O felie de tort are aproximativ 100-120g și înmulțești cu numărul de invitați ca să afli greutatea necesară.'
+        },
+        {
+          step: 'Pasul 3',
+          title: 'Alegi decorul',
+          text: 'Ne place foarte mult să încercăm decoruri noi și ne plac provocările. Așa că alege-ți orice decor de pe Pinterest sau de pe internet și hai să discutăm cum putem realiza tortul viselor tale.'
+        },
+        {
+          step: 'Pasul 4',
+          title: 'Ne contactezi',
+          text: 'Scrie-ne și stabilim împreună toate detaliile comenzii tale.',
+          link: '/contact'
+        }
+      ]
     },
 
     // ===== COMMON UI =====
@@ -402,7 +428,33 @@ export const translations = {
       noProducts: 'No products found in this category',
       productsCount: 'delicious products',
       galleryTitle: 'Designs models',
-      flavorsTitle: 'Flavors'
+      flavorsTitle: 'Flavors',
+      decorNote: 'The photos below are the standard decorations for each cake; we make custom decorations on request.',
+      orderTitle: 'How do I order a cake?',
+      orderCta: 'Contact us',
+      orderSteps: [
+        {
+          step: 'Step 1',
+          title: 'Choose the flavor',
+          text: 'We can make any of the flavors below in cake form. You just have to decide which one you like best and which your guests would enjoy.'
+        },
+        {
+          step: 'Step 2',
+          title: 'Choose the size',
+          text: 'The size depends on the number of guests. A slice of cake is roughly 100-120g; multiply that by the number of guests to find the weight you need.'
+        },
+        {
+          step: 'Step 3',
+          title: 'Choose the decoration',
+          text: 'We love trying new decorations and enjoy a challenge. So pick any decor from Pinterest or the internet and let us talk about how we can make the cake of your dreams.'
+        },
+        {
+          step: 'Step 4',
+          title: 'Contact us',
+          text: 'Write to us and we will settle all the details of your order together.',
+          link: '/contact'
+        }
+      ]
     },
 
     // ===== COMMON UI =====
