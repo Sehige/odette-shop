@@ -121,7 +121,7 @@ const ProductDetail = ({ product, language, onClose }) => {
         <div className="px-6 pb-6 -mt-4">
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             {/* Image Carousel */}
-            <div>
+            <div className="min-w-0">
               {/* Main Image with Navigation */}
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
                 <img
@@ -180,7 +180,7 @@ const ProductDetail = ({ product, language, onClose }) => {
                   {/* Thumbnails container */}
                   <div
                     ref={thumbnailContainerRef}
-                    className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1"
+                    className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1 min-w-0"
                   >
                     {images.map((img, index) => (
                       <button
@@ -216,9 +216,9 @@ const ProductDetail = ({ product, language, onClose }) => {
             </div>
 
             {/* Details */}
-            <div>
+            <div className="min-w-0">
               {/* Product Name */}
-              <h2 className="text-3xl md:text-6xl font-bold text-gray-900 mb-3">
+              <h2 className="text-3xl md:text-6xl font-bold text-gray-900 mb-3 break-words">
                 {language === 'ro' ? product.name_ro : product.name_en}
               </h2>
 
