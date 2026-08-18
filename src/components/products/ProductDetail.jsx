@@ -124,11 +124,10 @@ const ProductDetail = ({ product, language, onClose }) => {
             <div>
               {/* Main Image with Navigation */}
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                <AdjustableImage
-                  elementKey={images[selectedImageIndex]}
+                <img
                   src={getProductDetailImageUrl(images[selectedImageIndex])}
                   alt={language === 'ro' ? product.name_ro : product.name_en}
-                  className="w-full h-full"
+                  className="w-full h-full object-contain"
                 />
 
                 {/* Easter Special Badge */}
