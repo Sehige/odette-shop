@@ -11,8 +11,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Get environment variables
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.REACT_APP_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.REACT_APP_SUPABASE_ANON_KEY;
 
 // Validate that environment variables are set
 if (!supabaseUrl || !supabaseAnonKey) {
