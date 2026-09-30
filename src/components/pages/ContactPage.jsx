@@ -112,32 +112,22 @@ const ContactPage = ({ language }) => {
   const pageData = {
     title: 'Contact',
     description: language === 'ro'
-      ? 'Contacteaza Odette Confiserie pentru comenzi de prajituri si torturi. Telefon, email, adresa in Cluj-Napoca.'
+      ? 'Contactează Odette Confiserie pentru comenzi de prăjituri și torturi. Telefon, email, adresă în Cluj-Napoca.'
       : 'Contact Odette Confiserie for pastry and cake orders. Phone, email, address in Cluj-Napoca.'
   };
 
   const breadcrumbItems = [
-    { name: language === 'ro' ? 'Acasa' : 'Home', url: seoConfig.siteUrl },
+    { name: language === 'ro' ? 'Acasă' : 'Home', url: `${seoConfig.siteUrl}/` },
     { name: 'Contact', url: `${seoConfig.siteUrl}/contact` }
   ];
 
+  // The business details live in the Bakery JSON-LD in public/index.html; refer to it by @id.
   const contactPageSchema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     "name": pageData.title,
     "url": `${seoConfig.siteUrl}/contact`,
-    "mainEntity": {
-      "@type": "LocalBusiness",
-      "name": seoConfig.business.name,
-      "telephone": seoConfig.business.phone,
-      "email": seoConfig.business.email,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": seoConfig.business.address.street,
-        "addressLocality": seoConfig.business.address.city,
-        "addressCountry": seoConfig.business.address.country
-      }
-    }
+    "mainEntity": { "@id": seoConfig.businessId }
   };
 
   return (

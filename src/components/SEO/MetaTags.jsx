@@ -5,7 +5,6 @@ import { seoConfig } from '../../config/seoConfig';
 const MetaTags = ({
   title,
   description,
-  keywords,
   image,
   url,
   type = 'website',
@@ -27,9 +26,8 @@ const MetaTags = ({
       <html lang={lang} />
       <title>{siteTitle}</title>
       <meta name="description" content={siteDescription} />
-      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {noindex && <meta name="robots" content="noindex, follow" />}
 
       {/* Open Graph */}
       <meta property="og:type" content={type} />

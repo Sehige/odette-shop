@@ -291,9 +291,9 @@ const TermsAndConditionsPage = ({ language }) => {
   return (
     <>
       <MetaTags
-        title={isRomanian ? 'Termeni si Conditii' : 'Terms and Conditions'}
+        title={isRomanian ? 'Termeni și Condiții' : 'Terms and Conditions'}
         description={isRomanian
-          ? 'Termeni si conditii de utilizare pentru Odette Confiserie.'
+          ? 'Termeni și condiții de utilizare pentru Odette Confiserie.'
           : 'Terms and conditions of use for Odette Confiserie.'}
         url={`${seoConfig.siteUrl}/terms-and-conditions`}
         lang={language}

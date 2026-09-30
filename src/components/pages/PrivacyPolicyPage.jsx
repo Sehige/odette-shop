@@ -463,9 +463,9 @@ const PrivacyPolicyPage = ({ language }) => {
   return (
     <>
       <MetaTags
-        title={isRomanian ? 'Politica de Confidentialitate' : 'Privacy Policy'}
+        title={isRomanian ? 'Politica de Confidențialitate' : 'Privacy Policy'}
         description={isRomanian
-          ? 'Politica de confidentialitate si protectia datelor personale pentru Odette Confiserie.'
+          ? 'Politica de confidențialitate și protecția datelor personale pentru Odette Confiserie.'
           : 'Privacy policy and personal data protection for Odette Confiserie.'}
         url={`${seoConfig.siteUrl}/privacy-policy`}
         lang={language}

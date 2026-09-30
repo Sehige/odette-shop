@@ -16,83 +16,68 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Playfair+Display:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
-    
-    <!-- Primary Meta Tags -->
-    <title>Odette - Prăjituri Artizanale și Torturi Premium în Cluj-Napoca | Cofetărie Online</title>
-    <meta name="title" content="Odette Confiserie - Prăjituri Artizanale și Torturi Premium în Cluj-Napoca | Cofetărie Online" />
-    <meta name="description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca. Ingrediente premium, rețete tradiționale. Comenzi pentru evenimente." />
-    <meta name="keywords" content="prăjituri Cluj-Napoca, torturi personalizate, cofetărie online, deserturi premium, torturi nuntă, prăjituri evenimente, cofetărie artizanală" />
-    <meta name="author" content="Odette Bakery" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.odette-confiserie.ro" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Primary meta. Description and canonical are set per page by react-helmet-async
+         (src/components/SEO/MetaTags.jsx): static copies here would sit next to them on
+         every route and point every page at the homepage. -->
+    <title>Odette Confiserie – Cofetărie artizanală în Cluj-Napoca</title>
+    <meta name="author" content="Odette Confiserie" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Twitter defaults: link-preview bots (WhatsApp, Facebook) don't run
+         JavaScript, so these static values are what they show. -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.odette-confiserie.ro/" />
     <meta property="og:title" content="Odette Confiserie - Prăjituri Artizanale și Torturi Premium" />
     <meta property="og:description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca." />
     <meta property="og:image" content="https://www.odette-confiserie.ro/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Tarte artizanale cu ciocolată și alune pe o tavă de argint – Odette Confiserie" />
     <meta property="og:locale" content="ro_RO" />
-    <meta property="og:site_name" content="Odette Bakery" />
+    <meta property="og:site_name" content="Odette Confiserie" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://www.odette-confiserie.ro/" />
-    <meta property="twitter:title" content="Odette Confiserie - Prăjituri Artizanale și Torturi Premium" />
-    <meta property="twitter:description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium." />
-    <meta property="twitter:image" content="https://www.odette-confiserie.ro/twitter-image.jpg" />
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Odette Confiserie - Prăjituri Artizanale și Torturi Premium" />
+    <meta name="twitter:description" content="Comandă online prăjituri artizanale, torturi personalizate și deserturi premium." />
+    <meta name="twitter:image" content="https://www.odette-confiserie.ro/og-image.jpg" />
+
     <!-- Geo Tags -->
     <meta name="geo.region" content="RO-CJ" />
     <meta name="geo.placename" content="Cluj-Napoca" />
     <meta name="geo.position" content="46.752273185339014; 23.56535278292503" />
     <meta name="ICBM" content="46.752273185339014, 23.56535278292503" />
-    
+
     <!-- Business Info -->
     <meta name="contact" content="odette.confiserie@gmail.com" />
     <meta name="language" content="Romanian" />
-    
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon-192x192.png" />
     <!-- Manifest loaded after page to avoid blocking critical path -->
 
     <!-- Preconnect to Cloudinary for optimized image loading -->
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
-    
 
-    <!-- Single Page Apps for GitHub Pages -->
-    <!-- https://github.com/rafgraph/spa-github-pages -->
-    <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
-    </script>
-
-    <!-- JSON-LD Structured Data -->
+    <!-- JSON-LD: the single business entity for the whole site (pages reference it by @id) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Bakery",
+      "@id": "https://www.odette-confiserie.ro/#bakery",
       "name": "Odette Confiserie",
-      "image": "https://www.odette-confiserie.ro/logo_swan.png",
-      "@id": "https://www.odette-confiserie.ro",
-      "url": "https://www.odette-confiserie.ro",
+      "legalName": "Olala Sweets SRL",
+      "url": "https://www.odette-confiserie.ro/",
+      "logo": "https://www.odette-confiserie.ro/logo_swan.png",
+      "image": "https://www.odette-confiserie.ro/og-image.jpg",
       "telephone": "+40756157067",
       "email": "odette.confiserie@gmail.com",
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Strada Campului 133",
+        "streetAddress": "Strada Câmpului 133",
         "addressLocality": "Cluj-Napoca",
-        "postalCode": "400000",
+        "addressRegion": "Cluj",
+        "postalCode": "400686",
         "addressCountry": "RO"
       },
       "geo": {

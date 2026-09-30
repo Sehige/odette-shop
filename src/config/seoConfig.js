@@ -1,10 +1,11 @@
 export const seoConfig = {
   siteUrl: 'https://www.odette-confiserie.ro',
   siteName: 'Odette Confiserie',
-  defaultTitle: 'Odette - Prajituri Artizanale si Torturi Premium in Cluj-Napoca',
-  defaultDescription: 'Comanda online prajituri artizanale, torturi personalizate si deserturi premium. Livrare in Cluj-Napoca. Ingrediente premium, retete traditionale.',
+  defaultTitle: 'Odette Confiserie – Cofetărie artizanală în Cluj-Napoca',
+  defaultDescription: 'Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca. Ingrediente premium, rețete tradiționale.',
   defaultImage: 'https://www.odette-confiserie.ro/og-image.jpg',
-  twitterImage: 'https://www.odette-confiserie.ro/twitter-image.jpg',
+  // @id of the Bakery JSON-LD in public/index.html; pages reference it instead of repeating it
+  businessId: 'https://www.odette-confiserie.ro/#bakery',
   locale: 'ro_RO',
 
   business: {
@@ -14,9 +15,9 @@ export const seoConfig = {
     phone: '+40756157067',
     email: 'odette.confiserie@gmail.com',
     address: {
-      street: 'Strada Campului 133',
+      street: 'Strada Câmpului 133',
       city: 'Cluj-Napoca',
-      postalCode: '400000',
+      postalCode: '400686',
       country: 'RO'
     },
     geo: {
