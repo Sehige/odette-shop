@@ -1,8 +1,6 @@
 import React from 'react';
 import { Cookie, Info, Settings, Shield, List, Trash2 } from 'lucide-react';
 import { siteConfig } from '../../data/siteConfig';
-import MetaTags from '../SEO/MetaTags';
-import { seoConfig } from '../../config/seoConfig';
 
 const CookiePolicyPage = ({ language }) => {
   const isRomanian = language === 'ro';
@@ -362,15 +360,6 @@ const CookiePolicyPage = ({ language }) => {
 
   return (
     <>
-      <MetaTags
-        title={isRomanian ? 'Politica de Cookies' : 'Cookie Policy'}
-        description={isRomanian
-          ? 'Politica de cookies pentru Odette Confiserie.'
-          : 'Cookie policy for Odette Confiserie.'}
-        url={`${seoConfig.siteUrl}/cookie-policy`}
-        lang={language}
-        noindex={true}
-      />
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>

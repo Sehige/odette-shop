@@ -5,9 +5,6 @@ import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { contactService } from '../../services/utilityServices';
 import Toast from '../common/Toast';
-import MetaTags from '../SEO/MetaTags';
-import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
-import { seoConfig } from '../../config/seoConfig';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
@@ -102,37 +99,11 @@ const ContactPage = ({ language }) => {
     });
   };
 
-  const pageData = {
-    title: 'Contact',
-    description: language === 'ro'
-      ? 'Contactează Odette Confiserie pentru comenzi de prăjituri și torturi. Telefon, email, adresă în Cluj-Napoca.'
-      : 'Contact Odette Confiserie for pastry and cake orders. Phone, email, address in Cluj-Napoca.'
-  };
 
-  const breadcrumbItems = [
-    { name: language === 'ro' ? 'Acasă' : 'Home', url: `${seoConfig.siteUrl}/` },
-    { name: 'Contact', url: `${seoConfig.siteUrl}/contact` }
-  ];
 
-  // The business details live in the Bakery JSON-LD in public/index.html; refer to it by @id.
-  const contactPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "name": pageData.title,
-    "url": `${seoConfig.siteUrl}/contact`,
-    "mainEntity": { "@id": seoConfig.businessId }
-  };
 
   return (
     <>
-      <MetaTags
-        title={pageData.title}
-        description={pageData.description}
-        url={`${seoConfig.siteUrl}/contact`}
-        structuredData={contactPageSchema}
-        lang={language}
-      />
-      <BreadcrumbSchema items={breadcrumbItems} />
       <div className="pt-32 pb-16 min-h-screen bg-gray-50">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { usePreloaded } from '../context/PreloadContext';
 import {
   getAllProducts,
   getProductsByCategory,
@@ -26,35 +27,41 @@ import {
  * @returns {Object} { products, loading, error, refetch }
  */
 export const useAllProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Prerendered pages start from build-time data (see PreloadContext)
+  const preloaded = usePreloaded('products');
+  const [products, setProducts] = useState(preloaded || []);
+  const [loading, setLoading] = useState(!preloaded);
   const [error, setError] = useState(null);
 
-  const fetchProducts = async () => {
-    setLoading(true);
+  // background: refresh without showing a loading state or dropping what is shown
+  const fetchProducts = async ({ background = false } = {}) => {
+    if (!background) setLoading(true);
     setError(null);
-    
+
     const { data, error } = await getAllProducts();
-    
+
     if (error) {
-      setError(error);
-      setProducts([]);
+      if (!background) {
+        setError(error);
+        setProducts([]);
+      }
     } else {
       setProducts(data || []);
     }
-    
+
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts({ background: !!preloaded });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { 
-    products, 
-    loading, 
+  return {
+    products,
+    loading,
     error,
-    refetch: fetchProducts // Function to manually refetch
+    refetch: fetchProducts
   };
 };
 
@@ -108,33 +115,39 @@ export const useProductsByCategory = (category) => {
  * @returns {Object} { bestSellers, loading, error, refetch }
  */
 export const useBestSellers = () => {
-  const [bestSellers, setBestSellers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Prerendered pages start from build-time data (see PreloadContext)
+  const preloaded = usePreloaded('bestSellers');
+  const [bestSellers, setBestSellers] = useState(preloaded || []);
+  const [loading, setLoading] = useState(!preloaded);
   const [error, setError] = useState(null);
 
-  const fetchBestSellers = async () => {
-    setLoading(true);
+  // background: refresh without showing a loading state or dropping what is shown
+  const fetchBestSellers = async ({ background = false } = {}) => {
+    if (!background) setLoading(true);
     setError(null);
-    
+
     const { data, error } = await getBestSellers();
-    
+
     if (error) {
-      setError(error);
-      setBestSellers([]);
+      if (!background) {
+        setError(error);
+        setBestSellers([]);
+      }
     } else {
       setBestSellers(data || []);
     }
-    
+
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchBestSellers();
+    fetchBestSellers({ background: !!preloaded });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { 
-    bestSellers, 
-    loading, 
+  return {
+    bestSellers,
+    loading,
     error,
     refetch: fetchBestSellers
   };
@@ -230,19 +243,24 @@ export const useProductSearch = () => {
  * @returns {Object} { categories, loading, error, refetch }
  */
 export const useCategories = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Prerendered pages start from build-time data (see PreloadContext)
+  const preloaded = usePreloaded('categories');
+  const [categories, setCategories] = useState(preloaded || []);
+  const [loading, setLoading] = useState(!preloaded);
   const [error, setError] = useState(null);
 
-  const fetchCategories = async () => {
-    setLoading(true);
+  // background: refresh without showing a loading state or dropping what is shown
+  const fetchCategories = async ({ background = false } = {}) => {
+    if (!background) setLoading(true);
     setError(null);
 
     const { data, error } = await getCategories();
 
     if (error) {
-      setError(error);
-      setCategories([]);
+      if (!background) {
+        setError(error);
+        setCategories([]);
+      }
     } else {
       setCategories(data || []);
     }
@@ -251,7 +269,8 @@ export const useCategories = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategories({ background: !!preloaded });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

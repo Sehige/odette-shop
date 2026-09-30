@@ -4,6 +4,7 @@ export const seoConfig = {
   defaultTitle: 'Odette Confiserie – Cofetărie artizanală în Cluj-Napoca',
   defaultDescription: 'Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca. Ingrediente premium, rețete tradiționale.',
   defaultImage: 'https://www.odette-confiserie.ro/og-image.jpg',
+  defaultImageAlt: 'Tarte artizanale cu ciocolată și alune pe o tavă de argint – Odette Confiserie',
   // @id of the Bakery JSON-LD in public/index.html; pages reference it instead of repeating it
   businessId: 'https://www.odette-confiserie.ro/#bakery',
   locale: 'ro_RO',
