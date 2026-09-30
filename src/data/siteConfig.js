@@ -6,6 +6,8 @@ export const siteConfig = {
   // Contact Information
   contact: {
     phone: '+40 756 157 067',
+    // WhatsApp click-to-chat (wa.me wants the international number, digits only)
+    whatsapp: '40756157067',
     email: 'odette.confiserie@gmail.com',
     address: {
       ro: 'Strada Câmpului 133, Cluj-Napoca, România',
