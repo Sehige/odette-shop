@@ -11,7 +11,7 @@ const TermsAndConditionsPage = ({ language }) => {
     ro: {
       title: 'Termeni și Condiții',
       subtitle: 'Condiții generale de vânzare',
-      lastUpdate: 'Ultima actualizare: Noiembrie 2024',
+      lastUpdate: 'Ultima actualizare: Septembrie 2026',
 
       sections: [
         {
@@ -66,7 +66,7 @@ const TermsAndConditionsPage = ({ language }) => {
             'Livrăm în Cluj-Napoca și localitățile din jur. Pentru livrări în alte zone, vă rugăm să ne contactați.',
             '',
             '<strong>4.2 Costuri de Livrare</strong>',
-            `Taxa de livrare este de ${siteConfig.delivery.fee} RON. Livrarea este gratuită pentru comenzi peste ${siteConfig.delivery.freeThreshold} RON.`,
+            `Taxa de livrare este de ${siteConfig.delivery.feeCluj} RON în Cluj-Napoca și ${siteConfig.delivery.feeOutside} RON în afara orașului. Livrarea este gratuită pentru comenzi de peste ${siteConfig.delivery.freeThreshold} RON.`,
             '',
             '<strong>4.3 Termene de Livrare</strong>',
             'Livrările se efectuează în intervalul de timp convenit la plasarea comenzii. Ne străduim să respectăm programul, dar nu putem fi făcuți răspunzători pentru întârzieri cauzate de factori externi (trafic, vreme, etc.).',
@@ -149,7 +149,7 @@ const TermsAndConditionsPage = ({ language }) => {
     en: {
       title: 'Terms and Conditions',
       subtitle: 'General terms of sale',
-      lastUpdate: 'Last updated: November 2024',
+      lastUpdate: 'Last updated: September 2026',
 
       sections: [
         {
@@ -204,7 +204,7 @@ const TermsAndConditionsPage = ({ language }) => {
             'We deliver in Cluj-Napoca and surrounding areas. For deliveries to other areas, please contact us.',
             '',
             '<strong>4.2 Delivery Costs</strong>',
-            `Delivery fee is ${siteConfig.delivery.fee} RON. Delivery is free for orders over ${siteConfig.delivery.freeThreshold} RON.`,
+            `The delivery fee is ${siteConfig.delivery.feeCluj} RON in Cluj-Napoca and ${siteConfig.delivery.feeOutside} RON outside the city. Delivery is free for orders over ${siteConfig.delivery.freeThreshold} RON.`,
             '',
             '<strong>4.3 Delivery Terms</strong>',
             'Deliveries are made during the time interval agreed upon when placing the order. We strive to meet the schedule but cannot be held responsible for delays caused by external factors (traffic, weather, etc.).',

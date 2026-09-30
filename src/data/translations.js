@@ -1,3 +1,7 @@
+import { siteConfig } from './siteConfig';
+
+const { delivery } = siteConfig;
+
 export const translations = {
   ro: {
     // Header
@@ -36,7 +40,7 @@ export const translations = {
         },
         {
           title: 'Transport',
-          text: 'Oferim transport pentru produsele noastre. Tariful în Cluj-Napoca este de 15 lei, iar în afara orașului este 25 lei. Comenzile de peste 250 de lei beneficiază de transport gratuit.'
+          text: `Oferim transport pentru produsele noastre. Tariful în Cluj-Napoca este de ${delivery.feeCluj} lei, iar în afara orașului este ${delivery.feeOutside} lei. Comenzile de peste ${delivery.freeThreshold} de lei beneficiază de transport gratuit.`
         },
         {
           title: 'Ingrediente',
@@ -285,7 +289,7 @@ export const translations = {
         },
         {
           title: 'Delivery',
-          text: 'We offer delivery for our products. The fee in Cluj-Napoca is 15 lei, and outside the city it is 25 lei. Orders over 250 lei get free delivery.'
+          text: `We offer delivery for our products. The fee in Cluj-Napoca is ${delivery.feeCluj} lei, and outside the city it is ${delivery.feeOutside} lei. Orders over ${delivery.freeThreshold} lei get free delivery.`
         },
         {
           title: 'Ingredients',
