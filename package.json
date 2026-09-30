@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "react-router dev",
     "start": "react-router dev",
-    "build": "react-router build && node scripts/check-product-pages.mjs",
+    "build": "react-router build && node scripts/check-product-pages.mjs && node scripts/finish-build.mjs",
     "preview": "vite preview --outDir build/client",
     "test": "vitest run"
   },

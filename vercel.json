@@ -1,6 +1,7 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/admin/:path*",
@@ -73,12 +74,6 @@
           "value": "public, max-age=86400"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/__spa-fallback.html"
     }
   ]
 }

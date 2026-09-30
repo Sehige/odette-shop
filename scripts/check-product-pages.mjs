@@ -4,11 +4,8 @@
 // (EU Regulation 1169/2011), so a mismatch fails the build and nothing is deployed.
 import fs from 'node:fs';
 import path from 'node:path';
-import { loadEnv } from 'vite';
+import { fetchActiveProducts } from './catalog.mjs';
 
-const env = loadEnv('production', process.cwd(), 'REACT_APP_');
-const url = env.REACT_APP_SUPABASE_URL;
-const key = env.REACT_APP_SUPABASE_ANON_KEY;
 const select = 'slug,name_ro,ingredients_ro,allergens_ro,nutritional_info(*),categories:category(name_ro,name_en)';
 
 const normalize = (s) => (s || '').replace(/\s+/g, ' ').trim();
@@ -32,11 +29,7 @@ const NUTRITION = [
 ];
 
 async function check() {
-  const res = await fetch(`${url}/rest/v1/products?select=${select}&isActive=eq.true`, {
-    headers: { apikey: key, Authorization: `Bearer ${key}` },
-  });
-  if (!res.ok) return [`could not read the products from Supabase (HTTP ${res.status})`];
-  const products = await res.json();
+  const products = await fetchActiveProducts(select);
 
   const problems = [];
   for (const p of products) {
