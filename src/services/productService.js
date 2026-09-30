@@ -135,6 +135,37 @@ export const getProductById = async (productId) => {
 };
 
 /**
+ * Fetch a single active product by its URL slug (product pages, /produse/<slug>)
+ *
+ * @param {string} slug
+ * @returns {Promise<{data: Object|null, error: Error|null}>} data is null when there is no such product
+ */
+export const getProductBySlug = async (slug) => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
+      .eq('slug', slug)
+      .eq('isActive', true)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const product = data ? {
+      ...data,
+      isEasterFeatured: data.categories?.isEasterFeatured || false,
+      categoryName: data.categories?.name_en || '',
+      categoryNameRo: data.categories?.name_ro || ''
+    } : null;
+
+    return { data: product, error: null };
+  } catch (error) {
+    console.error(`Error fetching product with slug ${slug}:`, error);
+    return { data: null, error };
+  }
+};
+
+/**
  * Search products by name
  * 
  * @param {string} searchTerm - The search term

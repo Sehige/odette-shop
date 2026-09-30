@@ -4,6 +4,7 @@ import ShopPage from '../components/shop/ShopPage';
 import { useAppState } from '../context/AppStateContext';
 import { Preload } from '../context/PreloadContext';
 import { breadcrumbJsonLd, buildMeta } from '../seo/meta';
+import { productUrl } from '../seo/product';
 import { getAllProducts, getCategories } from '../services/productService';
 import { getGalleryImages } from '../services/galleryService';
 import { getAllImageSettings } from '../services/imageSettingsService';
@@ -39,7 +40,7 @@ export const meta = ({ loaderData }) => {
     jsonLd: [
       breadcrumbJsonLd([
         { name: 'Acasă', path: '/' },
-        { name: 'Magazin', path: '/shop' },
+        { name: 'Produse', path: '/shop' },
       ]),
       {
         '@context': 'https://schema.org',
@@ -52,6 +53,7 @@ export const meta = ({ loaderData }) => {
           item: {
             '@type': 'Product',
             name: product.name_ro,
+            url: productUrl(product),
             image: product.image_url,
             offers: { '@type': 'Offer', price: product.price, priceCurrency: 'RON' },
           },
