@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "build",
+  "outputDirectory": "build/client",
   "headers": [
     {
       "source": "/admin/:path*",
@@ -78,7 +78,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/__spa-fallback.html"
     }
   ]
 }

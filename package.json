@@ -2,25 +2,30 @@
   "name": "odette-shop",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
-    "dev": "vite",
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "react-router dev",
+    "start": "react-router dev",
+    "build": "react-router build",
+    "preview": "vite preview --outDir build/client",
     "test": "vitest run"
   },
   "dependencies": {
+    "@react-router/node": "^7.9.6",
     "@supabase/supabase-js": "^2.81.1",
+    "isbot": "^5.2.2",
     "lucide-react": "^0.553.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-helmet-async": "^3.0.0",
+    "react-router": "^7.9.6",
     "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
+    "@react-router/dev": "^7.9.6",
+    "@react-router/serve": "^7.9.6",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.3",

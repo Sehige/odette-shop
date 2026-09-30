@@ -1,8 +1,6 @@
 import React from 'react';
 import { Shield, Database, Lock, UserCheck, Mail, Cookie, Eye } from 'lucide-react';
 import { siteConfig } from '../../data/siteConfig';
-import MetaTags from '../SEO/MetaTags';
-import { seoConfig } from '../../config/seoConfig';
 
 const PrivacyPolicyPage = ({ language }) => {
   const isRomanian = language === 'ro';
@@ -462,15 +460,6 @@ const PrivacyPolicyPage = ({ language }) => {
 
   return (
     <>
-      <MetaTags
-        title={isRomanian ? 'Politica de Confidențialitate' : 'Privacy Policy'}
-        description={isRomanian
-          ? 'Politica de confidențialitate și protecția datelor personale pentru Odette Confiserie.'
-          : 'Privacy policy and personal data protection for Odette Confiserie.'}
-        url={`${seoConfig.siteUrl}/privacy-policy`}
-        lang={language}
-        noindex={true}
-      />
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>

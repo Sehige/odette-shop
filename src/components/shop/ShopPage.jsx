@@ -2,9 +2,6 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
-import MetaTags from '../SEO/MetaTags';
-import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
-import { seoConfig } from '../../config/seoConfig';
 
 import { useAllProducts, useCategories } from '../../hooks/useProducts';
 import { useGalleryImages } from '../../hooks/useGallery';
@@ -102,38 +99,8 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
     return nameA.localeCompare(nameB, language);
   });
 
-  const pageData = {
-    title: language === 'ro' ? 'Magazin Online - Prăjituri și Torturi' : 'Online Shop - Pastries and Cakes',
-    description: language === 'ro'
-      ? `Descoperă ${allProducts.length} prăjituri artizanale și torturi premium. Comandă online cu livrare în Cluj-Napoca.`
-      : `Discover ${allProducts.length} artisan pastries and premium cakes. Order online with delivery in Cluj-Napoca.`
-  };
 
-  const breadcrumbItems = [
-    { name: language === 'ro' ? 'Acasă' : 'Home', url: `${seoConfig.siteUrl}/` },
-    { name: language === 'ro' ? 'Magazin' : 'Shop', url: `${seoConfig.siteUrl}/shop` }
-  ];
 
-  const itemListSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": pageData.title,
-    "numberOfItems": filteredProducts.length,
-    "itemListElement": filteredProducts.slice(0, 10).map((product, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": language === 'ro' ? product.name_ro : product.name_en,
-        "image": product.image_url,
-        "offers": {
-          "@type": "Offer",
-          "price": product.price,
-          "priceCurrency": "RON"
-        }
-      }
-    }))
-  };
 
   // Loading state - use skeleton that matches final layout to prevent CLS
   if (productsLoading || categoriesLoading) {
@@ -193,14 +160,6 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
   
   return (
     <>
-      <MetaTags
-        title={pageData.title}
-        description={pageData.description}
-        url={`${seoConfig.siteUrl}/shop`}
-        structuredData={itemListSchema}
-        lang={language}
-      />
-      <BreadcrumbSchema items={breadcrumbItems} />
       <div className="pt-32 pb-16 min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         

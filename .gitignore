@@ -28,3 +28,6 @@ yarn-error.log*
 dev-server.log
 nul
 tmpclaude-*
+
+# React Router generated types
+/.react-router

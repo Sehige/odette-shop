@@ -13,23 +13,30 @@ const DEFAULT_SETTING = { focalX: 50, focalY: 50, zoom: 1 };
 
 const ImageSettingsContext = createContext(null);
 
-export const ImageSettingsProvider = ({ children }) => {
-  const [settings, setSettings] = useState({});
+// image_settings rows -> { [element_key]: { focalX, focalY, zoom } }
+const toSettingsByKey = (rows) => {
+  const byKey = {};
+  (rows || []).forEach((row) => {
+    byKey[row.element_key] = {
+      focalX: Number(row.focal_x),
+      focalY: Number(row.focal_y),
+      zoom: Number(row.zoom)
+    };
+  });
+  return byKey;
+};
+
+// initialRows: framing loaded at build time, so prerendered images are framed
+// right away instead of jumping once the settings arrive.
+export const ImageSettingsProvider = ({ initialRows, children }) => {
+  const [settings, setSettings] = useState(() => toSettingsByKey(initialRows));
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       const { data } = await getAllImageSettings();
       if (cancelled || !data) return;
-      const byKey = {};
-      data.forEach((row) => {
-        byKey[row.element_key] = {
-          focalX: Number(row.focal_x),
-          focalY: Number(row.focal_y),
-          zoom: Number(row.zoom)
-        };
-      });
-      setSettings(byKey);
+      setSettings(toSettingsByKey(data));
     })();
     return () => { cancelled = true; };
   }, []);

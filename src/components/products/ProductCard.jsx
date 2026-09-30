@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { getProductCardImageUrl } from '../../utils/imageOptimizer';
 import AdjustableImage from '../common/AdjustableImage';

@@ -1,8 +1,6 @@
 import React from 'react';
 import { FileText, ShoppingCart, CreditCard, Truck, RotateCcw, Shield } from 'lucide-react';
 import { siteConfig } from '../../data/siteConfig';
-import MetaTags from '../SEO/MetaTags';
-import { seoConfig } from '../../config/seoConfig';
 
 const TermsAndConditionsPage = ({ language }) => {
   const isRomanian = language === 'ro';
@@ -290,15 +288,6 @@ const TermsAndConditionsPage = ({ language }) => {
 
   return (
     <>
-      <MetaTags
-        title={isRomanian ? 'Termeni și Condiții' : 'Terms and Conditions'}
-        description={isRomanian
-          ? 'Termeni și condiții de utilizare pentru Odette Confiserie.'
-          : 'Terms and conditions of use for Odette Confiserie.'}
-        url={`${seoConfig.siteUrl}/terms-and-conditions`}
-        lang={language}
-        noindex={true}
-      />
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>
