@@ -2,7 +2,7 @@
 // AUTHENTICATION & USER API SERVICE
 // ========================================
 
-import { supabase } from '../lib/supabase'
+import { supabase } from '../config/supabaseClient'
 
 /**
  * Auth Service

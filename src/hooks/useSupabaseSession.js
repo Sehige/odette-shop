@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../config/supabaseClient';
 
 /**
  * useSupabaseSession
  *
  * Tracks the real Supabase auth session (used for the admin image tool).
- * Distinct from the mock localStorage-based useAuth hook.
- *
+ *  *
  * @returns {{ session: Object|null, isAdmin: boolean }}
  */
 const useSupabaseSession = () => {

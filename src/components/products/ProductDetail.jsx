@@ -3,7 +3,6 @@ import { X, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
-import { useAuth } from '../../hooks/useAuth';
 import { getProductDetailImageUrl, getThumbnailUrl } from '../../utils/imageOptimizer';
 import AdjustableImage from '../common/AdjustableImage';
 
@@ -13,7 +12,6 @@ const ProductDetail = ({ product, language, onClose }) => {
   const [selectedFlavor, setSelectedFlavor] = useState(
     product.flavors ? product.flavors[language][0] : null
   );
-  const { isAuthenticated } = useAuth();
   const t = translations[language];
 
   const modalContentRef = useRef(null);

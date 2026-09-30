@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
-import TrustBadges from '../home/TrustBadges';
 import MetaTags from '../SEO/MetaTags';
 import BreadcrumbSchema from '../SEO/BreadcrumbSchema';
 import { seoConfig } from '../../config/seoConfig';
@@ -91,8 +90,6 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProduct]);
 
-  console.log('Categories in ShopPage:', categories);
-  
   const filteredProducts = (selectedCategory === 'all'
     ? allProducts
     : allProducts.filter(p => p.category === selectedCategory)
