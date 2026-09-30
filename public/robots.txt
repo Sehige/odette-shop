@@ -1,20 +1,7 @@
-# Odette Bakery - Robots.txt
+# Odette Confiserie - robots.txt
+# One group for all crawlers: a crawler that finds a group naming it
+# (e.g. "User-agent: Googlebot") ignores the "*" group entirely.
 User-agent: *
-Allow: /
+Disallow: /admin
 
-# Disallow admin and account pages
-Disallow: /admin/
-Disallow: /account/
-Disallow: /checkout/
-Disallow: /cart/
-Disallow: /api/
-
-# Allow specific crawlers
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Sitemap location
 Sitemap: https://www.odette-confiserie.ro/sitemap.xml

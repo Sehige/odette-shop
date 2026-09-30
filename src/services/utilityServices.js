@@ -478,7 +478,9 @@ export const contactService = {
    */
   async submitContactForm(formData) {
     try {
-      const { data, error } = await supabase
+      // Insert only, no .select(): returning the row would need a public SELECT
+      // policy on contact_submissions, which must stay closed (personal data).
+      const { error } = await supabase
         .from('contact_submissions')
         .insert({
           name: formData.name,
@@ -487,12 +489,10 @@ export const contactService = {
           subject: formData.subject || null,
           message: formData.message
         })
-        .select()
-        .single()
 
       if (error) throw error
 
-      return { data, error: null }
+      return { data: null, error: null }
     } catch (error) {
       console.error('Error submitting contact form:', error)
       return { data: null, error }
