@@ -7,7 +7,7 @@
  * Path: /src/services/imageSettingsService.js
  */
 
-import { supabase } from '../lib/supabase';
+import { supabase } from '../config/supabaseClient';
 
 /**
  * Get all image settings (one row per element_key)

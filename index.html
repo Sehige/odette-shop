@@ -4,11 +4,11 @@
     <!-- GTM is loaded dynamically via React after cookie consent -->
 
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg?v=2" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/logo_swan.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo_swan.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#1e3a8a" />
 
@@ -52,7 +52,7 @@
     <meta name="contact" content="odette.confiserie@gmail.com" />
     <meta name="language" content="Romanian" />
 
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon-192x192.png" />
+    <link rel="apple-touch-icon" href="/favicon-192x192.png" />
     <!-- Manifest loaded after page to avoid blocking critical path -->
 
     <!-- Preconnect to Cloudinary for optimized image loading -->
@@ -115,12 +115,13 @@
   <body>
     <noscript>Trebuie să activați JavaScript pentru a rula această aplicație.</noscript>
     <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
     <!-- Load manifest after page to avoid blocking critical path -->
     <script>
       window.addEventListener('load', function() {
         var link = document.createElement('link');
         link.rel = 'manifest';
-        link.href = '%PUBLIC_URL%/manifest.json';
+        link.href = '/manifest.json';
         document.head.appendChild(link);
       });
     </script>

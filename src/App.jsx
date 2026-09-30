@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Data imports
-import { productsData } from './data/productsData';
-
 // Context providers
 import { CookieConsentProvider } from './context/CookieConsentContext';
 import { ImageSettingsProvider } from './context/ImageSettingsContext';
@@ -22,7 +19,6 @@ import ProductDetail from './components/products/ProductDetail';
 // Page components
 import HomePage from './components/pages/HomePage';
 import ShopPage from './components/shop/ShopPage';
-// import AboutPage from './components/pages/AboutPage';
 import ContactPage from './components/pages/ContactPage';
 import TermsAndConditionsPage from './components/pages/TermsAndConditionsPage';
 import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
@@ -64,16 +60,11 @@ function App() {
                 element={
                   <ShopPage
                     language={language}
-                    products={productsData}
                     selectedProduct={selectedProduct}
                     setSelectedProduct={setSelectedProduct}
                   />
                 }
               />
-              {/* <Route
-                path="about"
-                element={<AboutPage language={language} />}
-              /> */}
               <Route
                 path="contact"
                 element={<ContactPage language={language} />}
@@ -103,7 +94,6 @@ function App() {
               product={selectedProduct}
               language={language}
               onClose={() => setSelectedProduct(null)}
-              allProducts={productsData}
             />
           )}
 

@@ -218,11 +218,8 @@ export const getCategories = async () => {
       // Step 2: Extract unique category UUIDs (filter out null/undefined)
       const uniqueCategoryIds = [...new Set(productsData.map(p => p.category).filter(Boolean))];
 
-      console.log('Unique category UUIDs from products:', uniqueCategoryIds);
-
       // If no valid categories found, return empty array
       if (uniqueCategoryIds.length === 0) {
-        console.log('No categories found with active products');
         return { data: [], error: null };
       }
 
@@ -233,8 +230,6 @@ export const getCategories = async () => {
         .in('id', uniqueCategoryIds);
 
       if (categoriesError) throw categoriesError;
-
-      console.log('Categories with names:', categoriesData);
 
       return { data: categoriesData, error: null };
 
