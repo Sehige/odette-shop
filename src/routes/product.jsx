@@ -37,6 +37,7 @@ export const meta = ({ loaderData, params }) => {
       breadcrumbJsonLd([
         { name: 'Acasă', path: '/' },
         { name: 'Produse', path: '/shop' },
+        ...(product.categorySlug ? [{ name: product.categoryNameRo, path: `/${product.categorySlug}` }] : []),
         { name: product.name_ro, path },
       ]),
     ],

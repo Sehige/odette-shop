@@ -71,3 +71,28 @@ export const productJsonLd = (product) => {
 
   return JSON.parse(JSON.stringify(ld)); // drops the undefined fields
 };
+
+/** Display order of the product grid: order_index, then the Romanian name */
+export const sortForDisplay = (products) =>
+  [...products].sort(
+    (a, b) => (a.order_index ?? 1000) - (b.order_index ?? 1000) || (a.name_ro || '').localeCompare(b.name_ro || '', 'ro')
+  );
+
+/** ItemList JSON-LD for a product listing: the first 10 products, linking their pages */
+export const productListJsonLd = (name, products) => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name,
+  numberOfItems: products.length,
+  itemListElement: sortForDisplay(products).slice(0, 10).map((product, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'Product',
+      name: product.name_ro,
+      url: productUrl(product),
+      image: product.image_url,
+      offers: { '@type': 'Offer', price: product.price, priceCurrency: 'RON' },
+    },
+  })),
+});

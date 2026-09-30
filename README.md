@@ -6,6 +6,8 @@ Source of [odette-confiserie.ro](https://www.odette-confiserie.ro): a React app 
 
 Every page is **prerendered at build time** into static HTML (`react-router.config.js` lists the paths), so search engines and link previews see the full content without running JavaScript. Route modules live in `src/routes/` (`src/routes.js` maps them to URLs); each has a `meta` export for its `<head>` tags and, where the page shows catalogue data, a `loader` that fetches it from Supabase during the build. In the browser the app hydrates and refreshes that data, so edits in Supabase show immediately; the prerendered HTML updates on the next deploy. If Supabase can't be reached during a build, the build fails and the previous deployment stays live.
 
+Every category with active products gets a page at `/<category slug>` (e.g. `/torturi`). Its heading is the category name; the optional `intro_ro` / `intro_en`, `seo_title` and `seo_description` columns of `categories` in Supabase add an intro under the heading and a custom page title and description. A slug that equals a fixed page (e.g. `contact`) is skipped.
+
 Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build. `scripts/finish-build.mjs` then writes `sitemap.xml` (the indexable pages plus every product page, with each product's last edit as `lastmod`) and `404.html`, which Vercel serves with a real 404 status for any unknown address.
 
 ## Commands
