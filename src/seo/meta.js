@@ -58,3 +58,10 @@ export const breadcrumbJsonLd = (items) => ({
     item: `${seoConfig.siteUrl}${item.path}`,
   })),
 });
+
+/** Romanian count: "1 produs", "10 produse", "35 de produse" (numbers from 20 up take "de") */
+export const countRo = (n, singular, plural) => {
+  if (n === 1) return `1 ${singular}`;
+  const de = n % 100 >= 20 || (n > 0 && n % 100 === 0) ? ' de' : '';
+  return `${n}${de} ${plural}`;
+};

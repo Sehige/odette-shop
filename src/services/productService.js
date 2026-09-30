@@ -144,7 +144,7 @@ export const getProductBySlug = async (slug) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro)')
+      .select('*, nutritional_info(*), categories:category(isEasterFeatured, name_en, name_ro, slug)')
       .eq('slug', slug)
       .eq('isActive', true)
       .maybeSingle();
@@ -155,7 +155,8 @@ export const getProductBySlug = async (slug) => {
       ...data,
       isEasterFeatured: data.categories?.isEasterFeatured || false,
       categoryName: data.categories?.name_en || '',
-      categoryNameRo: data.categories?.name_ro || ''
+      categoryNameRo: data.categories?.name_ro || '',
+      categorySlug: data.categories?.slug || ''
     } : null;
 
     return { data: product, error: null };
@@ -257,7 +258,7 @@ export const getCategories = async () => {
       // Step 3: Fetch the full category data from categories table
       const { data: categoriesData, error: categoriesError } = await supabase
         .from('categories')
-        .select('id, name_ro, name_en, order_index')
+        .select('id, slug, name_ro, name_en, order_index, intro_ro, intro_en, seo_title, seo_description')
         .in('id', uniqueCategoryIds);
 
       if (categoriesError) throw categoriesError;

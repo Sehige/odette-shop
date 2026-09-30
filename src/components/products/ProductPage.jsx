@@ -8,6 +8,7 @@ const ProductPage = ({ product, language }) => {
   const navigate = useNavigate();
   const isRo = language === 'ro';
   const name = isRo ? product.name_ro : product.name_en;
+  const categoryName = isRo ? product.categoryNameRo : product.categoryName;
 
   return (
     <div className="pt-32 pb-16 min-h-screen bg-gray-50">
@@ -22,6 +23,14 @@ const ProductPage = ({ product, language }) => {
               <Link to="/shop" className="hover:text-gray-900 transition">{isRo ? 'Produse' : 'Products'}</Link>
             </li>
             <li aria-hidden="true">/</li>
+            {product.categorySlug && (
+              <>
+                <li>
+                  <Link to={`/${product.categorySlug}`} className="hover:text-gray-900 transition">{categoryName}</Link>
+                </li>
+                <li aria-hidden="true">/</li>
+              </>
+            )}
             <li className="text-gray-900" aria-current="page">{name}</li>
           </ol>
         </nav>

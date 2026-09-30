@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import ProductCard from '../products/ProductCard';
 
@@ -9,13 +9,23 @@ import useSupabaseSession from '../../hooks/useSupabaseSession';
 import CakeGalleryCarousel from './CakeGalleryCarousel';
 import CakeOrderSteps from './CakeOrderSteps';
 
-// ?filter / ?product only change what this page shows, so keep the scroll position
+// ?product only changes what this page shows, so keep the scroll position
 // (the router otherwise scrolls to the top on every URL change).
 const KEEP_SCROLL = { preventScrollReset: true };
 
-const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
-  const t = translations[language];
+const filterClass = (active) =>
+  `px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
+    active ? 'bg-blue-900 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+  }`;
+
+/**
+ * The product grid. On /shop it lists everything; on a category page (/torturi,
+ * /babka, ...) `category` narrows it to that category and supplies the heading and
+ * intro. The category buttons are links to those pages.
+ */
+const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) => {
   const shopT = translations[language].shop;
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   // Product counts in section titles are shown only to the logged-in admin
   const { isAdmin } = useSupabaseSession();
@@ -23,36 +33,30 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
   const { images: galleryImages } = useGalleryImages();
-  const [selectedCategory, setSelectedCategory] = React.useState('all');
+  const selectedCategory = category ? category.id : 'all';
 
   // Past-work photos for the selected category (e.g. Torturi). Empty on "all".
   const galleryForCategory = selectedCategory === 'all'
     ? []
     : galleryImages.filter((g) => g.category_id === selectedCategory);
 
-  // Whether the selected category is cakes (Torturi), to show the how-to-order steps.
-  const selectedCategoryObj = categories.find((c) => c.id === selectedCategory);
-  const isCakeCategory = !!selectedCategoryObj && (
-    (selectedCategoryObj.name_ro || '').toLowerCase().includes('tort') ||
-    (selectedCategoryObj.name_en || '').toLowerCase().includes('cake')
+  // Whether this is the cakes (Torturi) category, to show the how-to-order steps.
+  const isCakeCategory = !!category && (
+    (category.name_ro || '').toLowerCase().includes('tort') ||
+    (category.name_en || '').toLowerCase().includes('cake')
   );
 
-  // Keep the selected category in sync with the URL (?filter=<categoryId>) so
-  // category selections are shareable and shared links land pre-filtered.
+  // Old links filtered the shop with ?filter=<categoryId>: send them to the category page
   useEffect(() => {
-    setSelectedCategory(searchParams.get('filter') || 'all');
-  }, [searchParams]);
-
-  // Select a category by writing it to the URL (state follows via the effect
-  // above). 'all' clears the filter param. Other params (e.g. product) are kept.
-  const selectCategory = (id) => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
-      if (id && id !== 'all') params.set('filter', id);
-      else params.delete('filter');
-      return params;
-    }, KEEP_SCROLL);
-  };
+    if (category) return;
+    const filterId = searchParams.get('filter');
+    if (!filterId || !categories.length) return;
+    const target = categories.find((c) => c.id === filterId);
+    if (!target || !target.slug) return;
+    const product = searchParams.get('product');
+    navigate(`/${target.slug}${product ? `?product=${encodeURIComponent(product)}` : ''}`, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, categories, category]);
 
   // Open a product and reflect it in the URL (?product=<slug>) so it's shareable.
   // `replace` avoids stacking an extra history entry on top of the modal's own.
@@ -105,8 +109,10 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
     return nameA.localeCompare(nameB, language);
   });
 
-
-
+  const heading = category
+    ? (language === 'ro' ? category.name_ro : category.name_en) || category.name_ro
+    : shopT.title;
+  const intro = category ? (language === 'ro' ? category.intro_ro : category.intro_en) : null;
 
   // Loading state - use skeleton that matches final layout to prevent CLS
   if (productsLoading || categoriesLoading) {
@@ -163,29 +169,37 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
     );
   }
 
-  
   return (
     <>
       <div className="pt-32 pb-16 min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header - min-height matches skeleton to prevent CLS */}
         <div className="text-center mb-6 sm:mb-12 min-h-[80px] sm:min-h-[120px]">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2 sm:mb-4">
-            {shopT.title}
+            {heading}
           </h1>
-          <p className="text-base sm:text-xl text-gray-600">
-            {isAdmin
-              ? (language === 'ro'
-                  ? `Descoperă ${allProducts.length} ${shopT.productsCount}`
-                  : `Discover ${allProducts.length} ${shopT.productsCount}`)
-              : shopT.subtitle}
-          </p>
+          {intro ? (
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto whitespace-pre-line">
+              {intro}
+            </p>
+          ) : (
+            <p className="text-base sm:text-xl text-gray-600">
+              {isAdmin
+                ? (language === 'ro'
+                    ? `Descoperă ${filteredProducts.length} ${shopT.productsCount}`
+                    : `Discover ${filteredProducts.length} ${shopT.productsCount}`)
+                : shopT.subtitle}
+            </p>
+          )}
         </div>
-        
-        {/* Category Filter - min-height to prevent CLS */}
-        <div className="mb-4 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[36px] sm:min-h-[44px]">
-          {/* Category Buttons - sorted by order_index then alphabetically */}
+
+        {/* Category links - min-height to prevent CLS. Switching category keeps the scroll position. */}
+        <nav
+          aria-label={language === 'ro' ? 'Categorii' : 'Categories'}
+          className="mb-4 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[36px] sm:min-h-[44px]"
+        >
+          {/* Sorted by order_index then alphabetically */}
           {[...categories].sort((a, b) => {
             const orderA = a.order_index ?? 1000;
             const orderB = b.order_index ?? 1000;
@@ -193,36 +207,33 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
             const nameA = (language === 'ro' ? a.name_ro : a.name_en) || '';
             const nameB = (language === 'ro' ? b.name_ro : b.name_en) || '';
             return nameA.localeCompare(nameB, language);
-          }).map(category => {
-            const count = allProducts.filter(p => p.category === category.id).length;
+          }).map(item => {
+            const count = allProducts.filter(p => p.category === item.id).length;
+            const active = selectedCategory === item.id;
             return (
-              <button
-                key={category.id}
-                onClick={() => selectCategory(category.id)}
-                className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
-                  selectedCategory === category.id
-                    ? 'bg-blue-900 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+              <Link
+                key={item.id}
+                to={`/${item.slug}`}
+                preventScrollReset
+                aria-current={active ? 'page' : undefined}
+                className={filterClass(active)}
               >
-                {language === 'ro' ? category.name_ro : category.name_en}{isAdmin ? ` (${count})` : ''}
-              </button>
+                {language === 'ro' ? item.name_ro : item.name_en}{isAdmin ? ` (${count})` : ''}
+              </Link>
             );
           })}
 
-          {/* All Products Button - at the end */}
-          <button
-            onClick={() => selectCategory('all')}
-            className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition ${
-              selectedCategory === 'all'
-                ? 'bg-blue-900 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
+          {/* All products - at the end */}
+          <Link
+            to="/shop"
+            preventScrollReset
+            aria-current={selectedCategory === 'all' ? 'page' : undefined}
+            className={filterClass(selectedCategory === 'all')}
           >
             {shopT.all}{isAdmin ? ` (${allProducts.length})` : ''}
-          </button>
-        </div>
-                
+          </Link>
+        </nav>
+
         {/* "How to order a cake" steps — shown in the cakes (Torturi) category */}
         {isCakeCategory && <CakeOrderSteps language={language} />}
 
