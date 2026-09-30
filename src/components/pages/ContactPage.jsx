@@ -22,13 +22,6 @@ const ContactPage = ({ language }) => {
 
   const t = translations[language].contact;
 
-  // TikTok Icon Component
-  const TikTokIcon = ({ className, size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-    </svg>
-  );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -112,32 +105,22 @@ const ContactPage = ({ language }) => {
   const pageData = {
     title: 'Contact',
     description: language === 'ro'
-      ? 'Contacteaza Odette Confiserie pentru comenzi de prajituri si torturi. Telefon, email, adresa in Cluj-Napoca.'
+      ? 'Contactează Odette Confiserie pentru comenzi de prăjituri și torturi. Telefon, email, adresă în Cluj-Napoca.'
       : 'Contact Odette Confiserie for pastry and cake orders. Phone, email, address in Cluj-Napoca.'
   };
 
   const breadcrumbItems = [
-    { name: language === 'ro' ? 'Acasa' : 'Home', url: seoConfig.siteUrl },
+    { name: language === 'ro' ? 'Acasă' : 'Home', url: `${seoConfig.siteUrl}/` },
     { name: 'Contact', url: `${seoConfig.siteUrl}/contact` }
   ];
 
+  // The business details live in the Bakery JSON-LD in public/index.html; refer to it by @id.
   const contactPageSchema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     "name": pageData.title,
     "url": `${seoConfig.siteUrl}/contact`,
-    "mainEntity": {
-      "@type": "LocalBusiness",
-      "name": seoConfig.business.name,
-      "telephone": seoConfig.business.phone,
-      "email": seoConfig.business.email,
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": seoConfig.business.address.street,
-        "addressLocality": seoConfig.business.address.city,
-        "addressCountry": seoConfig.business.address.country
-      }
-    }
+    "mainEntity": { "@id": seoConfig.businessId }
   };
 
   return (
@@ -269,15 +252,6 @@ const ContactPage = ({ language }) => {
                         style={{ backgroundColor: '#d4af37' }}
                       >
                         <Facebook className="text-white" size={24} />
-                      </a>
-                      <a
-                        href={siteConfig.social.tiktok}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
-                        style={{ backgroundColor: '#d4af37' }}
-                      >
-                        <TikTokIcon className="text-white" size={24} />
                       </a>
                     </div>
                   </div>

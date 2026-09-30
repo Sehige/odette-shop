@@ -1,20 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, ExternalLink, Cookie, Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { useCookieConsent } from '../../context/CookieConsentContext';
 
-// TikTok is not in lucide-react (same inline icon as Header)
-const TikTokIcon = ({ className }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-  </svg>
-);
-
 const Footer = ({ language }) => {
-  const navigate = useNavigate();
   const t = translations[language];
   const { openPreferences } = useCookieConsent();
 
@@ -35,19 +27,19 @@ const Footer = ({ language }) => {
             {/* Legal Links */}
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
-                <button onClick={() => navigate('/terms-and-conditions')} className="hover:text-white transition">
+                <Link to="/terms-and-conditions" className="hover:text-white transition">
                   {t.termsAndConditions}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/privacy-policy')} className="hover:text-white transition">
+                <Link to="/privacy-policy" className="hover:text-white transition">
                   {t.privacyPolicy}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/cookie-policy')} className="hover:text-white transition">
+                <Link to="/cookie-policy" className="hover:text-white transition">
                   {t.cookiePolicy}
-                </button>
+                </Link>
               </li>
               <li>
                 <button onClick={openPreferences} className="hover:text-white transition flex items-center gap-2">
@@ -116,19 +108,19 @@ const Footer = ({ language }) => {
             <h4 className="text-xl font-semibold mb-4">{t.quickLinks}</h4>
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
-                <button onClick={() => navigate('/')} className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition">
                   {t.home}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/shop')} className="hover:text-white transition">
+                <Link to="/shop" className="hover:text-white transition">
                   {t.shopNav}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/contact')} className="hover:text-white transition">
+                <Link to="/contact" className="hover:text-white transition">
                   {t.contactNav}
-                </button>
+                </Link>
               </li>
             </ul>
 
@@ -152,15 +144,6 @@ const Footer = ({ language }) => {
                 className="text-blue-100 hover:text-white transition"
               >
                 <Facebook className="w-6 h-6" />
-              </a>
-              <a
-                href={siteConfig.social.tiktok}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                className="text-blue-100 hover:text-white transition"
-              >
-                <TikTokIcon className="w-6 h-6" />
               </a>
             </div>
           </div>

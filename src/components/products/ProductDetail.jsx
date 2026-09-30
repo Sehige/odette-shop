@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { translations } from '../../data/translations';
+import { siteConfig } from '../../data/siteConfig';
 import { useAuth } from '../../hooks/useAuth';
 import { getProductDetailImageUrl, getThumbnailUrl } from '../../utils/imageOptimizer';
 import AdjustableImage from '../common/AdjustableImage';
@@ -360,8 +361,8 @@ const ProductDetail = ({ product, language, onClose }) => {
                   <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'transport' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
                     <p className="text-gray-600 text-sm leading-relaxed">
                       {language === 'ro'
-                        ? 'Beneficiezi de livrare gratuită pentru comenzile de peste 200 lei. Pentru comenzile sub această valoare se percepe o taxă de transport de 15 lei în Cluj-Napoca și 25 lei în afara orașului.'
-                        : 'Free delivery for orders over 200 RON. For orders below this amount, the delivery fee is 15 RON in Cluj-Napoca and 25 RON outside the city.'}
+                        ? `Beneficiezi de livrare gratuită pentru comenzile de peste ${siteConfig.delivery.freeThreshold} lei. Pentru comenzile sub această valoare se percepe o taxă de transport de ${siteConfig.delivery.feeCluj} lei în Cluj-Napoca și ${siteConfig.delivery.feeOutside} lei în afara orașului.`
+                        : `Free delivery for orders over ${siteConfig.delivery.freeThreshold} RON. For orders below this amount, the delivery fee is ${siteConfig.delivery.feeCluj} RON in Cluj-Napoca and ${siteConfig.delivery.feeOutside} RON outside the city.`}
                     </p>
                   </div>
                 </div>

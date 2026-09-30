@@ -106,17 +106,14 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
   });
 
   const pageData = {
-    title: language === 'ro' ? 'Magazin Online - Prajituri si Torturi' : 'Online Shop - Pastries and Cakes',
+    title: language === 'ro' ? 'Magazin Online - Prăjituri și Torturi' : 'Online Shop - Pastries and Cakes',
     description: language === 'ro'
-      ? `Descopera ${allProducts.length} prajituri artizanale si torturi premium. Comanda online cu livrare in Cluj-Napoca.`
-      : `Discover ${allProducts.length} artisan pastries and premium cakes. Order online with delivery in Cluj-Napoca.`,
-    keywords: language === 'ro'
-      ? 'prajituri online, torturi comanda, cofetarie Cluj, deserturi premium'
-      : 'pastries online, cake order, Cluj bakery, premium desserts'
+      ? `Descoperă ${allProducts.length} prăjituri artizanale și torturi premium. Comandă online cu livrare în Cluj-Napoca.`
+      : `Discover ${allProducts.length} artisan pastries and premium cakes. Order online with delivery in Cluj-Napoca.`
   };
 
   const breadcrumbItems = [
-    { name: language === 'ro' ? 'Acasa' : 'Home', url: seoConfig.siteUrl },
+    { name: language === 'ro' ? 'Acasă' : 'Home', url: `${seoConfig.siteUrl}/` },
     { name: language === 'ro' ? 'Magazin' : 'Shop', url: `${seoConfig.siteUrl}/shop` }
   ];
 
@@ -202,7 +199,6 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
       <MetaTags
         title={pageData.title}
         description={pageData.description}
-        keywords={pageData.keywords}
         url={`${seoConfig.siteUrl}/shop`}
         structuredData={itemListSchema}
         lang={language}

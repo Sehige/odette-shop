@@ -37,7 +37,7 @@ function App() {
   return (
     <CookieConsentProvider>
       <ImageSettingsProvider>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter>
         <ScrollToTop />
         <div className="min-h-screen bg-white">
           <Routes>

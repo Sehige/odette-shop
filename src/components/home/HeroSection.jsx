@@ -1,12 +1,14 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import AdjustableImage from '../common/AdjustableImage';
-// Hero illustration (vector — scales to any size, no responsive srcset needed)
-import heroPicture from '../../hero_picture.svg';
+// Hero cut-out (transparent WebP) at 1x / 1.5x / 2x of its 744px layout width.
+// Rendered from the former hero_picture.svg (1.4 MB), which wrapped the same photo.
+import hero744 from '../../assets/hero/hero-744.webp';
+import hero1116 from '../../assets/hero/hero-1116.webp';
+import hero1488 from '../../assets/hero/hero-1488.webp';
 
 const HeroSection = ({ language }) => {
-  const navigate = useNavigate();
   const t = translations[language] || translations.ro;
 
   return (
@@ -19,21 +21,25 @@ const HeroSection = ({ language }) => {
               {t.landing.heroTagline}
             </h1>
             <div className="mt-10 flex justify-center">
-              <button
-                onClick={() => navigate('/shop')}
-                className="bg-[#f7f4ec] text-[#1e3a8a] px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase hover:opacity-90 transition transform hover:scale-105 shadow-xl"
+              <Link
+                to="/shop"
+                className="inline-block bg-[#f7f4ec] text-[#1e3a8a] px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase hover:opacity-90 transition transform hover:scale-105 shadow-xl"
               >
                 {t.landing.orderNow}
-              </button>
+              </Link>
             </div>
           </div>
 
-          {/* Right: floating product image (cut-out PNG when provided) */}
+          {/* Right: floating product image (transparent cut-out) */}
           <div className="order-1 lg:order-2">
             <AdjustableImage
               elementKey="hero"
-              src={heroPicture}
-              alt=""
+              src={hero1116}
+              srcSet={`${hero744} 744w, ${hero1116} 1116w, ${hero1488} 1488w`}
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              width={1488}
+              height={1104}
+              alt={t.landing.heroImageAlt}
               fit="contain"
               fetchPriority="high"
               decoding="async"

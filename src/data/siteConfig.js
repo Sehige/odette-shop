@@ -6,6 +6,8 @@ export const siteConfig = {
   // Contact Information
   contact: {
     phone: '+40 756 157 067',
+    // WhatsApp click-to-chat (wa.me wants the international number, digits only)
+    whatsapp: '40756157067',
     email: 'odette.confiserie@gmail.com',
     address: {
       ro: 'Strada Câmpului 133, Cluj-Napoca, România',
@@ -13,11 +15,10 @@ export const siteConfig = {
     }
   },
 
-  // Social Media Links
+  // Social Media Links (add a TikTok profile here once it exists)
   social: {
     instagram: 'https://www.instagram.com/odette.confiserie/',
-    facebook: 'https://www.facebook.com/profile.php?id=61581913980330',
-    tiktok: 'https://www.tiktok.com/'
+    facebook: 'https://www.facebook.com/profile.php?id=61581913980330'
   },
 
   // Business Hours (bilingual because format differs by language)
@@ -26,11 +27,11 @@ export const siteConfig = {
     en: 'Monday - Friday: 9:00 - 19:00\nSaturday: 8:00 - 12:00\nSunday: Closed'
   },
 
-  // Delivery Settings
+  // Delivery rules (lei): the single source for the product modal, the FAQ and the Terms page
   delivery: {
-    fee: 15,
-    freeThreshold: 200,
-    timeSlots: ['9:00 - 12:00', '12:00 - 17:00', '17:00 - 20:00']
+    feeCluj: 15,
+    feeOutside: 25,
+    freeThreshold: 250
   },
 
   // Google Maps Embed URL - Odette Confiserie, Cluj-Napoca

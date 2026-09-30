@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import WhatsAppButton from '../common/WhatsAppButton';
 
 const Layout = ({
   language,
@@ -17,6 +18,7 @@ const Layout = ({
         <Outlet />
       </main>
       <Footer language={language} />
+      <WhatsAppButton language={language} />
     </div>
   );
 };
