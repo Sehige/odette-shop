@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Menu, X, Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
@@ -12,19 +12,17 @@ const NAVY = '#1e3a8a';
 
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const t = translations[language];
 
   // Wedding / events offer URL
   const weddingOfferUrl = 'https://www.canva.com/design/DAG9eAIoAiU/4Wzi004UggxTwSxsU1Wp8Q/view';
 
-  const go = (path) => {
-    navigate(path);
-    setMobileMenuOpen(false);
-  };
+  // Nav items are real links (crawlable, middle-click opens a tab); tapping one closes the mobile menu
+  const closeMenu = () => setMobileMenuOpen(false);
 
   // Nav items (routes unchanged; only labels were renamed)
   const navLinkClass = 'text-white/90 hover:text-white transition font-semibold whitespace-nowrap text-lg xl:text-xl';
+  const mobileLinkClass = 'text-left text-white/90 hover:text-white py-2 font-semibold';
 
   return (
     <header
@@ -35,9 +33,10 @@ const Header = ({ language, setLanguage }) => {
       <div className="w-full px-4 sm:px-6 lg:px-10">
         <div className="relative flex items-center justify-between h-20 lg:h-[124px]">
           {/* LEFT: swan + Odette Confiserie wordmark (both white on navy) */}
-          <button
-            onClick={() => go('/')}
-            aria-label="Odette Confiserie - Acasă"
+          <Link
+            to="/"
+            onClick={closeMenu}
+            aria-label={`Odette Confiserie - ${t.home}`}
             className="flex items-center gap-2 sm:gap-3 flex-shrink-0"
           >
             <img
@@ -50,16 +49,16 @@ const Header = ({ language, setLanguage }) => {
               alt="Odette Confiserie"
               className="h-12 sm:h-16 lg:h-[92px] w-auto"
             />
-          </button>
+          </Link>
 
           {/* CENTER: navigation (desktop), absolutely centered on the header */}
           <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <button onClick={() => go('/')} className={navLinkClass}>
+            <Link to="/" className={navLinkClass}>
               {t.home}
-            </button>
-            <button onClick={() => go('/shop')} className={navLinkClass}>
+            </Link>
+            <Link to="/shop" className={navLinkClass}>
               {t.shopNav}
-            </button>
+            </Link>
             <a
               href={weddingOfferUrl}
               target="_blank"
@@ -68,9 +67,9 @@ const Header = ({ language, setLanguage }) => {
             >
               {t.weddingNav}
             </a>
-            <button onClick={() => go('/contact')} className={navLinkClass}>
+            <Link to="/contact" className={navLinkClass}>
               {t.contactNav}
-            </button>
+            </Link>
           </nav>
 
           {/* RIGHT: socials + language (desktop) / menu button (mobile) */}
@@ -94,9 +93,10 @@ const Header = ({ language, setLanguage }) => {
               <Facebook className="w-6 h-6" />
             </a>
 
-            {/* Language toggle */}
+            {/* Language toggle (shows the current language) */}
             <button
               onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
+              aria-label={language === 'ro' ? 'Switch to English' : 'Schimbă în română'}
               className="text-lg font-semibold text-white/90 hover:text-white transition"
             >
               {language === 'ro' ? 'Ro' : 'En'}
@@ -117,24 +117,24 @@ const Header = ({ language, setLanguage }) => {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-white/30">
             <nav className="flex flex-col space-y-3">
-              <button onClick={() => go('/')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
+              <Link to="/" onClick={closeMenu} className={mobileLinkClass}>
                 {t.home}
-              </button>
-              <button onClick={() => go('/shop')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
+              </Link>
+              <Link to="/shop" onClick={closeMenu} className={mobileLinkClass}>
                 {t.shopNav}
-              </button>
+              </Link>
               <a
                 href={weddingOfferUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-left text-white/90 hover:text-white py-2 font-semibold"
+                onClick={closeMenu}
+                className={mobileLinkClass}
               >
                 {t.weddingNav}
               </a>
-              <button onClick={() => go('/contact')} className="text-left text-white/90 hover:text-white py-2 font-semibold">
+              <Link to="/contact" onClick={closeMenu} className={mobileLinkClass}>
                 {t.contactNav}
-              </button>
+              </Link>
 
               {/* Socials in mobile menu */}
               <div className="flex items-center gap-4 pt-2">

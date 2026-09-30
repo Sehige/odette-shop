@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, ExternalLink, Cookie, Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
@@ -7,7 +7,6 @@ import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { useCookieConsent } from '../../context/CookieConsentContext';
 
 const Footer = ({ language }) => {
-  const navigate = useNavigate();
   const t = translations[language];
   const { openPreferences } = useCookieConsent();
 
@@ -28,19 +27,19 @@ const Footer = ({ language }) => {
             {/* Legal Links */}
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
-                <button onClick={() => navigate('/terms-and-conditions')} className="hover:text-white transition">
+                <Link to="/terms-and-conditions" className="hover:text-white transition">
                   {t.termsAndConditions}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/privacy-policy')} className="hover:text-white transition">
+                <Link to="/privacy-policy" className="hover:text-white transition">
                   {t.privacyPolicy}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/cookie-policy')} className="hover:text-white transition">
+                <Link to="/cookie-policy" className="hover:text-white transition">
                   {t.cookiePolicy}
-                </button>
+                </Link>
               </li>
               <li>
                 <button onClick={openPreferences} className="hover:text-white transition flex items-center gap-2">
@@ -109,19 +108,19 @@ const Footer = ({ language }) => {
             <h4 className="text-xl font-semibold mb-4">{t.quickLinks}</h4>
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
-                <button onClick={() => navigate('/')} className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition">
                   {t.home}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/shop')} className="hover:text-white transition">
+                <Link to="/shop" className="hover:text-white transition">
                   {t.shopNav}
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => navigate('/contact')} className="hover:text-white transition">
+                <Link to="/contact" className="hover:text-white transition">
                   {t.contactNav}
-                </button>
+                </Link>
               </li>
             </ul>
 

@@ -28,6 +28,7 @@ export const translations = {
     landing: {
       heroTagline: 'Locul unde eleganța franceză întâlnește exigența germană.',
       orderNow: 'Comandă Acum',
+      heroImageAlt: 'Două felii de prăjitură cu blat în straturi și glazură de ciocolată, decorate cu cireșe, pe o farfurie de porțelan',
       aboutTitle: 'Deserturi artizanale create cu drag pentru frumos',
       aboutP1: 'Prăjiturile noastre îmbină cunoștințe de chimie, tehnici clasice de cofetărie și materie primă de cea mai bună calitate pentru a realiza deserturi memorabile pentru tine și invitații tăi.',
       aboutP2: 'Ne place să realizăm deserturi personalizate inspirate din cofetăria franțuzească și cea românească.',
@@ -277,6 +278,7 @@ export const translations = {
     landing: {
       heroTagline: 'The place where French elegance meets German precision.',
       orderNow: 'Order Now',
+      heroImageAlt: 'Two slices of layered sponge cake with chocolate glaze and cherries on a porcelain plate',
       aboutTitle: 'Artisan desserts made with love, for beauty',
       aboutP1: 'Our pastries combine knowledge of chemistry, classic confectionery techniques and the finest quality ingredients to create memorable desserts for you and your guests.',
       aboutP2: 'We love creating personalized desserts inspired by French and Romanian confectionery.',
