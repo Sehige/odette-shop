@@ -9,6 +9,10 @@ import useSupabaseSession from '../../hooks/useSupabaseSession';
 import CakeGalleryCarousel from './CakeGalleryCarousel';
 import CakeOrderSteps from './CakeOrderSteps';
 
+// ?filter / ?product only change what this page shows, so keep the scroll position
+// (the router otherwise scrolls to the top on every URL change).
+const KEEP_SCROLL = { preventScrollReset: true };
+
 const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
   const t = translations[language];
   const shopT = translations[language].shop;
@@ -47,7 +51,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
       if (id && id !== 'all') params.set('filter', id);
       else params.delete('filter');
       return params;
-    });
+    }, KEEP_SCROLL);
   };
 
   // Open a product and reflect it in the URL (?product=<slug>) so it's shareable.
@@ -58,7 +62,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
       const params = new URLSearchParams(prev);
       params.set('product', product.slug);
       return params;
-    }, { replace: true });
+    }, { ...KEEP_SCROLL, replace: true });
   };
 
   // Open the product named in the URL once products have loaded (shared link).
@@ -84,7 +88,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
         const next = new URLSearchParams(params);
         next.delete('product');
         return next;
-      }, { replace: true });
+      }, { ...KEEP_SCROLL, replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProduct]);
