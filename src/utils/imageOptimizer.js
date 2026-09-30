@@ -16,6 +16,7 @@ const CLOUDINARY_CLOUD_NAME = 'dszlfdr5f'; // Using 'demo' for testing, replace 
  * @param {string} options.quality - Image quality ('auto', 'auto:low', 'auto:good', 'auto:best')
  * @param {string} options.format - Output format ('auto', 'webp', 'avif')
  * @param {string} options.crop - Crop mode ('fill', 'fit', 'scale', 'thumb')
+ * @param {string} options.gravity - Crop focus ('auto' = subject-aware), used with crop 'fill'
  * @returns {string} Optimized Cloudinary fetch URL
  */
 export const getOptimizedImageUrl = (imageUrl, options = {}) => {
@@ -39,7 +40,8 @@ export const getOptimizedImageUrl = (imageUrl, options = {}) => {
     height,
     quality = 'auto',
     format = 'auto',
-    crop = 'fill'
+    crop = 'fill',
+    gravity
   } = options;
 
   // Build transformation string
@@ -48,6 +50,7 @@ export const getOptimizedImageUrl = (imageUrl, options = {}) => {
   if (width) transforms.push(`w_${width}`);
   if (height) transforms.push(`h_${height}`);
   transforms.push(`c_${crop}`);
+  if (gravity) transforms.push(`g_${gravity}`);
   transforms.push(`q_${quality}`);
   transforms.push(`f_${format}`);
 

@@ -6,6 +6,8 @@ Source of [odette-confiserie.ro](https://www.odette-confiserie.ro): a React app 
 
 Every page is **prerendered at build time** into static HTML (`react-router.config.js` lists the paths), so search engines and link previews see the full content without running JavaScript. Route modules live in `src/routes/` (`src/routes.js` maps them to URLs); each has a `meta` export for its `<head>` tags and, where the page shows catalogue data, a `loader` that fetches it from Supabase during the build. In the browser the app hydrates and refreshes that data, so edits in Supabase show immediately; the prerendered HTML updates on the next deploy. If Supabase can't be reached during a build, the build fails and the previous deployment stays live.
 
+Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build.
+
 ## Commands
 
 | Command | What it does |

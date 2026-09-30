@@ -50,23 +50,25 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct }) => {
     });
   };
 
-  // Open a product and reflect it in the URL (?product=<id>) so it's shareable.
+  // Open a product and reflect it in the URL (?product=<slug>) so it's shareable.
   // `replace` avoids stacking an extra history entry on top of the modal's own.
   const openProduct = (product) => {
     setSelectedProduct(product);
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
-      params.set('product', product.id);
+      params.set('product', product.slug);
       return params;
     }, { replace: true });
   };
 
   // Open the product named in the URL once products have loaded (shared link).
+  // Older links carry the product id instead of the slug; both are accepted.
   useEffect(() => {
-    const productId = searchParams.get('product');
-    if (!productId || !allProducts.length) return;
-    if (!selectedProduct || selectedProduct.id !== productId) {
-      const product = allProducts.find((p) => p.id === productId);
+    const wanted = searchParams.get('product');
+    if (!wanted || !allProducts.length) return;
+    const matches = (p) => p && (p.slug === wanted || p.id === wanted);
+    if (!matches(selectedProduct)) {
+      const product = allProducts.find(matches);
       if (product) setSelectedProduct(product);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

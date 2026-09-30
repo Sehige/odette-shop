@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { getProductCardImageUrl } from '../../utils/imageOptimizer';
@@ -7,15 +8,24 @@ import AdjustableImage from '../common/AdjustableImage';
 const ProductCard = ({ product, language, setSelectedProduct, priority = false }) => {
   const t = translations[language];
 
+  // The card is a real link to the product page (crawlable, keyboard-reachable,
+  // opens in a new tab with Ctrl/Cmd/middle click); a plain click opens the
+  // quick-view modal instead, as before.
+  const handleClick = (event) => {
+    if (!setSelectedProduct) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    setSelectedProduct(product);
+  };
+
   return (
-    <div
-      className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
+    <Link
+      to={`/produse/${product.slug}`}
+      onClick={handleClick}
+      className="block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
     >
-      {/* Image - Clickable */}
-      <div
-        className="relative overflow-hidden aspect-square"
-        onClick={() => setSelectedProduct(product)}
-      >
+      {/* Image */}
+      <div className="relative overflow-hidden aspect-square">
         {/* editable=false: framing is edited from the product detail modal (same photo/setting) */}
         <AdjustableImage
           editable={false}
@@ -46,11 +56,8 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
         </button>*/}
       </div>
       
-      {/* Product Info - Clickable */}
-      <div
-        className="p-3 sm:p-6"
-        onClick={() => setSelectedProduct(product)}
-      >
+      {/* Product Info */}
+      <div className="p-3 sm:p-6">
         <div className="flex flex-col items-center mb-2 sm:mb-3 min-h-[2rem] sm:min-h-[3rem]">
           <h3 className="text-sm sm:text-xl font-semibold text-gray-900 line-clamp-2 text-center">
             {language === 'ro' ? product.name_ro : product.name_en}
@@ -77,7 +84,7 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
