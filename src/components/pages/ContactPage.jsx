@@ -210,6 +210,7 @@ const ContactPage = ({ language }) => {
                         href={siteConfig.social.instagram}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Instagram"
                         className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
                         style={{ backgroundColor: '#d4af37' }}
                       >
@@ -219,6 +220,7 @@ const ContactPage = ({ language }) => {
                         href={siteConfig.social.facebook}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Facebook"
                         className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
                         style={{ backgroundColor: '#d4af37' }}
                       >
@@ -248,11 +250,12 @@ const ContactPage = ({ language }) => {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.name} *
                     </label>
                     <input
                       type="text"
+                      id="contact-name"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -263,11 +266,12 @@ const ContactPage = ({ language }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label htmlFor="contact-email" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.email} *
                     </label>
                     <input
                       type="email"
+                      id="contact-email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -278,11 +282,12 @@ const ContactPage = ({ language }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label htmlFor="contact-phone" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.phone}
                     </label>
                     <input
                       type="tel"
+                      id="contact-phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
@@ -292,10 +297,11 @@ const ContactPage = ({ language }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.message} *
                     </label>
                     <textarea
+                      id="contact-message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
@@ -309,8 +315,9 @@ const ContactPage = ({ language }) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-lg font-semibold text-white hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: isSubmitting ? '#6b7280' : '#d4af37' }}
+                    className="w-full py-4 rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    // navy on gold (4.9:1); white on gold was 2.1:1, too faint to read
+                    style={{ backgroundColor: isSubmitting ? '#6b7280' : '#d4af37', color: isSubmitting ? '#ffffff' : '#1e3a8a' }}
                   >
                     <Send size={20} />
                     {isSubmitting

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse, useMatches } from 'react-router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse, useLocation, useMatches } from 'react-router';
 import './index.css';
 import { seoConfig } from './config/seoConfig';
 import { bakeryJsonLd, jsonLdString } from './seo/schema';
@@ -57,8 +57,23 @@ export const meta = () => [{ title: seoConfig.defaultTitle }];
 
 export default function App() {
   const [language, setLanguage] = useState('ro');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const closeProduct = useCallback(() => setSelectedProduct(null), []);
+
+  // The open product and the page it was opened on: it shows only on that page, so
+  // leaving the page closes it ("Contactează-ne" in the modal goes to /contact)
+  const { pathname } = useLocation();
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
+  const [opened, setOpened] = useState(null);
+  const setSelectedProduct = useCallback(
+    (product) => setOpened(product ? { product, pathname: pathnameRef.current } : null),
+    []
+  );
+  const closeProduct = useCallback(() => setOpened(null), []);
+  const selectedProduct = opened && opened.pathname === pathname ? opened.product : null;
+  // forget a product left behind on another page, so coming back doesn't reopen it
+  useEffect(() => {
+    setOpened((current) => (current && current.pathname !== pathname ? null : current));
+  }, [pathname]);
 
   // <html lang> follows the language toggle
   useEffect(() => {

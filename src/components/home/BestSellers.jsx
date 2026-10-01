@@ -5,7 +5,7 @@ import ProductCard from '../products/ProductCard';
 import { useBestSellers } from '../../hooks/useProducts';
 
 const BestSellers = ({ language, setSelectedProduct }) => {
-  const [currentIndex, setCurrentIndex] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const t = translations[language];
   
   const { bestSellers, loading, error } = useBestSellers();

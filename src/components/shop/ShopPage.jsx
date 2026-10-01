@@ -46,22 +46,26 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
     (category.name_en || '').toLowerCase().includes('cake')
   );
 
-  // Old links filtered the shop with ?filter=<categoryId>: send them to the category page
+  // Old links filtered the shop with ?filter=<categoryId>: send them to the category page,
+  // which then opens the product the link names, if any
+  const filterId = !category && searchParams.get('filter');
+  const legacyCategory = filterId ? categories.find((c) => c.id === filterId && c.slug) : null;
   useEffect(() => {
-    if (category) return;
-    const filterId = searchParams.get('filter');
-    if (!filterId || !categories.length) return;
-    const target = categories.find((c) => c.id === filterId);
-    if (!target || !target.slug) return;
+    if (!legacyCategory) return;
     const product = searchParams.get('product');
-    navigate(`/${target.slug}${product ? `?product=${encodeURIComponent(product)}` : ''}`, { replace: true });
+    navigate(`/${legacyCategory.slug}${product ? `?product=${encodeURIComponent(product)}` : ''}`, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, categories, category]);
+  }, [legacyCategory]);
 
-  // Open a product and reflect it in the URL (?product=<slug>) so it's shareable.
-  // `replace` avoids stacking an extra history entry on top of the modal's own.
+  // Open a product by naming it in the URL (?product=<slug>), so the link can be shared;
+  // the effect below then opens it. Opening only once the URL has changed keeps the
+  // modal's own history entry on top, so closing the modal leaves no extra entry behind.
+  // `replace` avoids stacking a second entry for the same product.
   const openProduct = (product) => {
-    setSelectedProduct(product);
+    if (searchParams.get('product') === product.slug) {
+      setSelectedProduct(product);
+      return;
+    }
     setSearchParams((prev) => {
       const params = new URLSearchParams(prev);
       params.set('product', product.slug);
@@ -73,7 +77,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
   // Older links carry the product id instead of the slug; both are accepted.
   useEffect(() => {
     const wanted = searchParams.get('product');
-    if (!wanted || !allProducts.length) return;
+    if (!wanted || !allProducts.length || legacyCategory) return;
     const matches = (p) => p && (p.slug === wanted || p.id === wanted);
     if (!matches(selectedProduct)) {
       const product = allProducts.find(matches);

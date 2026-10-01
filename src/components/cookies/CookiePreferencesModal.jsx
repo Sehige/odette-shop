@@ -14,6 +14,12 @@ const CookiePreferencesModal = ({ language }) => {
   } = useCookieConsent();
 
   const modalRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  // Move keyboard focus into the dialog when it opens
+  useEffect(() => {
+    if (showPreferences) closeButtonRef.current?.focus({ preventScroll: true });
+  }, [showPreferences]);
   const t = translations[language]?.cookieConsent || translations.ro.cookieConsent;
 
   // Local state for preferences before saving
@@ -98,6 +104,9 @@ const CookiePreferencesModal = ({ language }) => {
     >
       <div
         ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cookie-preferences-title"
         className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
       >
         {/* Header */}
@@ -108,9 +117,10 @@ const CookiePreferencesModal = ({ language }) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Cookie className="w-8 h-8" />
-              <h2 className="text-2xl font-bold">{t.preferencesTitle}</h2>
+              <h2 id="cookie-preferences-title" className="text-2xl font-bold">{t.preferencesTitle}</h2>
             </div>
             <button
+              ref={closeButtonRef}
               onClick={closePreferences}
               className="p-2 hover:bg-white/10 rounded-full transition"
               aria-label={translations[language]?.close || 'Close'}
