@@ -8,7 +8,8 @@
 -- - A scheduled job looks every minute. Once nothing has changed for 2 minutes (so a
 --   series of edits gives a single build), it calls the Vercel Deploy Hook. Vercel then
 --   builds and publishes in about 2 minutes: an edit is live roughly 5 minutes later.
--- - If Vercel does not accept the call, it is tried again 10 minutes later.
+-- - If Vercel does not accept the call (or does not answer within 30 seconds), it is
+--   called again 10 minutes later.
 --
 -- The Deploy Hook URL is a secret (anyone who has it can start builds) and this
 -- repository is public, so the URL lives in Supabase Vault, never in this file.
@@ -103,9 +104,10 @@ begin
     return;
   end if;
 
+  -- Vercel can take several seconds to answer (pg_net gives up after 5 by default)
   update private.site_rebuild
      set requested_at = now(),
-         request_id = net.http_post(url := hook);
+         request_id = net.http_post(url := hook, timeout_milliseconds := 30000);
 end
 $$;
 
@@ -128,8 +130,8 @@ select
       then 'edits waiting: the build starts within about 3 minutes'
     when r.status_code between 200 and 299 then 'build requested, Vercel accepted it'
     when r.id is not null
-      then 'Vercel did not accept the call, tried again after 10 minutes: '
-        || coalesce(r.status_code::text, r.error_msg, 'no answer')
+      then 'Vercel did not accept the call; it is called again 10 minutes after the last try ('
+        || coalesce('HTTP ' || r.status_code, r.error_msg, 'no answer') || ')'
     else 'build requested'
   end as status
 from private.site_rebuild s
