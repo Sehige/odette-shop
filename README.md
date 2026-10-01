@@ -37,6 +37,8 @@ The same two variables are set in the Vercel project. The `REACT_APP_` prefix is
 
 Work happens on the `local` branch. Merging `local` into `production` and pushing deploys the site on Vercel.
 
+Catalogue edits in Supabase (products, nutrition, categories, gallery, image framing) rebuild the live site by themselves: a scheduled job in Supabase calls a Vercel Deploy Hook once the edits have settled for 2 minutes, and the change is live about 5 minutes after the last edit. The Deploy Hook URL is a secret kept in Supabase Vault, not in this repository. Setup, status and pause instructions: `supabase/sql/2026-10-01_rebuild_on_edit.sql`.
+
 ## Database
 
 Supabase SQL that has been applied by hand lives in `supabase/sql/` (for example the row-level security hardening from September 2026).
