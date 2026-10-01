@@ -1,54 +1,77 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useId, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ProductInfo from './ProductInfo';
 
-// Quick-view modal over the shop grid; the product itself is rendered by ProductInfo
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+const isModalEntry = () => !!(window.history.state && window.history.state.modal === 'product');
+
+// Quick-view modal over the product grid; the product itself is rendered by ProductInfo
 const ProductDetail = ({ product, language, onClose }) => {
   const navigate = useNavigate();
   const modalContentRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const headingId = useId();
 
-  // Handle ESC key press
+  // Opening adds a history entry, so the browser's Back button closes the product.
+  // (Pushed once: the check also covers React's double effects in development.)
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape' || event.keyCode === 27) {
-        onClose();
+    if (!isModalEntry()) window.history.pushState({ modal: 'product' }, '');
+    const handlePopState = () => onClose();
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [onClose]);
+
+  // Closing from the page (✕, Esc, backdrop) goes back through that same entry, so
+  // afterwards Back leaves the page instead of reopening the product.
+  const requestClose = useCallback(() => {
+    if (isModalEntry()) window.history.back();
+    else onClose();
+  }, [onClose]);
+
+  // Keyboard: focus starts on ✕, Tab stays inside the dialog, Esc closes, and focus
+  // returns to what opened it (without scrolling the page).
+  useEffect(() => {
+    const opener = document.activeElement;
+    closeButtonRef.current?.focus({ preventScroll: true });
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        requestClose();
+        return;
+      }
+      if (event.key !== 'Tab' || !modalContentRef.current) return;
+      const focusable = modalContentRef.current.querySelectorAll(FOCUSABLE);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
-    document.addEventListener('keydown', handleEscKey);
-    return () => document.removeEventListener('keydown', handleEscKey);
-  }, [onClose]);
-
-  // Handle browser back button - push state when modal opens, close on back
-  useEffect(() => {
-    // Push a new history state when modal opens
-    window.history.pushState({ modal: 'product' }, '');
-
-    const handlePopState = () => {
-      // When back is pressed, close the modal
-      onClose();
-    };
-
-    window.addEventListener('popstate', handlePopState);
-
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      document.removeEventListener('keydown', handleKeyDown);
+      if (opener && typeof opener.focus === 'function') opener.focus({ preventScroll: true });
     };
-  }, [onClose]);
+  }, [requestClose]);
 
   // Handle click outside modal
   const handleBackdropClick = (event) => {
     if (modalContentRef.current && !modalContentRef.current.contains(event.target)) {
-      onClose();
+      requestClose();
     }
   };
 
-  const handleContactUs = () => {
-    // Close modal and navigate to contact page
-    onClose();
-    navigate('/contact');
-  };
+  // Contact page instead of the product: it takes the place of the modal's history
+  // entry, so Back from the contact page returns to the product. The modal closes once
+  // the page has changed (root.jsx); closing it first would cancel this navigation.
+  const handleContactUs = () => navigate('/contact', { replace: isModalEntry() });
 
   return (
     <div
@@ -57,21 +80,25 @@ const ProductDetail = ({ product, language, onClose }) => {
     >
       <div
         ref={modalContentRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId}
         className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto relative"
       >
         {/* Sticky Close Button */}
         <div className="sticky top-0 z-20 flex justify-end p-3 bg-gradient-to-b from-white via-white to-transparent">
           <button
-            onClick={onClose}
+            ref={closeButtonRef}
+            onClick={requestClose}
             className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition shadow-md"
-            aria-label="Close"
+            aria-label={language === 'ro' ? 'Închide' : 'Close'}
           >
             <X className="w-6 h-6 text-gray-700" />
           </button>
         </div>
 
         <div className="px-6 pb-6 -mt-4">
-          <ProductInfo product={product} language={language} onContact={handleContactUs} />
+          <ProductInfo product={product} language={language} onContact={handleContactUs} headingId={headingId} />
         </div>
       </div>
     </div>

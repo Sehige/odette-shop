@@ -16,7 +16,7 @@ const Footer = ({ language }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* LEFT: Legal & Company Information */}
           <div>
-            <h4 className="text-xl font-semibold mb-4">{t.legalInfo}</h4>
+            <h2 className="text-xl font-semibold mb-4">{t.legalInfo}</h2>
 
             {/* Minimal Company Data */}
             <div className="mb-4 pb-4 border-b border-blue-700">
@@ -64,7 +64,7 @@ const Footer = ({ language }) => {
 
           {/* MIDDLE: Contact + Opening Hours */}
           <div>
-            <h4 className="text-xl font-semibold mb-4">{t.contactNav}</h4>
+            <h2 className="text-xl font-semibold mb-4">{t.contactNav}</h2>
             <ul className="space-y-3 text-blue-100 text-base">
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5" />
@@ -92,10 +92,10 @@ const Footer = ({ language }) => {
             </ul>
 
             {/* Opening Hours */}
-            <h4 className="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
+            <h2 className="text-xl font-semibold mt-6 mb-3 flex items-center gap-2">
               <Clock className="w-5 h-5" />
               {t.contact.labels.hours}
-            </h4>
+            </h2>
             <ul className="space-y-1 text-blue-100 text-base">
               {siteConfig.hours[language].split('\n').map((line) => (
                 <li key={line}>{line}</li>
@@ -105,7 +105,7 @@ const Footer = ({ language }) => {
 
           {/* RIGHT: Quick Links + Social Media */}
           <div>
-            <h4 className="text-xl font-semibold mb-4">{t.quickLinks}</h4>
+            <h2 className="text-xl font-semibold mb-4">{t.quickLinks}</h2>
             <ul className="space-y-3 text-blue-100 text-base">
               <li>
                 <Link to="/" className="hover:text-white transition">
@@ -125,7 +125,7 @@ const Footer = ({ language }) => {
             </ul>
 
             {/* Social Media */}
-            <h4 className="text-xl font-semibold mt-6 mb-3">{t.followUs}</h4>
+            <h2 className="text-xl font-semibold mt-6 mb-3">{t.followUs}</h2>
             <div className="flex items-center gap-4">
               <a
                 href={siteConfig.social.instagram}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import { Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
@@ -12,9 +12,11 @@ import AdjustableImage from '../common/AdjustableImage';
  *
  * @param {'h1'|'h2'} headingLevel - h1 on the product page, h2 inside the modal
  * @param {Function} onContact - the "Contactează-ne" button
+ * @param {string} [headingId] - id for the product name (the modal is labelled by it)
  */
-const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
+const ProductInfo = ({ product, language, onContact, headingLevel = 'h2', headingId }) => {
   const t = translations[language];
+  const uid = useId(); // ties each section button to its panel (stable between server and browser)
   const Heading = headingLevel;
   const thumbnailContainerRef = useRef(null);
 
@@ -156,7 +158,7 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
       {/* Details */}
       <div className="min-w-0">
         {/* Product Name */}
-        <Heading className="text-3xl md:text-6xl font-bold text-gray-900 mb-3 break-words">
+        <Heading id={headingId} className="text-3xl md:text-6xl font-bold text-gray-900 mb-3 break-words">
           {language === 'ro' ? product.name_ro : product.name_en}
         </Heading>
 
@@ -185,6 +187,9 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
               <div className="border-b border-gray-200">
                 <button
                   onClick={() => toggleDropdown('ingredients')}
+                  id={`${uid}-ingredients-button`}
+                  aria-expanded={openDropdown === 'ingredients'}
+                  aria-controls={`${uid}-ingredients`}
                   className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
                 >
                   <span className="text-sm font-medium text-gray-900">{t.ingredients}</span>
@@ -194,7 +199,13 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
                     <Plus className="w-4 h-4 text-gray-900" />
                   )}
                 </button>
-                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'ingredients' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                <div
+                  id={`${uid}-ingredients`}
+                  role="region"
+                  aria-labelledby={`${uid}-ingredients-button`}
+                  aria-hidden={openDropdown !== 'ingredients'}
+                  className={`overflow-hidden transition-all duration-300 ${openDropdown === 'ingredients' ? 'max-h-96 pb-4' : 'max-h-0'}`}
+                >
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {(product.ingredients_ro || product.ingredients_en)
                       ? (language === 'ro' ? product.ingredients_ro : product.ingredients_en)
@@ -207,6 +218,9 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
               <div className="border-b border-gray-200">
                 <button
                   onClick={() => toggleDropdown('allergens')}
+                  id={`${uid}-allergens-button`}
+                  aria-expanded={openDropdown === 'allergens'}
+                  aria-controls={`${uid}-allergens`}
                   className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
                 >
                   <span className="text-sm font-medium text-gray-900">{t.allergens}</span>
@@ -216,7 +230,13 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
                     <Plus className="w-4 h-4 text-gray-600" />
                   )}
                 </button>
-                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'allergens' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                <div
+                  id={`${uid}-allergens`}
+                  role="region"
+                  aria-labelledby={`${uid}-allergens-button`}
+                  aria-hidden={openDropdown !== 'allergens'}
+                  className={`overflow-hidden transition-all duration-300 ${openDropdown === 'allergens' ? 'max-h-96 pb-4' : 'max-h-0'}`}
+                >
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {(product.allergens_ro || product.allergens_en)
                       ? (language === 'ro' ? product.allergens_ro : product.allergens_en)
@@ -229,6 +249,9 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
               <div className="border-b border-gray-200">
                 <button
                   onClick={() => toggleDropdown('nutritional')}
+                  id={`${uid}-nutritional-button`}
+                  aria-expanded={openDropdown === 'nutritional'}
+                  aria-controls={`${uid}-nutritional`}
                   className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
                 >
                   <span className="text-sm font-medium text-gray-900">{t.nutritionalInfo}</span>
@@ -238,7 +261,13 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
                     <Plus className="w-4 h-4 text-gray-900" />
                   )}
                 </button>
-                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'nutritional' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                <div
+                  id={`${uid}-nutritional`}
+                  role="region"
+                  aria-labelledby={`${uid}-nutritional-button`}
+                  aria-hidden={openDropdown !== 'nutritional'}
+                  className={`overflow-hidden transition-all duration-300 ${openDropdown === 'nutritional' ? 'max-h-96 pb-4' : 'max-h-0'}`}
+                >
                   {product.nutritional_info ? (
                     <table className="w-full text-sm text-gray-900">
                       <tbody>
@@ -286,6 +315,9 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
           <div className="border-b border-gray-200">
             <button
               onClick={() => toggleDropdown('transport')}
+              id={`${uid}-transport-button`}
+              aria-expanded={openDropdown === 'transport'}
+              aria-controls={`${uid}-transport`}
               className="w-full flex justify-between items-center py-4 hover:opacity-70 transition"
             >
               <span className="text-sm font-medium text-gray-900">{language === 'ro' ? 'Transport' : 'Shipping'}</span>
@@ -295,7 +327,13 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2' }) => {
                 <Plus className="w-4 h-4 text-gray-600" />
               )}
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ${openDropdown === 'transport' ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+            <div
+              id={`${uid}-transport`}
+              role="region"
+              aria-labelledby={`${uid}-transport-button`}
+              aria-hidden={openDropdown !== 'transport'}
+              className={`overflow-hidden transition-all duration-300 ${openDropdown === 'transport' ? 'max-h-96 pb-4' : 'max-h-0'}`}
+            >
               <p className="text-gray-600 text-sm leading-relaxed">
                 {language === 'ro'
                   ? `Beneficiezi de livrare gratuită pentru comenzile de peste ${siteConfig.delivery.freeThreshold} lei. Pentru comenzile sub această valoare se percepe o taxă de transport de ${siteConfig.delivery.feeCluj} lei în Cluj-Napoca și ${siteConfig.delivery.feeOutside} lei în afara orașului.`

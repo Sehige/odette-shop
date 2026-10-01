@@ -107,6 +107,8 @@ const Header = ({ language, setLanguage }) => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 text-white"
               aria-label="Menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
@@ -115,7 +117,7 @@ const Header = ({ language, setLanguage }) => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-white/30">
+          <div id="mobile-menu" className="lg:hidden py-4 border-t border-white/30">
             <nav className="flex flex-col space-y-3">
               <Link to="/" onClick={closeMenu} className={mobileLinkClass}>
                 {t.home}
