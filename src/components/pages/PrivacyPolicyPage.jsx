@@ -103,8 +103,8 @@ const PrivacyPolicyPage = ({ language }) => {
             '<strong>6.3 Servicii de hosting</strong>',
             'Site-ul nostru este găzduit pe servere securizate, care respectă standardele de protecție a datelor.',
             '',
-            '<strong>6.4 Mesajele trimise prin formularul de contact</strong>',
-            'Mesajele sunt păstrate în baza noastră de date (Supabase) și ne sunt transmise pe email prin Resend. Acești furnizori le prelucrează doar în numele nostru, ca să vă putem răspunde.',
+            '<strong>6.4 Mesajele și comenzile trimise prin site</strong>',
+            'Mesajele din formularul de contact și comenzile (nume, telefon, adresa de livrare, produsele alese) sunt păstrate în baza noastră de date (Supabase) și ne sunt transmise pe email prin Resend. Acești furnizori le prelucrează doar în numele nostru, ca să vă putem răspunde și să onorăm comanda.',
             '',
             '<strong>6.5 Autorități publice</strong>',
             'Putem divulga date la cererea autorităților competente, în conformitate cu legislația în vigoare.'
@@ -330,8 +330,8 @@ const PrivacyPolicyPage = ({ language }) => {
             '<strong>6.3 Hosting services</strong>',
             'Our website is hosted on secure servers that comply with data protection standards.',
             '',
-            '<strong>6.4 Messages sent through the contact form</strong>',
-            'Messages are stored in our database (Supabase) and forwarded to us by email through Resend. These providers process them only on our behalf, so that we can reply to you.',
+            '<strong>6.4 Messages and orders sent through the website</strong>',
+            'Contact form messages and orders (name, phone, delivery address, the products chosen) are stored in our database (Supabase) and forwarded to us by email through Resend. These providers process them only on our behalf, so that we can reply to you and fulfil the order.',
             '',
             '<strong>6.5 Public authorities</strong>',
             'We may disclose data at the request of competent authorities, in accordance with current legislation.'

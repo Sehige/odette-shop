@@ -9,7 +9,7 @@ const TermsAndConditionsPage = ({ language }) => {
     ro: {
       title: 'Termeni și Condiții',
       subtitle: 'Condiții generale de vânzare',
-      lastUpdate: 'Ultima actualizare: Septembrie 2026',
+      lastUpdate: 'Ultima actualizare: Octombrie 2026',
 
       sections: [
         {
@@ -32,8 +32,9 @@ const TermsAndConditionsPage = ({ language }) => {
             'Produsele sunt disponibile în limita stocului existent. În cazul în care un produs comandat nu mai este disponibil, vă vom contacta pentru a propune alternative sau rambursarea integrală a sumei.',
             '',
             '<strong>2.3 Plasarea Comenzii</strong>',
-            'Comenzile pot fi plasate online prin site-ul nostru. Pentru comenzi personalizate sau evenimente speciale, vă rugăm să ne contactați în prealabil.',
-            'Confirmarea comenzii se face prin email sau telefon.',
+            'Comenzile pot fi plasate online prin site-ul nostru, din pagina „Comanda ta”: alegeți produsele, ridicarea din magazin sau livrarea și ziua dorită. Pentru comenzi personalizate sau evenimente speciale, vă rugăm să ne contactați în prealabil.',
+            'Comenzile primite până la ora 18:00 pot fi pregătite începând cu ziua următoare. Ridicarea și livrarea au loc de luni până sâmbătă; duminica și în zilele anunțate ca închise nu onorăm comenzi.',
+            'Comanda trimisă prin site este o cerere de comandă: devine fermă după ce o confirmăm telefonic, când stabilim împreună și ora. Totalul afișat este estimativ; pentru produsele vândute la kilogram, prețul final depinde de greutatea exactă și vi-l comunicăm la confirmare.',
             '',
             '<strong>2.4 Prețuri</strong>',
             'Toate prețurile afișate pe site sunt exprimate în Lei (RON) și includ TVA. Ne rezervăm dreptul de a modifica prețurile fără notificare prealabilă, dar comenzile deja plasate nu vor fi afectate.'
@@ -147,7 +148,7 @@ const TermsAndConditionsPage = ({ language }) => {
     en: {
       title: 'Terms and Conditions',
       subtitle: 'General terms of sale',
-      lastUpdate: 'Last updated: September 2026',
+      lastUpdate: 'Last updated: October 2026',
 
       sections: [
         {
@@ -170,8 +171,9 @@ const TermsAndConditionsPage = ({ language }) => {
             'Products are available subject to stock. If an ordered product is no longer available, we will contact you to propose alternatives or a full refund.',
             '',
             '<strong>2.3 Placing an Order</strong>',
-            'Orders can be placed online through our website. For custom orders or special events, please contact us in advance.',
-            'Order confirmation is done via email or phone.',
+            'Orders can be placed online through our website, on the “Your order” page: choose the products, pickup from the shop or delivery, and the day you want. For custom orders or special events, please contact us in advance.',
+            'Orders received by 18:00 can be prepared from the next day on. Pickup and delivery take place Monday to Saturday; we do not fulfil orders on Sundays or on days announced as closed.',
+            'An order sent through the website is an order request: it becomes firm once we confirm it by phone, when we also agree the time. The total shown is an estimate; for products sold by the kilogram, the final price depends on the exact weight and we tell you at confirmation.',
             '',
             '<strong>2.4 Prices</strong>',
             'All prices displayed on the website are expressed in Romanian Leu (RON) and include VAT. We reserve the right to modify prices without prior notice, but already placed orders will not be affected.'

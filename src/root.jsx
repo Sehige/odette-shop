@@ -9,6 +9,7 @@ import { bakeryJsonLd, jsonLdString } from './seo/schema';
 import { AppStateContext } from './context/AppStateContext';
 import { CookieConsentProvider } from './context/CookieConsentContext';
 import { ImageSettingsProvider } from './context/ImageSettingsContext';
+import { OrderProvider } from './context/OrderContext';
 import CookieConsentBanner from './components/cookies/CookieConsentBanner';
 import CookiePreferencesModal from './components/cookies/CookiePreferencesModal';
 import ProductDetail from './components/products/ProductDetail';
@@ -95,6 +96,7 @@ export default function App() {
     <CookieConsentProvider>
       <ImageSettingsProvider initialRows={initialImageSettings}>
         <AppStateContext.Provider value={{ language, setLanguage, selectedProduct, setSelectedProduct }}>
+          <OrderProvider>
           <div className="min-h-screen bg-white">
             <Outlet />
 
@@ -107,6 +109,7 @@ export default function App() {
             <CookieConsentBanner language={language} />
             <CookiePreferencesModal language={language} />
           </div>
+          </OrderProvider>
         </AppStateContext.Provider>
       </ImageSettingsProvider>
     </CookieConsentProvider>

@@ -11,6 +11,7 @@ export const NOINDEX_PAGES = [
   '/privacy-policy',
   '/cookie-policy',
   '/admin',
+  '/comanda',
 ];
 
 // Category pages live at the top level, so their slugs must not take a fixed page's address
