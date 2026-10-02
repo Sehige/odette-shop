@@ -127,7 +127,25 @@ export const translations = {
         subject: 'Subiect',
         message: 'Mesaj',
         address: 'Adresă',
-        hours: 'Program'
+        hours: 'Program',
+        kind: 'Despre ce ne scrii?',
+        cakeDate: 'Data dorită',
+        eventDate: 'Data evenimentului',
+        portions: 'Număr de porții',
+        guests: 'Număr de invitați'
+      },
+      kinds: {
+        contact: 'Întrebare sau comandă',
+        custom_cake: 'Tort personalizat',
+        event: 'Eveniment'
+      },
+      placeholders: {
+        custom_cake: 'Aroma, decorul, mesajul de pe tort, alergii de care să ținem cont…',
+        event: 'Tipul evenimentului, locul și ce ai vrea să pregătim…'
+      },
+      errors: {
+        tooMany: 'Am primit deja mai multe mesaje de la această adresă. Vă rugăm să încercați mai târziu sau să ne sunați.',
+        invalid: 'Vă rugăm verificați datele introduse (de exemplu, data nu poate fi în trecut).'
       },
       send: 'Trimite Mesaj',
       success: 'Mulțumim! Mesajul tău a fost trimis cu succes. Te vom contacta în curând.',
@@ -377,7 +395,25 @@ export const translations = {
         subject: 'Subject',
         message: 'Message',
         address: 'Address',
-        hours: 'Hours'
+        hours: 'Hours',
+        kind: 'What is it about?',
+        cakeDate: 'Date needed',
+        eventDate: 'Event date',
+        portions: 'Number of portions',
+        guests: 'Number of guests'
+      },
+      kinds: {
+        contact: 'Question or order',
+        custom_cake: 'Custom cake',
+        event: 'Event'
+      },
+      placeholders: {
+        custom_cake: 'Flavour, decoration, message on the cake, allergies we should know about…',
+        event: 'Type of event, venue and what you would like us to prepare…'
+      },
+      errors: {
+        tooMany: 'We have already received several messages from this address. Please try again later or call us.',
+        invalid: 'Please check the details you entered (for example, the date cannot be in the past).'
       },
       send: 'Send Message',
       success: 'Thank you! Your message has been sent successfully. We will contact you soon.',

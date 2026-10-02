@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Mail, Phone, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
@@ -7,18 +8,30 @@ import { contactService } from '../../services/utilityServices';
 import Toast from '../common/Toast';
 import ContactMap from './ContactMap';
 
+// `website` is a trap: hidden from people, but bots that fill in every field fill it in
+const EMPTY_FORM = { kind: 'contact', name: '', email: '', phone: '', event_date: '', guests: '', message: '', website: '' };
+const KINDS = ['contact', 'custom_cake', 'event'];
+// Links can preselect the topic: /contact?subiect=tort-personalizat or ?subiect=eveniment
+const SUBJECTS = { 'tort-personalizat': 'custom_cake', eveniment: 'event' };
+
 const ContactPage = ({ language }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState(EMPTY_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState(null);
+  const [searchParams] = useSearchParams();
+  // When the form appeared: the server ignores forms sent within seconds (bots)
+  const shownAt = useRef(0);
 
   const t = translations[language].contact;
+  const isEnquiry = formData.kind !== 'contact';
+
+  useEffect(() => {
+    shownAt.current = Date.now();
+    const kind = SUBJECTS[searchParams.get('subiect')];
+    if (kind) setFormData((current) => ({ ...current, kind }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,15 +65,24 @@ const ContactPage = ({ language }) => {
     setIsSubmitting(true);
 
     try {
-      // Call the existing service
-      const { data, error } = await contactService.submitContactForm(formData);
+      const { error } = await contactService.submitContactForm({
+        ...formData,
+        // date and count only belong to custom cakes and events
+        event_date: isEnquiry ? formData.event_date : '',
+        guests: isEnquiry ? formData.guests : '',
+        elapsed_ms: Date.now() - shownAt.current,
+        language
+      });
 
       if (error) {
-        console.error('Supabase error details:', error);
+        const messages = {
+          too_many: t.errors.tooMany,
+          invalid: t.errors.invalid
+        };
         setToast({
-          message: language === 'ro'
+          message: messages[error.reason] || (language === 'ro'
             ? 'A apărut o eroare. Vă rugăm încercați din nou.'
-            : 'An error occurred. Please try again.',
+            : 'An error occurred. Please try again.'),
           type: 'error'
         });
         return;
@@ -72,12 +94,8 @@ const ContactPage = ({ language }) => {
       // Reset form after 3 seconds
       setTimeout(() => {
         setSubmitted(false);
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
+        setFormData(EMPTY_FORM);
+        shownAt.current = Date.now();
       }, 3000);
 
     } catch (error) {
@@ -241,6 +259,31 @@ const ContactPage = ({ language }) => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  <fieldset>
+                    <legend className="block text-sm font-semibold text-gray-700 mb-2">{t.labels.kind}</legend>
+                    <div className="flex flex-wrap gap-2">
+                      {KINDS.map((kind) => (
+                        <label
+                          key={kind}
+                          className={`px-4 py-2 rounded-full border-2 text-sm font-semibold cursor-pointer transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-900 has-[:focus-visible]:ring-offset-2 ${
+                            formData.kind === kind ? 'border-blue-900 bg-blue-50 text-blue-900' : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="kind"
+                            value={kind}
+                            checked={formData.kind === kind}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            className="sr-only"
+                          />
+                          {t.kinds[kind]}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+
                   <div>
                     <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.name} *
@@ -288,6 +331,43 @@ const ContactPage = ({ language }) => {
                     />
                   </div>
 
+                  {isEnquiry && (
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="contact-date" className="block text-sm font-semibold text-gray-700 mb-2">
+                          {formData.kind === 'event' ? t.labels.eventDate : t.labels.cakeDate}
+                        </label>
+                        <input
+                          type="date"
+                          id="contact-date"
+                          name="event_date"
+                          min={new Date().toLocaleDateString('en-CA')}
+                          value={formData.event_date}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="contact-guests" className="block text-sm font-semibold text-gray-700 mb-2">
+                          {formData.kind === 'event' ? t.labels.guests : t.labels.portions}
+                        </label>
+                        <input
+                          type="number"
+                          id="contact-guests"
+                          name="guests"
+                          min="1"
+                          max="5000"
+                          inputMode="numeric"
+                          value={formData.guests}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.message} *
@@ -299,9 +379,23 @@ const ContactPage = ({ language }) => {
                       onChange={handleChange}
                       required
                       rows={5}
+                      placeholder={t.placeholders[formData.kind] || ''}
                       disabled={isSubmitting}
                       className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition resize-none disabled:opacity-50"
                     ></textarea>
+                  </div>
+
+                  <div aria-hidden="true" className="absolute -left-[10000px] w-px h-px overflow-hidden">
+                    <label htmlFor="contact-website">Website</label>
+                    <input
+                      type="text"
+                      id="contact-website"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.website}
+                      onChange={handleChange}
+                    />
                   </div>
 
                   <button
