@@ -26,6 +26,8 @@ const results = [];
 const check = (name, pass, detail = '') => results.push({ name, pass: !!pass, detail: String(detail ?? '') });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const ANALYTICS = /googletagmanager\.com|google-analytics\.com/;
+// the Google map on /contact runs Google's own code, which now and then logs its own network errors
+const GOOGLE_MAP = /maps\.googleapis\.com|maps\.gstatic\.com|google\.com\/maps|<gmp-/;
 const CLOSE = '[role="dialog"] button[aria-label="Închide"]';
 const CARDS = '.grid a[href^="/produse/"]';
 const errors = [];
@@ -51,7 +53,9 @@ async function newPage({ viewport = { width: 1280, height: 800 }, dismissCookies
   // unknown addresses answer 404 on purpose, and blocked analytics requests fail on purpose;
   // the browser logs both as failed resources
   page.on('console', (m) => {
-    if (m.type() !== 'error' || /status of 404/.test(m.text()) || ANALYTICS.test(m.location()?.url || '')) return;
+    const from = m.location()?.url || '';
+    if (m.type() !== 'error' || /status of 404/.test(m.text()) || ANALYTICS.test(from)) return;
+    if (GOOGLE_MAP.test(from) || GOOGLE_MAP.test(m.text())) return;
     errors.push(`${page.url()}: ${m.text()}`);
   });
   return page;
