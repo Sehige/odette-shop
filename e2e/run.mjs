@@ -309,6 +309,65 @@ try {
     check('product page: breadcrumb links home, products and the category', crumbs.includes('/') && crumbs.includes('/shop') && crumbs.length >= 3, crumbs.join(' '));
   }
 
+  // 6b. Order requests: add products, then send the order (answered here, never emailed)
+  {
+    const page = await newPage();
+    await open(page, '/shop');
+    const pick = await page.evaluate(() => {
+      const data = Object.values(window.__reactRouterDataRouter.state.loaderData).find((d) => d && d.products);
+      const orderable = data.products.filter((p) => Number(p.price) > 0);
+      const perKg = (p) => (p.price_unit || '').trim().toLowerCase() === 'kg';
+      const brief = (p) => ({ slug: p.slug, id: p.id, price: Number(p.price) });
+      return { kg: brief(orderable.find(perKg)), piece: brief(orderable.find((p) => !perKg(p))) };
+    });
+    const badge = () => page.evaluate(() => document.querySelector('header a[href="/comanda"]')?.getAttribute('aria-label'));
+
+    await open(page, `/produse/${pick.kg.slug}`);
+    await domClick(page, 'button[aria-label="Mai mult"]');
+    const shown = await page.$eval('[role="group"][aria-label="Cantitate"] output', (o) => o.textContent);
+    check('order: products sold by weight go up in half kilos', shown === '1,5 kg', shown);
+    await clickText(page, 'button', 'Adaugă la comandă');
+    await sleep(300);
+    check('order: adding confirms it and the header counts it',
+      (await page.evaluate(() => document.body.textContent.includes('Adăugat în comandă'))) && (await badge()) === 'Comanda ta (1)', await badge());
+
+    await open(page, `/shop?product=${pick.piece.slug}`);
+    await page.waitForSelector(CLOSE, { timeout: 10000 });
+    await clickText(page, '[role="dialog"] button', 'Adaugă la comandă');
+    await sleep(300);
+    await clickText(page, '[role="dialog"] a', 'Vezi comanda');
+    await page.waitForFunction(() => location.pathname === '/comanda', { timeout: 10000 }).catch(() => {});
+    await page.waitForFunction(() => document.querySelectorAll('#order-day option').length > 1, { timeout: 10000 }).catch(() => {});
+    check('order: "Vezi comanda" in the product window opens the order page with both products',
+      !(await page.$('[role="dialog"]')) && (await page.$$('section[aria-labelledby="order-products"] li')).length === 2, await where(page));
+
+    await clickText(page, 'form label', 'Livrare');
+    await sleep(200);
+    check('a11y: every order form field has a label', await page.evaluate(() =>
+      [...document.querySelectorAll('form input, form textarea, form select')].every((el) => el.labels && el.labels.length > 0)));
+    check('order: only open days are offered, never a Sunday', await page.evaluate(() =>
+      [...document.querySelectorAll('#order-day option')].filter((o) => o.value).every((o) => new Date(`${o.value}T00:00:00Z`).getUTCDay() !== 0)));
+    await page.type('#order-address', 'Str. Test 1, Cluj-Napoca');
+    const day = await page.$eval('#order-day', (select) => [...select.options].find((o) => o.value)?.value);
+    await page.select('#order-day', day);
+    await page.type('#order-name', 'Test E2E');
+    await page.type('#order-phone', '0740 123 456');
+    const subtotal = pick.kg.price * 1.5 + pick.piece.price;
+    const expected = `${new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 2 }).format(subtotal + (subtotal >= 250 ? 0 : 15))} lei`;
+    const total = await page.$eval('#order-total', (d) => d.textContent);
+    check('order: the estimated total includes the delivery fee', total === expected, `${total}, expected ${expected}`);
+    await domClick(page, 'form button[type="submit"]');
+    await page.waitForFunction(() => document.body.textContent.includes('Am primit comanda'), { timeout: 10000 }).catch(() => {});
+    const sent = page.enquiries.at(-1) || {};
+    check('order: the order reaches the function with its products, day and delivery',
+      sent.type === 'order' && sent.fulfilment === 'delivery' && sent.delivery_zone === 'cluj' && sent.wanted_date === day &&
+        sent.phone === '0740 123 456' && sent.website === '' &&
+        JSON.stringify(sent.items) === JSON.stringify([{ product_id: pick.kg.id, quantity: 1.5 }, { product_id: pick.piece.id, quantity: 1 }]),
+      JSON.stringify(sent));
+    check('order: thank-you shown and the order list emptied',
+      (await page.evaluate(() => document.body.textContent.includes('Am primit comanda'))) && (await badge()) === 'Comanda ta', await badge());
+  }
+
   // 7. Contact page and phone layout
   {
     const page = await newPage();

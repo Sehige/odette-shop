@@ -4,6 +4,8 @@ import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
 import { getProductDetailImageUrl, getThumbnailUrl } from '../../utils/imageOptimizer';
 import AdjustableImage from '../common/AdjustableImage';
+import AddToOrder from '../order/AddToOrder';
+import { canBeOrdered } from '../../order/rules';
 
 /**
  * Product photos, description, price and the ingredients / allergens / nutrition /
@@ -343,14 +345,25 @@ const ProductInfo = ({ product, language, onContact, headingLevel = 'h2', headin
           </div>
         </div>
 
-        {/* Contact Us Button */}
-        <button
-          onClick={onContact}
-          className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
-          style={{ backgroundColor: '#1e40af' }}
-        >
-          {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
-        </button>
+        {/* Order it; "Contactează-ne" stays as the second choice (the only one if it has no price) */}
+        <AddToOrder product={product} language={language} />
+        {canBeOrdered(product) ? (
+          <button
+            onClick={onContact}
+            className="w-full py-3 rounded-lg font-semibold border-2 hover:bg-blue-50 transition flex items-center justify-center gap-2"
+            style={{ borderColor: '#1e40af', color: '#1e40af' }}
+          >
+            {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
+          </button>
+        ) : (
+          <button
+            onClick={onContact}
+            className="w-full text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition shadow-lg flex items-center justify-center gap-2"
+            style={{ backgroundColor: '#1e40af' }}
+          >
+            {language === 'ro' ? 'Contactează-ne' : 'Contact Us'}
+          </button>
+        )}
 
       </div>
     </div>

@@ -476,22 +476,48 @@ export const contactService = {
    * @param {Object} formData - Contact form data
    * @returns {Promise<{data: Object, error: Error|null}>}
    */
-  // Sent to the submit-enquiry Edge Function (supabase/functions), which checks the
-  // message, saves it and emails the shop. On failure, error.reason is 'invalid',
-  // 'too_many' or 'server'.
-  async submitContactForm(formData) {
-    const { error } = await supabase.functions.invoke('submit-enquiry', { body: formData })
-    if (!error) return { data: null, error: null }
-
-    let reason = 'server'
-    try {
-      reason = (await error.context.json()).error || reason
-    } catch {
-      // no readable answer (network error): keep 'server'
-    }
-    console.error('Error submitting contact form:', error)
-    return { data: null, error: { reason } }
+  submitContactForm(formData) {
+    return sendToShop(formData)
   }
+}
+
+/**
+ * Order Service
+ * Order requests from /comanda
+ */
+export const orderService = {
+  // body: { type: 'order', name, phone, fulfilment, delivery_zone, delivery_address,
+  //         wanted_date, notes, items: [{ product_id, quantity }], ... }
+  submitOrder(order) {
+    return sendToShop({ ...order, type: 'order' })
+  },
+
+  // Days without pickup or delivery besides Sundays, from today on (YYYY-MM-DD)
+  async getClosedDays(today) {
+    const { data, error } = await supabase.from('closed_days').select('day').gte('day', today)
+    if (error) {
+      console.error('Error loading closed days:', error)
+      return []
+    }
+    return data.map((row) => row.day)
+  }
+}
+
+// Contact messages and orders go to the submit-enquiry Edge Function (supabase/functions),
+// which checks them, saves them and emails the shop. On failure, error.reason is
+// 'invalid' (error.fields names what was wrong), 'too_many' or 'server'.
+async function sendToShop(body) {
+  const { error } = await supabase.functions.invoke('submit-enquiry', { body })
+  if (!error) return { data: null, error: null }
+
+  let answer = {}
+  try {
+    answer = await error.context.json()
+  } catch {
+    // no readable answer (network error)
+  }
+  console.error('Error sending to the shop:', error)
+  return { data: null, error: { reason: answer.error || 'server', fields: answer.fields || [] } }
 }
 
 /**
@@ -581,5 +607,6 @@ export default {
   customOrderService,
   newsletterService,
   contactService,
+  orderService,
   settingsService
 }

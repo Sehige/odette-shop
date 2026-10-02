@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Facebook, Instagram } from 'lucide-react';
+import { Menu, X, Facebook, Instagram, ShoppingBag } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
+import { useOrder } from '../../context/OrderContext';
 // White wordmark for the navy header
 import odetteLogo from '../../Odette_Confiserie.svg';
 // White swan logo mark (sits left of the wordmark)
@@ -13,6 +14,7 @@ const NAVY = '#1e3a8a';
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language];
+  const { count: orderCount } = useOrder();
 
   // Wedding / events offer URL
   const weddingOfferUrl = 'https://www.canva.com/design/DAG9eAIoAiU/4Wzi004UggxTwSxsU1Wp8Q/view';
@@ -92,6 +94,24 @@ const Header = ({ language, setLanguage }) => {
             >
               <Facebook className="w-6 h-6" />
             </a>
+
+            {/* The visitor's order list, with the number of products in it */}
+            <Link
+              to="/comanda"
+              onClick={closeMenu}
+              aria-label={`${t.order.navLabel}${orderCount ? ` (${orderCount})` : ''}`}
+              className="relative text-white/90 hover:text-white transition"
+            >
+              <ShoppingBag className="w-6 h-6 lg:w-7 lg:h-7" aria-hidden="true" />
+              {orderCount > 0 && (
+                <span
+                  className="absolute -top-2 -right-2.5 min-w-[1.25rem] h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center"
+                  style={{ backgroundColor: '#d4af37', color: NAVY }}
+                >
+                  {orderCount}
+                </span>
+              )}
+            </Link>
 
             {/* Language toggle (shows the current language) */}
             <button
