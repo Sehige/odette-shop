@@ -323,6 +323,8 @@ try {
     await open(form, '/contact?subiect=tort-personalizat');
     check('contact: ?subiect=tort-personalizat preselects a custom cake, with date and portions', await form.evaluate(() =>
       document.querySelector('input[name="kind"][value="custom_cake"]')?.checked && !!document.getElementById('contact-date') && !!document.getElementById('contact-guests')));
+    check('contact: no email field; the phone is required', await form.evaluate(() =>
+      !document.querySelector('form input[type="email"], #contact-email') && document.getElementById('contact-phone')?.required === true));
     check('a11y: every enquiry field has a label', await form.evaluate(() =>
       [...document.querySelectorAll('form input, form textarea')].every((el) => el.labels && el.labels.length > 0)));
     check('contact: the trap field is out of sight and out of the Tab order', await form.evaluate(() => {
@@ -332,7 +334,7 @@ try {
     const wanted = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
     const fill = async () => {
       await form.type('#contact-name', 'Test E2E');
-      await form.type('#contact-email', 'test@example.ro');
+      await form.type('#contact-phone', '0740 123 456');
       // a date input takes its value in the browser's format; set it the way React notices
       await form.evaluate((value) => {
         const input = document.getElementById('contact-date');
@@ -347,7 +349,7 @@ try {
     await form.waitForFunction(() => document.body.textContent.includes('Mulțumim!'), { timeout: 10000 }).catch(() => {});
     const sent = form.enquiries[0] || {};
     check('contact: a custom-cake enquiry reaches the function, trap empty, success shown',
-      sent.kind === 'custom_cake' && sent.event_date === wanted && sent.guests === '20' && sent.website === '' && sent.elapsed_ms > 0 &&
+      sent.kind === 'custom_cake' && sent.phone === '0740 123 456' && !('email' in sent) && sent.event_date === wanted && sent.guests === '20' && sent.website === '' && sent.elapsed_ms > 0 &&
         sent.language === 'ro' && (await form.evaluate(() => document.body.textContent.includes('Mulțumim!'))), JSON.stringify(sent));
 
     form.enquiryAnswer = { status: 429, body: { error: 'too_many' } };
@@ -355,7 +357,7 @@ try {
     await open(form, '/contact?subiect=tort-personalizat');
     await fill();
     await form.waitForFunction(() => document.body.textContent.includes('mai multe mesaje'), { timeout: 10000 }).catch(() => {});
-    check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la această adresă')));
+    check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la acest număr de telefon')));
 
     const phone = await newPage({ viewport: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true } });
     await open(phone, '/');

@@ -9,7 +9,7 @@ import Toast from '../common/Toast';
 import ContactMap from './ContactMap';
 
 // `website` is a trap: hidden from people, but bots that fill in every field fill it in
-const EMPTY_FORM = { kind: 'contact', name: '', email: '', phone: '', event_date: '', guests: '', message: '', website: '' };
+const EMPTY_FORM = { kind: 'contact', name: '', phone: '', event_date: '', guests: '', message: '', website: '' };
 const KINDS = ['contact', 'custom_cake', 'event'];
 // Links can preselect the topic: /contact?subiect=tort-personalizat or ?subiect=eveniment
 const SUBJECTS = { 'tort-personalizat': 'custom_cake', eveniment: 'event' };
@@ -40,7 +40,7 @@ const ContactPage = ({ language }) => {
     if (isSubmitting) return;
 
     // Basic validation (browser handles required fields, but double-check)
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.phone || !formData.message) {
       setToast({
         message: language === 'ro'
           ? 'Vă rugăm completați toate câmpurile obligatorii'
@@ -50,13 +50,13 @@ const ContactPage = ({ language }) => {
       return;
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    // Phone validation: digits with spaces, dots, dashes or brackets, 8 to 15 digits
+    const digits = formData.phone.replace(/\D/g, '');
+    if (!/^\+?[\d\s().\/-]+$/.test(formData.phone.trim()) || digits.length < 8 || digits.length > 15) {
       setToast({
         message: language === 'ro'
-          ? 'Vă rugăm introduceți o adresă de email validă'
-          : 'Please enter a valid email address',
+          ? 'Vă rugăm introduceți un număr de telefon valid'
+          : 'Please enter a valid phone number',
         type: 'error'
       });
       return;
@@ -301,31 +301,18 @@ const ContactPage = ({ language }) => {
                   </div>
 
                   <div>
-                    <label htmlFor="contact-email" className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.labels.email} *
-                    </label>
-                    <input
-                      type="email"
-                      id="contact-email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      disabled={isSubmitting}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
-                    />
-                  </div>
-
-                  <div>
                     <label htmlFor="contact-phone" className="block text-sm font-semibold text-gray-700 mb-2">
-                      {t.labels.phone}
+                      {t.labels.phone} *
                     </label>
                     <input
                       type="tel"
                       id="contact-phone"
                       name="phone"
+                      autoComplete="tel"
+                      placeholder="07xx xxx xxx"
                       value={formData.phone}
                       onChange={handleChange}
+                      required
                       disabled={isSubmitting}
                       className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
                     />

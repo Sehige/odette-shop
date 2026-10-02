@@ -39,7 +39,7 @@ function setup({ counts = [0, 0] } = {}) {
   return { calls, send };
 }
 
-const message = { name: 'Ana Pop', email: 'Ana@Example.ro', phone: '0740 000 000', message: 'Bună ziua', elapsed_ms: 9000 };
+const message = { name: 'Ana Pop', phone: '0740 123 456', message: 'Bună ziua', elapsed_ms: 9000 };
 const inserted = (calls) => calls.find((c) => c.method === 'POST' && c.url.includes('contact_submissions'));
 const emailed = (calls) => calls.find((c) => c.url.startsWith('https://api.resend.com'));
 
@@ -50,15 +50,26 @@ describe('submit-enquiry', () => {
     expect(res.headers.get('access-control-allow-origin')).toBe('https://www.odette-confiserie.ro');
   });
 
-  it('saves a message, emails the shop with the customer as reply-to, and records the email', async () => {
+  it('saves a message, emails the shop with the phone and a WhatsApp link, and records the email', async () => {
     const { calls, send } = setup();
-    const res = await send(message);
+    const res = await send({ ...message, email: 'ignored@example.ro' });
     expect(res.status).toBe(200);
-    expect(inserted(calls).body).toMatchObject({ kind: 'contact', name: 'Ana Pop', email: 'ana@example.ro', spam: false, subject: 'Mesaj' });
+    const row = inserted(calls).body;
+    expect(row).toMatchObject({ kind: 'contact', name: 'Ana Pop', phone: '0740123456', spam: false, subject: 'Mesaj' });
+    expect(row).not.toHaveProperty('email');
     const email = emailed(calls).body;
-    expect(email).toMatchObject({ to: ['shop@test.ro'], reply_to: 'ana@example.ro', subject: 'Mesaj nou de pe site: Ana Pop' });
-    expect(email.text).toContain('Telefon: 0740 000 000');
+    expect(email).toMatchObject({ to: ['shop@test.ro'], subject: '[Comanda Site] Mesaj: Ana Pop' });
+    expect(email).not.toHaveProperty('reply_to');
+    expect(email.text).toContain('Telefon: 0740123456');
+    expect(email.text).toContain('WhatsApp: https://wa.me/40740123456');
     expect(calls.at(-1)).toMatchObject({ method: 'PATCH', url: 'https://db.test/rest/v1/contact_submissions?id=eq.7' });
+  });
+
+  it('accepts international numbers and links them on WhatsApp', async () => {
+    const { calls, send } = setup();
+    await send({ ...message, phone: '0049 151 2345 6789' });
+    expect(inserted(calls).body.phone).toBe('+4915123456789');
+    expect(emailed(calls).body.text).toContain('WhatsApp: https://wa.me/4915123456789');
   });
 
   it('puts the date and portions of a custom cake in the email', async () => {
@@ -66,7 +77,7 @@ describe('submit-enquiry', () => {
     await send({ ...message, kind: 'custom_cake', event_date: '2026-12-12', guests: '20' });
     expect(inserted(calls).body).toMatchObject({ kind: 'custom_cake', event_date: '2026-12-12', guests: 20 });
     const email = emailed(calls).body;
-    expect(email.subject).toBe('Tort personalizat: Ana Pop, 12 decembrie 2026');
+    expect(email.subject).toBe('[Comanda Site] Tort personalizat: Ana Pop, 12 decembrie 2026');
     expect(email.text).toContain('Data dorită: 12 decembrie 2026');
     expect(email.text).toContain('Număr de porții: 20');
   });
@@ -80,12 +91,14 @@ describe('submit-enquiry', () => {
     }
   });
 
-  it('rejects invalid fields and dates in the past without saving', async () => {
-    const { calls, send } = setup();
-    const res = await send({ ...message, email: 'not-an-email', kind: 'event', event_date: '2026-10-01', guests: 0 });
-    expect(res.status).toBe(400);
-    expect((await res.json()).fields).toEqual(['email', 'event_date', 'guests']);
-    expect(calls).toHaveLength(0);
+  it('rejects a missing or invalid phone and dates in the past without saving', async () => {
+    for (const phone of [undefined, '', '12345', 'call me', '0740 123 456 789 012 345']) {
+      const { calls, send } = setup();
+      const res = await send({ ...message, phone, kind: 'event', event_date: '2026-10-01', guests: 0 });
+      expect(res.status).toBe(400);
+      expect((await res.json()).fields).toEqual(['phone', 'event_date', 'guests']);
+      expect(calls).toHaveLength(0);
+    }
   });
 
   it('keeps messages full of links but marks them as spam and does not email them', async () => {
@@ -96,11 +109,11 @@ describe('submit-enquiry', () => {
     expect(emailed(calls)).toBeUndefined();
   });
 
-  it('refuses a sixth message from the same address within an hour', async () => {
+  it('refuses a sixth message from the same phone number within an hour', async () => {
     const { calls, send } = setup({ counts: [5, 5] });
     const res = await send(message);
     expect(res.status).toBe(429);
     expect(inserted(calls)).toBeUndefined();
-    expect(calls[0].url).toContain('email=eq.ana%40example.ro');
+    expect(calls[0].url).toContain('phone=eq.0740123456');
   });
 });

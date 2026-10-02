@@ -22,10 +22,11 @@ const ORIGINS = [
   /^https:\/\/odette-shop-[a-z0-9-]+-sehiges-projects\.vercel\.app$/,
   /^http:\/\/localhost:\d+$/,
 ];
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SUBJECT_PREFIX = '[Comanda Site]'; // starts the subject of every email the site sends
+const PHONE = /^\+?[\d\s().\/-]+$/;
 const LINK = /https?:\/\/|www\./gi;
 const MIN_FILL_MS = 3000; // nobody types a message faster; bots do
-const MAX_PER_EMAIL_HOUR = 5;
+const MAX_PER_PHONE_HOUR = 5;
 const MAX_PER_HOUR = 30; // keeps a flood from using up the email quota
 
 const cors = (origin: string | null): Record<string, string> => ({
@@ -42,19 +43,31 @@ const isoDay = (date: Date) =>
 const dayRo = (iso: string) =>
   new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
     .format(new Date(`${iso}T00:00:00Z`));
-// One line, no control characters (names and phones end up in the email subject)
+// One line, no control characters (names end up in the email subject)
 const line = (value: unknown) => (typeof value === 'string' ? value.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim() : '');
+
+// Phone numbers are stored as digits (with + for international ones), so the same
+// number always looks the same: 0740 123 456 → 0740123456, 0040 7… → +407…
+const normalPhone = (raw: string) => {
+  const digits = raw.replace(/\D/g, '');
+  if (raw.startsWith('+')) return `+${digits}`;
+  return digits.startsWith('00') ? `+${digits.slice(2)}` : digits;
+};
+// wa.me needs the international number without +; local numbers are Romanian
+const whatsappLink = (phone: string) => {
+  const international = phone.startsWith('+') ? phone.slice(1) : /^0\d{9}$/.test(phone) ? `40${phone.slice(1)}` : null;
+  return international ? `https://wa.me/${international}` : null;
+};
 
 export function validate(body: Record<string, unknown>, now: Date) {
   const kind = typeof body.kind === 'string' && Object.hasOwn(KINDS, body.kind) ? body.kind : 'contact';
   const name = line(body.name);
-  const email = line(body.email).toLowerCase();
-  const phone = line(body.phone);
+  const rawPhone = line(body.phone);
+  const phone = normalPhone(rawPhone);
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   const errors: string[] = [];
   if (!name || name.length > 200) errors.push('name');
-  if (!EMAIL.test(email) || email.length > 320) errors.push('email');
-  if (phone.length > 40) errors.push('phone');
+  if (!PHONE.test(rawPhone) || phone.replace('+', '').length < 8 || phone.replace('+', '').length > 15) errors.push('phone');
   if (!message || message.length > 5000) errors.push('message');
 
   let eventDate: string | null = null;
@@ -71,22 +84,21 @@ export function validate(body: Record<string, unknown>, now: Date) {
     if (!Number.isInteger(count) || count < 1 || count > 5000) errors.push('guests');
     else guests = count;
   }
-  return { errors, value: { kind, name, email, phone: phone || null, message, event_date: eventDate, guests } };
+  return { errors, value: { kind, name, phone, message, event_date: eventDate, guests } };
 }
 
+// The email to the shop; the subject gets SUBJECT_PREFIX when it is sent
 export function emailFor(value: ReturnType<typeof validate>['value']) {
   const isEvent = value.kind === 'event';
   const when = value.event_date ? dayRo(value.event_date) : null;
-  const subject =
-    value.kind === 'contact'
-      ? `Mesaj nou de pe site: ${value.name}`
-      : `${KINDS[value.kind]}: ${value.name}${when ? `, ${when}` : ''}`;
+  const whatsapp = whatsappLink(value.phone);
+  const subject = `${KINDS[value.kind]}: ${value.name}${when ? `, ${when}` : ''}`;
   const text = [
     `${KINDS[value.kind]} de la ${value.name}`,
     '',
     `Nume: ${value.name}`,
-    `Email: ${value.email}`,
-    value.phone && `Telefon: ${value.phone}`,
+    `Telefon: ${value.phone}`,
+    whatsapp && `WhatsApp: ${whatsapp}`,
     when && `${isEvent ? 'Data evenimentului' : 'Data dorită'}: ${when}`,
     value.guests && `${isEvent ? 'Număr de invitați' : 'Număr de porții'}: ${value.guests}`,
     '',
@@ -94,7 +106,7 @@ export function emailFor(value: ReturnType<typeof validate>['value']) {
     value.message,
     '',
     '—',
-    'Apăsați Reply: răspunsul ajunge direct la client.',
+    'Răspundeți clientului la telefon sau pe WhatsApp.',
     'Toate mesajele: Supabase → Table Editor → contact_submissions.',
   ].filter((l) => l !== null && l !== undefined && l !== false);
   return { subject, text: text.join('\n') };
@@ -141,10 +153,17 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
     if (!res.ok) throw new Error(`count failed: HTTP ${res.status}`);
     return Number((res.headers.get('content-range') || '').split('/')[1]) || 0;
   };
+  // Every email the site sends goes through here, so each subject starts with SUBJECT_PREFIX
+  const sendEmail = (message: { subject: string; text: string }) =>
+    deps.fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, to: [to], subject: `${SUBJECT_PREFIX} ${message.subject}`, text: message.text }),
+    });
 
   try {
     if (
-      (await countSince(`&email=eq.${encodeURIComponent(value.email)}`)) >= MAX_PER_EMAIL_HOUR ||
+      (await countSince(`&phone=eq.${encodeURIComponent(value.phone)}`)) >= MAX_PER_PHONE_HOUR ||
       (await countSince('')) >= MAX_PER_HOUR
     ) {
       return reply(429, { error: 'too_many' });
@@ -162,12 +181,7 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
     const [{ id }] = await saved.json();
 
     if (!spam && resendKey) {
-      const { subject, text } = emailFor(value);
-      const sent = await deps.fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from, to: [to], reply_to: value.email, subject, text }),
-      });
+      const sent = await sendEmail(emailFor(value));
       // The message is saved either way; emailed_at stays empty if the email failed
       if (sent.ok) {
         await db(`contact_submissions?id=eq.${id}`, {

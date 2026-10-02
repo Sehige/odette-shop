@@ -144,7 +144,7 @@ export const translations = {
         event: 'Tipul evenimentului, locul și ce ai vrea să pregătim…'
       },
       errors: {
-        tooMany: 'Am primit deja mai multe mesaje de la această adresă. Vă rugăm să încercați mai târziu sau să ne sunați.',
+        tooMany: 'Am primit deja mai multe mesaje de la acest număr de telefon. Vă rugăm să încercați mai târziu sau să ne sunați.',
         invalid: 'Vă rugăm verificați datele introduse (de exemplu, data nu poate fi în trecut).'
       },
       send: 'Trimite Mesaj',
@@ -412,7 +412,7 @@ export const translations = {
         event: 'Type of event, venue and what you would like us to prepare…'
       },
       errors: {
-        tooMany: 'We have already received several messages from this address. Please try again later or call us.',
+        tooMany: 'We have already received several messages from this phone number. Please try again later or call us.',
         invalid: 'Please check the details you entered (for example, the date cannot be in the past).'
       },
       send: 'Send Message',
