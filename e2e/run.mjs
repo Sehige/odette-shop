@@ -28,6 +28,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const ANALYTICS = /googletagmanager\.com|google-analytics\.com/;
 // the Google map on /contact runs Google's own code, which now and then logs its own network errors
 const GOOGLE_MAP = /maps\.googleapis\.com|maps\.gstatic\.com|google\.com\/maps|<gmp-/;
+// any Google host (fonts, maps, analytics): nothing may load from these before cookie consent
+const GOOGLE = /(^|\.)(google\.[a-z.]+|googleapis\.com|gstatic\.com|googletagmanager\.com|google-analytics\.com|doubleclick\.net)$/;
 const CLOSE = '[role="dialog"] button[aria-label="Închide"]';
 const CARDS = '.grid a[href^="/produse/"]';
 const errors = [];
@@ -45,8 +47,10 @@ async function newPage({ viewport = { width: 1280, height: 800 }, dismissCookies
   await page.setViewport(viewport);
   await page.setRequestInterception(true);
   page.analytics = [];
+  page.google = [];
   page.dismissCookies = dismissCookies;
   page.on('request', (r) => {
+    if (GOOGLE.test(new URL(r.url()).hostname)) page.google.push(r.url());
     if (ANALYTICS.test(r.url())) { page.analytics.push(r.url()); r.abort(); } else r.continue();
   });
   page.on('pageerror', (e) => errors.push(`${page.url()}: ${e.message}`));
@@ -113,17 +117,25 @@ try {
     await open(page, '/');
     check('consent: banner shown to a new visitor', await page.evaluate(() => document.body.textContent.includes('Respinge opționale')));
     check('consent: WhatsApp button waits for the choice', !(await page.$('a[href^="https://wa.me/"]')));
-    check('consent: no analytics before a choice', page.analytics.length === 0, `${page.analytics.length} requests`);
+    check('consent: nothing loads from Google before a choice (fonts, maps, analytics)', page.google.length === 0, page.google[0]);
     await clickText(page, 'button', 'Respinge opționale');
     await sleep(3500); // analytics would load within ~3 s
     check('consent: no analytics after rejecting', page.analytics.length === 0, `${page.analytics.length} requests`);
     check('consent: WhatsApp button shown after the choice', !!(await page.$('a[href^="https://wa.me/"]')));
+    await open(page, '/contact');
+    await sleep(1000);
+    check('contact map waits for a click after rejecting (nothing from Google)',
+      page.google.length === 0 && !(await page.$('iframe')) && (await page.evaluate(() => document.body.textContent.includes('Afișează harta'))), page.google[0]);
+    await clickText(page, 'button', 'Afișează harta');
+    check('contact map shows after "Afișează harta"', !!(await page.waitForSelector('iframe[src*="google.com/maps"]', { timeout: 5000 }).catch(() => null)));
 
     const accept = await newPage({ dismissCookies: false });
     await open(accept, '/');
     await clickText(accept, 'button', 'Acceptă toate');
     await sleep(5000);
     check('consent: analytics load after accepting', accept.analytics.some((u) => u.includes('gtag/js')));
+    await open(accept, '/contact');
+    check('contact map loads by itself after accepting all cookies', !!(await accept.waitForSelector('iframe[src*="google.com/maps"]', { timeout: 5000 }).catch(() => null)));
 
     const prefs = await newPage({ dismissCookies: false });
     await open(prefs, '/');
@@ -145,6 +157,17 @@ try {
     check('home: best sellers link their product pages', (await page.$$(CARDS)).length > 0 || (await page.$$('a[href^="/produse/"]')).length > 0);
     await page.keyboard.press('Tab');
     check('a11y: the first Tab reaches "Sari la conținut"', (await page.evaluate(() => document.activeElement?.textContent)) === 'Sari la conținut');
+    const font = await page.evaluate(async () => {
+      await document.fonts.ready;
+      return {
+        family: getComputedStyle(document.querySelector('h1')).fontFamily,
+        loaded: [...document.fonts].some((f) => f.family.includes('Playfair Display Variable') && f.status === 'loaded'),
+        hosts: performance.getEntriesByType('resource').filter((e) => /playfair/i.test(e.name)).map((e) => new URL(e.name).host),
+      };
+    });
+    check('fonts: headings use Playfair Display, served by the site itself',
+      font.family.includes('Playfair Display Variable') && font.loaded && font.hosts.length > 0 && font.hosts.every((h) => h === new URL(BASE).host),
+      JSON.stringify(font));
     check('a11y: every image has an alt attribute', (await page.$$('img:not([alt])')).length === 0);
     check('a11y: footer section titles are h2', (await page.$$('footer h4')).length === 0 && (await page.$$('footer h2')).length >= 4);
     await page.click('button[aria-label="Switch to English"]');

@@ -6,9 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        script: ['Parisienne', 'cursive'],
-        // Upgrades every existing `font-serif` heading across the site to Playfair Display
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        // Every `font-serif` heading uses Playfair Display (self-hosted, see root.jsx)
+        serif: ['"Playfair Display Variable"', 'Georgia', 'serif'],
       },
       keyframes: {
         'slide-up': {

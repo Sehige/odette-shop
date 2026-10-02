@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse, useLocation, useMatches } from 'react-router';
+import '@fontsource-variable/playfair-display/wght.css';
+import playfairLatin from '@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2?url';
+import playfairLatinExt from '@fontsource-variable/playfair-display/files/playfair-display-latin-ext-wght-normal.woff2?url';
 import './index.css';
 import { seoConfig } from './config/seoConfig';
 import { bakeryJsonLd, jsonLdString } from './seo/schema';
@@ -27,10 +30,6 @@ export function Layout({ children }) {
         <link rel="icon" type="image/png" sizes="192x192" href="/logo_swan.png" />
         <link rel="apple-touch-icon" href="/favicon-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
-        {/* Google Fonts: Parisienne (script hero tagline) + Playfair Display (headings) */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Playfair+Display:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
         {/* Product photos are served through Cloudinary */}
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
         <meta name="author" content="Odette Confiserie" />
@@ -51,6 +50,14 @@ export function Layout({ children }) {
     </html>
   );
 }
+
+// The headings font (Playfair Display) is served from this site rather than Google Fonts,
+// so no visitor data goes to Google before cookie consent. Romanian headings need both
+// files (ă, ș, ț are in latin-ext), so both are preloaded.
+export const links = () =>
+  [playfairLatin, playfairLatinExt].map((href) => ({
+    rel: 'preload', as: 'font', type: 'font/woff2', href, crossOrigin: 'anonymous',
+  }));
 
 // Used only where a page has no meta of its own (the single-page fallback)
 export const meta = () => [{ title: seoConfig.defaultTitle }];

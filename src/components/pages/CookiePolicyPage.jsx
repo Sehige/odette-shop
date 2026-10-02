@@ -9,7 +9,7 @@ const CookiePolicyPage = ({ language }) => {
     ro: {
       title: 'Politica de Cookies',
       subtitle: 'Cum folosim cookie-urile pe site-ul nostru',
-      lastUpdate: 'Ultima actualizare: Noiembrie 2024',
+      lastUpdate: 'Ultima actualizare: Octombrie 2026',
 
       sections: [
         {
@@ -96,10 +96,13 @@ const CookiePolicyPage = ({ language }) => {
             'Folosit pentru a analiza traficul pe site și a înțelege comportamentul utilizatorilor.',
             'Pentru mai multe informații: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Google Privacy Policy</a>',
             '',
-            '<strong>4.2 Procesatori de plăți</strong>',
+            '<strong>4.2 Google Maps</strong>',
+            'Harta de pe pagina de contact se încarcă de la Google doar după ce apăsați „Afișează harta” sau dacă ați acceptat cookie-urile de marketing. Odată afișată, Google poate seta propriile cookie-uri.',
+            '',
+            '<strong>4.3 Procesatori de plăți</strong>',
             'Furnizorii de servicii de plată pot seta cookie-uri pentru a procesa tranzacțiile în siguranță.',
             '',
-            '<strong>4.3 Rețele sociale (dacă sunt integrate)</strong>',
+            '<strong>4.4 Rețele sociale (dacă sunt integrate)</strong>',
             'Dacă integrăm butoane de social media (Facebook, Instagram), aceste platforme pot seta propriile cookie-uri.',
             '',
             'Nu avem control asupra cookie-urilor setate de terțe părți. Vă rugăm să consultați politicile lor de confidențialitate.'
@@ -183,7 +186,7 @@ const CookiePolicyPage = ({ language }) => {
     en: {
       title: 'Cookie Policy',
       subtitle: 'How we use cookies on our website',
-      lastUpdate: 'Last updated: November 2024',
+      lastUpdate: 'Last updated: October 2026',
 
       sections: [
         {
@@ -270,10 +273,13 @@ const CookiePolicyPage = ({ language }) => {
             'Used to analyze website traffic and understand user behavior.',
             'For more information: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Google Privacy Policy</a>',
             '',
-            '<strong>4.2 Payment processors</strong>',
+            '<strong>4.2 Google Maps</strong>',
+            'The map on the contact page loads from Google only after you press “Show the map”, or if you have accepted marketing cookies. Once shown, Google may set its own cookies.',
+            '',
+            '<strong>4.3 Payment processors</strong>',
             'Payment service providers may set cookies to securely process transactions.',
             '',
-            '<strong>4.3 Social networks (if integrated)</strong>',
+            '<strong>4.4 Social networks (if integrated)</strong>',
             'If we integrate social media buttons (Facebook, Instagram), these platforms may set their own cookies.',
             '',
             'We have no control over cookies set by third parties. Please consult their privacy policies.'

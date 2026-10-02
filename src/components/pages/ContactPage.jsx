@@ -5,6 +5,7 @@ import { siteConfig } from '../../data/siteConfig';
 import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { contactService } from '../../services/utilityServices';
 import Toast from '../common/Toast';
+import ContactMap from './ContactMap';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState({
@@ -125,16 +126,7 @@ const ContactPage = ({ language }) => {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Map Container - Hidden on mobile */}
               <div className="hidden md:block bg-gray-200 rounded-2xl overflow-hidden h-[500px]">
-                <iframe
-                  src={siteConfig.mapUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Odette Location"
-                ></iframe>
+                <ContactMap language={language} />
               </div>
 
               {/* Contact Information Container */}

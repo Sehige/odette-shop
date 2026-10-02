@@ -17,7 +17,7 @@ const HeroSection = ({ language }) => {
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-8 lg:gap-12">
           {/* Left: tagline + CTA */}
           <div className="text-center order-2 lg:order-1">
-            <h1 className="font-serif font-normal text-white leading-relaxed text-[32px] sm:text-[43px] lg:text-[54px]">
+            <h1 className="font-serif font-medium text-white leading-relaxed text-[32px] sm:text-[43px] lg:text-[54px]">
               {t.landing.heroTagline}
             </h1>
             <div className="mt-10 flex justify-center">
