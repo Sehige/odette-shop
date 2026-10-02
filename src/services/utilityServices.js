@@ -476,27 +476,21 @@ export const contactService = {
    * @param {Object} formData - Contact form data
    * @returns {Promise<{data: Object, error: Error|null}>}
    */
+  // Sent to the submit-enquiry Edge Function (supabase/functions), which checks the
+  // message, saves it and emails the shop. On failure, error.reason is 'invalid',
+  // 'too_many' or 'server'.
   async submitContactForm(formData) {
+    const { error } = await supabase.functions.invoke('submit-enquiry', { body: formData })
+    if (!error) return { data: null, error: null }
+
+    let reason = 'server'
     try {
-      // Insert only, no .select(): returning the row would need a public SELECT
-      // policy on contact_submissions, which must stay closed (personal data).
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          subject: formData.subject || null,
-          message: formData.message
-        })
-
-      if (error) throw error
-
-      return { data: null, error: null }
-    } catch (error) {
-      console.error('Error submitting contact form:', error)
-      return { data: null, error }
+      reason = (await error.context.json()).error || reason
+    } catch {
+      // no readable answer (network error): keep 'server'
     }
+    console.error('Error submitting contact form:', error)
+    return { data: null, error: { reason } }
   }
 }
 

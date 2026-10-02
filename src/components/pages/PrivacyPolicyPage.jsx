@@ -9,7 +9,7 @@ const PrivacyPolicyPage = ({ language }) => {
     ro: {
       title: 'Politica de Confidențialitate',
       subtitle: 'Protecția datelor cu caracter personal (GDPR)',
-      lastUpdate: 'Ultima actualizare: Noiembrie 2024',
+      lastUpdate: 'Ultima actualizare: Octombrie 2026',
 
       sections: [
         {
@@ -103,7 +103,10 @@ const PrivacyPolicyPage = ({ language }) => {
             '<strong>6.3 Servicii de hosting</strong>',
             'Site-ul nostru este găzduit pe servere securizate, care respectă standardele de protecție a datelor.',
             '',
-            '<strong>6.4 Autorități publice</strong>',
+            '<strong>6.4 Mesajele trimise prin formularul de contact</strong>',
+            'Mesajele sunt păstrate în baza noastră de date (Supabase) și ne sunt transmise pe email prin Resend. Acești furnizori le prelucrează doar în numele nostru, ca să vă putem răspunde.',
+            '',
+            '<strong>6.5 Autorități publice</strong>',
             'Putem divulga date la cererea autorităților competente, în conformitate cu legislația în vigoare.'
           ]
         },
@@ -233,7 +236,7 @@ const PrivacyPolicyPage = ({ language }) => {
     en: {
       title: 'Privacy Policy',
       subtitle: 'Personal data protection (GDPR)',
-      lastUpdate: 'Last updated: November 2024',
+      lastUpdate: 'Last updated: October 2026',
 
       sections: [
         {
@@ -327,7 +330,10 @@ const PrivacyPolicyPage = ({ language }) => {
             '<strong>6.3 Hosting services</strong>',
             'Our website is hosted on secure servers that comply with data protection standards.',
             '',
-            '<strong>6.4 Public authorities</strong>',
+            '<strong>6.4 Messages sent through the contact form</strong>',
+            'Messages are stored in our database (Supabase) and forwarded to us by email through Resend. These providers process them only on our behalf, so that we can reply to you.',
+            '',
+            '<strong>6.5 Public authorities</strong>',
             'We may disclose data at the request of competent authorities, in accordance with current legislation.'
           ]
         },

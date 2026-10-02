@@ -48,17 +48,27 @@ async function newPage({ viewport = { width: 1280, height: 800 }, dismissCookies
   await page.setRequestInterception(true);
   page.analytics = [];
   page.google = [];
+  page.enquiries = [];
+  page.enquiryAnswer = { status: 200, body: { ok: true } };
   page.dismissCookies = dismissCookies;
   page.on('request', (r) => {
     if (GOOGLE.test(new URL(r.url()).hostname)) page.google.push(r.url());
+    // The contact form's function is answered here, never called: that would email the shop
+    if (/\/functions\/v1\/submit-enquiry/.test(r.url())) {
+      const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS' };
+      if (r.method() === 'OPTIONS') return r.respond({ status: 204, headers });
+      page.enquiries.push(JSON.parse(r.postData() || '{}'));
+      return r.respond({ status: page.enquiryAnswer.status, headers, contentType: 'application/json', body: JSON.stringify(page.enquiryAnswer.body) });
+    }
     if (ANALYTICS.test(r.url())) { page.analytics.push(r.url()); r.abort(); } else r.continue();
   });
   page.on('pageerror', (e) => errors.push(`${page.url()}: ${e.message}`));
+  page.expectErrors = false; // set by checks that provoke an error answer on purpose
   // unknown addresses answer 404 on purpose, and blocked analytics requests fail on purpose;
   // the browser logs both as failed resources
   page.on('console', (m) => {
     const from = m.location()?.url || '';
-    if (m.type() !== 'error' || /status of 404/.test(m.text()) || ANALYTICS.test(from)) return;
+    if (m.type() !== 'error' || page.expectErrors || /status of 404/.test(m.text()) || ANALYTICS.test(from)) return;
     if (GOOGLE_MAP.test(from) || GOOGLE_MAP.test(m.text())) return;
     errors.push(`${page.url()}: ${m.text()}`);
   });
@@ -306,6 +316,45 @@ try {
       [...document.querySelectorAll('form input, form textarea')].every((el) => el.labels && el.labels.length > 0)));
     check('a11y: icon-only links have names', await page.evaluate(() =>
       [...document.querySelectorAll('a')].filter((a) => !a.textContent.trim()).every((a) => a.getAttribute('aria-label'))));
+
+    // Enquiry form: a link preselects the topic; the message goes to the submit-enquiry function
+    const form = await newPage();
+    await open(form, '/contact?subiect=tort-personalizat');
+    check('contact: ?subiect=tort-personalizat preselects a custom cake, with date and portions', await form.evaluate(() =>
+      document.querySelector('input[name="kind"][value="custom_cake"]')?.checked && !!document.getElementById('contact-date') && !!document.getElementById('contact-guests')));
+    check('a11y: every enquiry field has a label', await form.evaluate(() =>
+      [...document.querySelectorAll('form input, form textarea')].every((el) => el.labels && el.labels.length > 0)));
+    check('contact: the trap field is out of sight and out of the Tab order', await form.evaluate(() => {
+      const trap = document.getElementById('contact-website');
+      return trap.tabIndex === -1 && trap.getBoundingClientRect().right < 0 && !!trap.closest('[aria-hidden="true"]');
+    }));
+    const wanted = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
+    const fill = async () => {
+      await form.type('#contact-name', 'Test E2E');
+      await form.type('#contact-email', 'test@example.ro');
+      // a date input takes its value in the browser's format; set it the way React notices
+      await form.evaluate((value) => {
+        const input = document.getElementById('contact-date');
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, value);
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }, wanted);
+      await form.type('#contact-guests', '20');
+      await form.type('#contact-message', 'Un tort de test');
+      await domClick(form, 'form button[type="submit"]');
+    };
+    await fill();
+    await form.waitForFunction(() => document.body.textContent.includes('Mulțumim!'), { timeout: 10000 }).catch(() => {});
+    const sent = form.enquiries[0] || {};
+    check('contact: a custom-cake enquiry reaches the function, trap empty, success shown',
+      sent.kind === 'custom_cake' && sent.event_date === wanted && sent.guests === '20' && sent.website === '' && sent.elapsed_ms > 0 &&
+        sent.language === 'ro' && (await form.evaluate(() => document.body.textContent.includes('Mulțumim!'))), JSON.stringify(sent));
+
+    form.enquiryAnswer = { status: 429, body: { error: 'too_many' } };
+    form.expectErrors = true;
+    await open(form, '/contact?subiect=tort-personalizat');
+    await fill();
+    await form.waitForFunction(() => document.body.textContent.includes('mai multe mesaje'), { timeout: 10000 }).catch(() => {});
+    check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la această adresă')));
 
     const phone = await newPage({ viewport: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true } });
     await open(phone, '/');

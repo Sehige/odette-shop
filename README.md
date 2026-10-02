@@ -42,3 +42,5 @@ Catalogue edits in Supabase (products, nutrition, categories, gallery, image fra
 ## Database
 
 Supabase SQL that has been applied by hand lives in `supabase/sql/` (for example the row-level security hardening from September 2026).
+
+The contact form posts to the Supabase Edge Function `supabase/functions/submit-enquiry` (spam checks, saves to `contact_submissions`, emails the shop through Resend with the customer as reply-to). It is deployed by pasting `index.ts` into Supabase → Edge Functions → `submit-enquiry` (or `npx supabase functions deploy submit-enquiry`); its secret `RESEND_API_KEY` is set under Edge Functions → Secrets. Tests: `src/test/submit-enquiry.test.js`.
