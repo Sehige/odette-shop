@@ -53,10 +53,11 @@ async function newPage({ viewport = { width: 1280, height: 800 }, dismissCookies
   page.dismissCookies = dismissCookies;
   page.on('request', (r) => {
     if (GOOGLE.test(new URL(r.url()).hostname)) page.google.push(r.url());
-    // The contact form's function is answered here, never called: that would email the shop
+    // The contact form's message is answered here, never sent: that would email the shop.
+    // The browser's permission check (OPTIONS) does reach the real function.
     if (/\/functions\/v1\/submit-enquiry/.test(r.url())) {
-      const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS' };
-      if (r.method() === 'OPTIONS') return r.respond({ status: 204, headers });
+      if (r.method() === 'OPTIONS') return r.continue();
+      const headers = { 'Access-Control-Allow-Origin': '*' };
       page.enquiries.push(JSON.parse(r.postData() || '{}'));
       return r.respond({ status: page.enquiryAnswer.status, headers, contentType: 'application/json', body: JSON.stringify(page.enquiryAnswer.body) });
     }
