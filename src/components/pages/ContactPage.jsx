@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Mail, Phone, MapPin, Clock, Send, Instagram, Facebook } from 'lucide-react';
+import { Mail, Phone, Send, Instagram, Facebook, MessageCircle } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
-import { getGoogleMapsUrl } from '../../utils/mapUtils';
 import { contactService } from '../../services/utilityServices';
 import Toast from '../common/Toast';
-import ContactMap from './ContactMap';
+import LocationCard from '../location/LocationCard';
 
 // `website` is a trap: hidden from people, but bots that fill in every field fill it in
 const EMPTY_FORM = { kind: 'contact', name: '', phone: '', event_date: '', guests: '', message: '', website: '' };
 const KINDS = ['contact', 'custom_cake', 'event'];
 // Links can preselect the topic: /contact?subiect=tort-personalizat or ?subiect=eveniment
 const SUBJECTS = { 'tort-personalizat': 'custom_cake', eveniment: 'event' };
+
+const ACTION = 'inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white border-2 border-gray-200 font-semibold text-gray-800 hover:border-blue-900 hover:text-blue-900 transition';
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState(EMPTY_FORM);
@@ -134,114 +135,35 @@ const ContactPage = ({ language }) => {
           <p className="text-xl text-gray-600">
             {t.subtitle}
           </p>
+          {/* Straight to the phone, WhatsApp or email */}
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <a href={`tel:${siteConfig.contact.phone.replace(/\s/g, '')}`} className={ACTION}>
+              <Phone className="w-5 h-5" aria-hidden="true" />
+              {siteConfig.contact.phone}
+            </a>
+            <a href={`https://wa.me/${siteConfig.contact.whatsapp}`} target="_blank" rel="noopener noreferrer" className={ACTION}>
+              <MessageCircle className="w-5 h-5" aria-hidden="true" />
+              WhatsApp
+            </a>
+            <a href={`mailto:${siteConfig.contact.email}`} className={ACTION}>
+              <Mail className="w-5 h-5" aria-hidden="true" />
+              {siteConfig.contact.email}
+            </a>
+          </div>
+          <div className="mt-5 flex justify-center gap-4">
+            <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-gray-500 hover:text-blue-900 transition">
+              <Instagram className="w-6 h-6" />
+            </a>
+            <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-gray-500 hover:text-blue-900 transition">
+              <Facebook className="w-6 h-6" />
+            </a>
+          </div>
         </div>
 
       {/* Main Content */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto space-y-12">
-            {/* Top Section: Map and Contact Info */}
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Map Container - Hidden on mobile */}
-              <div className="hidden md:block bg-gray-200 rounded-2xl overflow-hidden h-[500px]">
-                <ContactMap language={language} />
-              </div>
-
-              {/* Contact Information Container */}
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
-                  {t.infoTitle}
-                </h2>
-
-                <div className="space-y-6">
-                  {/* Address */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#d4af37' }}>
-                      <MapPin className="text-white" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.address}</h3>
-                      <a
-                        href={getGoogleMapsUrl(siteConfig.contact.address[language])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-900 hover:underline transition"
-                      >
-                        {siteConfig.contact.address[language]}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Phone */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#d4af37' }}>
-                      <Phone className="text-white" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.phone}</h3>
-                      <a href={`tel:${siteConfig.contact.phone}`} className="text-gray-600 hover:text-blue-900 transition">
-                        {siteConfig.contact.phone}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Email */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#d4af37' }}>
-                      <Mail className="text-white" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.email}</h3>
-                      <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-600 hover:text-blue-900 transition">
-                        {siteConfig.contact.email}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Hours */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#d4af37' }}>
-                      <Clock className="text-white" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">{t.labels.hours}</h3>
-                      <p className="text-gray-600 whitespace-pre-line">{siteConfig.hours[language]}</p>
-                    </div>
-                  </div>
-
-                  {/* Social Media */}
-                  <div className="pt-4 border-t border-gray-200">
-                    <h3 className="text-xl font-bold mb-3" style={{ color: '#1e3a8a' }}>
-                      {t.socialTitle}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{t.socialDescription}</p>
-                    <div className="flex gap-4">
-                      <a
-                        href={siteConfig.social.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Instagram"
-                        className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
-                        style={{ backgroundColor: '#d4af37' }}
-                      >
-                        <Instagram className="text-white" size={24} />
-                      </a>
-                      <a
-                        href={siteConfig.social.facebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Facebook"
-                        className="w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition"
-                        style={{ backgroundColor: '#d4af37' }}
-                      >
-                        <Facebook className="text-white" size={24} />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Bottom Section: Contact Form */}
             <div className="max-w-3xl mx-auto bg-gray-50 p-8 rounded-2xl">
               <h2 className="text-3xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
@@ -401,6 +323,17 @@ const ContactPage = ({ language }) => {
                 </form>
               )}
             </div>
+
+            {/* The shop: hours, directions, map */}
+            <section aria-labelledby="unde-ne-gasesti">
+              <h2 id="unde-ne-gasesti" className="text-3xl font-bold mb-6 text-center" style={{ color: '#1e3a8a' }}>
+                {translations[language].location.title}
+              </h2>
+              <LocationCard language={language} headingLevel="h3" />
+              <p className="mt-6 text-center text-sm text-gray-600">
+                {siteConfig.company.legalName} · CUI {siteConfig.company.cui} · {translations[language].footer.tradeRegister} {siteConfig.company.tradeRegister}
+              </p>
+            </section>
           </div>
         </div>
       </section>

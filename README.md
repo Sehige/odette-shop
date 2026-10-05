@@ -8,7 +8,7 @@ Every page is **prerendered at build time** into static HTML (`react-router.conf
 
 Every category with active products gets a page at `/<category slug>` (e.g. `/torturi`). Its heading is the category name; the optional `intro_ro` / `intro_en`, `seo_title` and `seo_description` columns of `categories` in Supabase add an intro under the heading and a custom page title and description. A slug that equals a fixed page (e.g. `contact`) is skipped.
 
-Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build. `scripts/finish-build.mjs` then writes `sitemap.xml` (the indexable pages, every category page and every product page, with the latest product edit as `lastmod`) and `404.html`, which Vercel serves with a real 404 status for any unknown address.
+Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/clean-prerender.mjs` removes stray NUL bytes that React 18's server renderer sometimes writes next to a multi-byte character, then `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build. `scripts/finish-build.mjs` then writes `sitemap.xml` (the indexable pages, every category page and every product page, with the latest product edit as `lastmod`) and `404.html`, which Vercel serves with a real 404 status for any unknown address.
 
 ## Commands
 
@@ -42,5 +42,7 @@ Catalogue edits in Supabase (products, nutrition, categories, gallery, image fra
 ## Database
 
 Supabase SQL that has been applied by hand lives in `supabase/sql/` (for example the row-level security hardening from September 2026).
+
+The business's details (address, phone, opening hours, delivery fees, company data, map links) live in `src/data/siteConfig.js`; the footer, contact page, homepage and the structured data for search engines read them from there. Holidays and special hours are rows in the Supabase table `special_days` (`supabase/sql/2026-10-05_special_days_and_fixes.sql`); the live "Deschis acum / Închis · deschide …" status (`src/lib/openingHours.js`, tested in `src/test/opening-hours.test.js`) is worked out in the browser in Romanian time, never at build time.
 
 The contact form posts to the Supabase Edge Function `supabase/functions/submit-enquiry` (spam checks, phone number required, saves to `contact_submissions`, emails the shop through Resend with the phone and a WhatsApp link; every email subject starts with `[Comanda Site]`). It is deployed by pasting `index.ts` into Supabase → Edge Functions → `submit-enquiry` (or `npx supabase functions deploy submit-enquiry`); its secret `RESEND_API_KEY` is set under Edge Functions → Secrets. Tests: `src/test/submit-enquiry.test.js`.

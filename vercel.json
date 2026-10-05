@@ -3,6 +3,13 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/produse/brownie2",
+      "destination": "/produse/brownie-la-kg",
+      "statusCode": 301
+    }
+  ],
   "headers": [
     {
       "source": "/admin/:path*",
