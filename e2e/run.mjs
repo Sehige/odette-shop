@@ -31,6 +31,7 @@ const GOOGLE_MAP = /maps\.googleapis\.com|maps\.gstatic\.com|google\.com\/maps|<
 // any Google host (fonts, maps, analytics): nothing may load from these before cookie consent
 const GOOGLE = /(^|\.)(google\.[a-z.]+|googleapis\.com|gstatic\.com|googletagmanager\.com|google-analytics\.com|doubleclick\.net)$/;
 const CLOSE = '[role="dialog"] button[aria-label="Închide"]';
+const STATUS_TEXT = /^(Deschis acum · închide la \d\d:\d\d|Închide în curând · la \d\d:\d\d|Închis( · deschide .+ la \d\d:\d\d)?)$/;
 const CARDS = '.grid a[href^="/produse/"]';
 const errors = [];
 
@@ -121,6 +122,15 @@ try {
   check('HTTP /shop/ redirects to /shop', slash.status === 308 && (slash.location || '').endsWith('/shop'), `${slash.status} ${slash.location}`);
   const locs = ((await raw('/sitemap.xml')).html.match(/<loc>/g) || []).length;
   check('sitemap.xml lists pages, categories and products', locs >= 3 + categoryPaths.length + productPaths.length, `${locs} URLs`);
+  const homeHtml = (await raw('/')).html;
+  check('HTML /: opening hours are in the page, the live status is not (it is worked out in the browser)',
+    homeHtml.includes('Luni – Vineri') && !/Deschis acum|Închide în curând|Închis · deschide/.test(homeHtml));
+  const bakery = [...homeHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Bakery') || {};
+  check('structured data: the business has its opening hours and map link',
+    (bakery.openingHoursSpecification || []).length === 2 && /google\.com\/maps\/place/.test(bakery.hasMap || ''), JSON.stringify(bakery.openingHoursSpecification));
+  const oldBrownie = await raw('/produse/brownie2');
+  check('HTTP /produse/brownie2 redirects permanently to /produse/brownie-la-kg',
+    oldBrownie.status === 301 && (oldBrownie.location || '').endsWith('/produse/brownie-la-kg'), `${oldBrownie.status} ${oldBrownie.location}`);
 
   // 2. Cookie consent and analytics, as a new visitor
   {
@@ -180,7 +190,24 @@ try {
       font.family.includes('Playfair Display Variable') && font.loaded && font.hosts.length > 0 && font.hosts.every((h) => h === new URL(BASE).host),
       JSON.stringify(font));
     check('a11y: every image has an alt attribute', (await page.$$('img:not([alt])')).length === 0);
-    check('a11y: footer section titles are h2', (await page.$$('footer h4')).length === 0 && (await page.$$('footer h2')).length >= 4);
+    check('a11y: footer section titles are h2', (await page.$$('footer h4')).length === 0 && (await page.$$('footer h2')).length >= 3);
+    await page.waitForFunction(() => [...document.querySelectorAll('[data-open-status]')].every((p) => p.textContent.trim()), { timeout: 5000 }).catch(() => {});
+    const statuses = await page.evaluate(() => [...document.querySelectorAll('[data-open-status]')].map((p) => p.textContent.trim()));
+    check('opening hours: the live status appears after loading (strip, card, footer)',
+      statuses.length >= 3 && statuses.every((text) => STATUS_TEXT.test(text)), statuses.join(' | '));
+    check('home: info strip with free delivery and the Cluj fee', await page.evaluate(() =>
+      document.body.textContent.includes('Transport gratuit pentru comenzi de peste 250 lei') && document.body.textContent.includes('Livrare în Cluj-Napoca · 15 lei')));
+    check('home: "Unde ne găsești" with "Rute" to Google Maps directions', await page.evaluate(() =>
+      !!document.getElementById('unde-ne-gasesti') &&
+      [...document.querySelectorAll('a')].some((a) => a.textContent.trim() === 'Rute' && a.href.startsWith('https://www.google.com/maps/dir/?api=1&destination='))));
+    check('footer: company line with the trade register number, and the legal links', await page.evaluate(() => {
+      const footer = document.querySelector('footer');
+      const nav = footer.querySelector('nav[aria-label="Informații legale"]');
+      const hrefs = nav ? [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href')) : [];
+      return /© \d{4} Olala Sweets SRL · CUI 52083122 · Reg\. Com\. J2025048164006/.test(footer.textContent) &&
+        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', 'https://anpc.ro/ce-este-sal/', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
+        !!nav.querySelector('button');
+    }));
     await page.click('button[aria-label="Switch to English"]');
     await sleep(300);
     check('language toggle switches to English', (await page.evaluate(() => document.documentElement.lang)) === 'en');
@@ -360,6 +387,13 @@ try {
     check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la acest număr de telefon')));
 
     const phone = await newPage({ viewport: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true } });
+    const narrow = await newPage({ viewport: { width: 375, height: 800, isMobile: true, hasTouch: true } });
+    const wide = [];
+    for (const path of ['/', '/contact', '/shop', productPaths[0]]) {
+      await open(narrow, path);
+      if (await narrow.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) wide.push(path);
+    }
+    check('phone (375px): no page scrolls sideways', wide.length === 0, wide.join(' '));
     await open(phone, '/');
     const menu = 'button[aria-controls="mobile-menu"]';
     const before = await phone.$eval(menu, (b) => b.getAttribute('aria-expanded'));

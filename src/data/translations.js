@@ -152,6 +152,28 @@ export const translations = {
       socialTitle: 'Urmărește-ne',
       socialDescription: 'Rămâi la curent cu cele mai noi creații'
     },
+    location: {
+      title: 'Unde ne găsești',
+      directions: 'Rute',
+      viewOnMaps: 'Vezi pe Google Maps',
+      followInstagram: 'Urmărește-ne pe Instagram',
+      special: 'Program special'
+    },
+    infoStrip: {
+      label: 'Pe scurt',
+      freeDelivery: (threshold) => `Transport gratuit pentru comenzi de peste ${threshold} lei`,
+      delivery: (fee) => `Livrare în Cluj-Napoca · ${fee} lei`
+    },
+    footer: {
+      description: 'Cofetărie artizanală în Cluj-Napoca: prăjituri, torturi și box-uri făcute cu grijă, din ingrediente de calitate.',
+      legalNav: 'Informații legale',
+      terms: 'Termeni',
+      privacy: 'Confidențialitate',
+      cookies: 'Cookies',
+      anpc: 'ANPC – SAL',
+      euDisputes: 'Litigii UE',
+      tradeRegister: 'Reg. Com.'
+    },
 
     // ===== ABOUT PAGE =====
     about: {
@@ -419,6 +441,28 @@ export const translations = {
       success: 'Thank you! Your message has been sent successfully. We will contact you soon.',
       socialTitle: 'Follow Us',
       socialDescription: 'Stay updated with our latest creations'
+    },
+    location: {
+      title: 'Where to find us',
+      directions: 'Directions',
+      viewOnMaps: 'View on Google Maps',
+      followInstagram: 'Follow us on Instagram',
+      special: 'Special hours'
+    },
+    infoStrip: {
+      label: 'At a glance',
+      freeDelivery: (threshold) => `Free delivery for orders over ${threshold} RON`,
+      delivery: (fee) => `Delivery in Cluj-Napoca · ${fee} RON`
+    },
+    footer: {
+      description: 'Artisan patisserie in Cluj-Napoca: pastries, cakes and boxes made with care from quality ingredients.',
+      legalNav: 'Legal information',
+      terms: 'Terms',
+      privacy: 'Privacy',
+      cookies: 'Cookies',
+      anpc: 'ANPC – ADR',
+      euDisputes: 'EU disputes',
+      tradeRegister: 'Trade Reg.'
     },
 
     // ===== ABOUT PAGE =====

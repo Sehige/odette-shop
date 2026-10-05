@@ -5,30 +5,8 @@ export const seoConfig = {
   defaultDescription: 'Comandă online prăjituri artizanale, torturi personalizate și deserturi premium. Livrare în Cluj-Napoca. Ingrediente premium, rețete tradiționale.',
   defaultImage: 'https://www.odette-confiserie.ro/og-image.jpg',
   defaultImageAlt: 'Tarte artizanale cu ciocolată și alune pe o tavă de argint – Odette Confiserie',
-  // @id of the Bakery JSON-LD in public/index.html; pages reference it instead of repeating it
+  // @id of the Bakery JSON-LD (src/seo/schema.js, in every page's head); pages refer to it.
+  // The business's details themselves live in src/data/siteConfig.js.
   businessId: 'https://www.odette-confiserie.ro/#bakery',
   locale: 'ro_RO',
-
-  business: {
-    name: 'Odette Confiserie',
-    legalName: 'Olala Sweets SRL',
-    type: 'Bakery',
-    phone: '+40756157067',
-    email: 'odette.confiserie@gmail.com',
-    address: {
-      street: 'Strada Câmpului 133',
-      city: 'Cluj-Napoca',
-      postalCode: '400686',
-      country: 'RO'
-    },
-    geo: {
-      latitude: 46.752273,
-      longitude: 23.565352
-    },
-    priceRange: '$$',
-    social: {
-      instagram: 'https://www.instagram.com/odette.confiserie/',
-      facebook: 'https://www.facebook.com/profile.php?id=61581913980330'
-    }
-  }
 };

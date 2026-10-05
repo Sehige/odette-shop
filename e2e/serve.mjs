@@ -1,5 +1,6 @@
 // Serves build/client the way Vercel serves it with this project's vercel.json:
-// exact file -> folder index.html -> trailing slash 308 -> 404.html with status 404.
+// redirects (exact paths) -> trailing slash 308 -> exact file -> folder index.html ->
+// 404.html with status 404.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,6 +11,7 @@ const TYPES = {
   '.xml': 'application/xml', '.txt': 'text/plain', '.data': 'text/x-script',
 };
 const isFile = (p) => { try { return fs.statSync(p).isFile(); } catch { return false; } };
+const redirects = JSON.parse(fs.readFileSync('vercel.json', 'utf8')).redirects || [];
 
 export function startServer(dir = 'build/client', port = 0) {
   const root = path.resolve(dir);
@@ -17,6 +19,11 @@ export function startServer(dir = 'build/client', port = 0) {
   const server = http.createServer((req, res) => {
     const [rawPath, query] = req.url.split('?');
     const urlPath = decodeURIComponent(rawPath);
+    const redirect = redirects.find((r) => r.source === urlPath);
+    if (redirect) {
+      res.writeHead(redirect.statusCode || (redirect.permanent === false ? 307 : 308), { Location: redirect.destination });
+      return res.end();
+    }
     if (urlPath.length > 1 && urlPath.endsWith('/')) {
       res.writeHead(308, { Location: urlPath.slice(0, -1) + (query ? `?${query}` : '') });
       return res.end();
