@@ -87,8 +87,10 @@ const domClick = (page, selector) =>
   page.evaluate((s) => { const el = document.querySelector(s); if (el) el.click(); return !!el; }, selector);
 const scrollY = (page) => page.evaluate(() => window.scrollY);
 const where = (page) => page.evaluate(() => location.pathname + location.search);
-async function open(page, path) {
-  const res = await page.goto(BASE + path, { waitUntil: 'networkidle0', timeout: 60000 });
+// waitUntil 'load' where a third-party frame (the Google map) never lets the network go quiet
+async function open(page, path, { waitUntil = 'networkidle0' } = {}) {
+  // 120 s: on a slow connection the live site can take a while to go quiet
+  const res = await page.goto(BASE + path, { waitUntil, timeout: 120000 });
   if (page.dismissCookies) await clickText(page, 'button', 'Respinge opționale');
   return res;
 }
@@ -155,7 +157,7 @@ try {
     await clickText(accept, 'button', 'Acceptă toate');
     await sleep(5000);
     check('consent: analytics load after accepting', accept.analytics.some((u) => u.includes('gtag/js')));
-    await open(accept, '/contact');
+    await open(accept, '/contact', { waitUntil: 'load' });
     check('contact map loads by itself after accepting all cookies', !!(await accept.waitForSelector('iframe[src*="google.com/maps"]', { timeout: 5000 }).catch(() => null)));
 
     const prefs = await newPage({ dismissCookies: false });
