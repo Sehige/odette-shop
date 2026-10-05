@@ -159,13 +159,7 @@ export const translations = {
       followInstagram: 'Urmărește-ne pe Instagram',
       special: 'Program special'
     },
-    infoStrip: {
-      label: 'Pe scurt',
-      freeDelivery: (threshold) => `Transport gratuit pentru comenzi de peste ${threshold} lei`,
-      delivery: (fee) => `Livrare în Cluj-Napoca · ${fee} lei`
-    },
     footer: {
-      description: 'Cofetărie artizanală în Cluj-Napoca: prăjituri, torturi și box-uri făcute cu grijă, din ingrediente de calitate.',
       legalNav: 'Informații legale',
       terms: 'Termeni',
       privacy: 'Confidențialitate',
@@ -449,13 +443,7 @@ export const translations = {
       followInstagram: 'Follow us on Instagram',
       special: 'Special hours'
     },
-    infoStrip: {
-      label: 'At a glance',
-      freeDelivery: (threshold) => `Free delivery for orders over ${threshold} RON`,
-      delivery: (fee) => `Delivery in Cluj-Napoca · ${fee} RON`
-    },
     footer: {
-      description: 'Artisan patisserie in Cluj-Napoca: pastries, cakes and boxes made with care from quality ingredients.',
       legalNav: 'Legal information',
       terms: 'Terms',
       privacy: 'Privacy',
