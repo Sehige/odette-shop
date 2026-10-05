@@ -28,7 +28,7 @@ const ContactMap = ({ language, compact = false }) => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-4 p-8 text-center">
-      <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#d4af37' }}>
+      <div className="w-16 h-16 flex-shrink-0 rounded-full flex items-center justify-center" style={{ backgroundColor: '#d4af37' }}>
         <MapPin className="text-white" size={32} aria-hidden="true" />
       </div>
       {!compact && <p className="max-w-xs font-medium text-gray-700">{siteConfig.contact.address[language]}</p>}

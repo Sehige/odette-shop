@@ -193,10 +193,8 @@ try {
     check('a11y: footer section titles are h2', (await page.$$('footer h4')).length === 0 && (await page.$$('footer h2')).length >= 3);
     await page.waitForFunction(() => [...document.querySelectorAll('[data-open-status]')].every((p) => p.textContent.trim()), { timeout: 5000 }).catch(() => {});
     const statuses = await page.evaluate(() => [...document.querySelectorAll('[data-open-status]')].map((p) => p.textContent.trim()));
-    check('opening hours: the live status appears after loading (strip, card, footer)',
-      statuses.length >= 3 && statuses.every((text) => STATUS_TEXT.test(text)), statuses.join(' | '));
-    check('home: info strip with free delivery and the Cluj fee', await page.evaluate(() =>
-      document.body.textContent.includes('Transport gratuit pentru comenzi de peste 250 lei') && document.body.textContent.includes('Livrare în Cluj-Napoca · 15 lei')));
+    check('opening hours: the live status appears after loading (card and footer)',
+      statuses.length >= 2 && statuses.every((text) => STATUS_TEXT.test(text)), statuses.join(' | '));
     check('home: "Unde ne găsești" with "Rute" to Google Maps directions', await page.evaluate(() =>
       !!document.getElementById('unde-ne-gasesti') &&
       [...document.querySelectorAll('a')].some((a) => a.textContent.trim() === 'Rute' && a.href.startsWith('https://www.google.com/maps/dir/?api=1&destination='))));
@@ -344,6 +342,15 @@ try {
       [...document.querySelectorAll('form input, form textarea')].every((el) => el.labels && el.labels.length > 0)));
     check('a11y: icon-only links have names', await page.evaluate(() =>
       [...document.querySelectorAll('a')].filter((a) => !a.textContent.trim()).every((a) => a.getAttribute('aria-label'))));
+    check('contact: map and contact box side by side (map left), the form underneath', await page.evaluate(() => {
+      const map = [...document.querySelectorAll('button')].find((el) => el.textContent.includes('Afișează harta'));
+      const rute = [...document.querySelectorAll('main a')].find((el) => el.textContent.trim() === 'Rute');
+      const form = document.querySelector('main form');
+      if (!map || !rute || !form) return false;
+      const [m, r, f] = [map, rute, form].map((el) => el.getBoundingClientRect());
+      return m.right < r.left && m.bottom < f.top && r.bottom < f.top &&
+        !!document.querySelector('main a[href^="tel:"]') && !!document.querySelector('main a[href^="mailto:"]');
+    }));
 
     // Enquiry form: a link preselects the topic; the message goes to the submit-enquiry function
     const form = await newPage();

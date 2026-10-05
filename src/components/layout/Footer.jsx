@@ -32,7 +32,6 @@ const Footer = ({ language }) => {
               <img src={logoMark} alt="" className="h-16 w-auto object-contain" />
               <img src={odetteLogo} alt={siteConfig.name} className="h-12 w-auto" />
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-blue-100">{f.description}</p>
             <div className="mt-5 flex items-center gap-4">
               <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-blue-100 hover:text-white transition">
                 <Instagram className="w-6 h-6" />
@@ -43,14 +42,14 @@ const Footer = ({ language }) => {
             </div>
           </div>
 
-          {/* Opening hours, with the live status */}
-          <div>
+          {/* Opening hours, with the live status (on wide screens each column sits centred in its space) */}
+          <div className="lg:justify-self-center">
             <h2 className="text-lg font-semibold mb-3">{t.contact.labels.hours}</h2>
             <HoursBox language={language} tone="dark" />
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="lg:justify-self-center">
             <h2 className="text-lg font-semibold mb-3">{t.contactNav}</h2>
             <ul className="space-y-3 text-blue-100">
               <li className="flex items-center gap-3">
@@ -71,7 +70,7 @@ const Footer = ({ language }) => {
           </div>
 
           {/* Quick links */}
-          <div>
+          <div className="lg:justify-self-center">
             <h2 className="text-lg font-semibold mb-3">{t.quickLinks}</h2>
             <ul className="space-y-3 text-blue-100">
               <li><Link to="/" className={linkClass}>{t.home}</Link></li>
