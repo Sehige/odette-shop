@@ -388,6 +388,15 @@ try {
     check(`not found ${path}: 404, not-found page, links work`, res.status() === 404 && h1.includes('Pagina nu a fost găsită') && alive, `${res.status()} "${h1}"`);
   }
 
+  // 9. Every page in the sitemap opens without JavaScript errors (hydration included)
+  {
+    const page = await newPage();
+    const paths = [...(await raw('/sitemap.xml')).html.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
+    const before = errors.length;
+    for (const path of paths) await page.goto(BASE + path, { waitUntil: 'networkidle0', timeout: 60000 });
+    check(`all ${paths.length} sitemap pages open without JavaScript errors`, errors.length === before, errors.slice(before, before + 3).join(' | '));
+  }
+
   check('no JavaScript errors (including hydration) on any page', errors.length === 0, errors.slice(0, 3).join(' | '));
 } catch (error) {
   check('suite ran to the end', false, error.stack || error.message);

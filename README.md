@@ -8,7 +8,7 @@ Every page is **prerendered at build time** into static HTML (`react-router.conf
 
 Every category with active products gets a page at `/<category slug>` (e.g. `/torturi`). Its heading is the category name; the optional `intro_ro` / `intro_en`, `seo_title` and `seo_description` columns of `categories` in Supabase add an intro under the heading and a custom page title and description. A slug that equals a fixed page (e.g. `contact`) is skipped.
 
-Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build. `scripts/finish-build.mjs` then writes `sitemap.xml` (the indexable pages, every category page and every product page, with the latest product edit as `lastmod`) and `404.html`, which Vercel serves with a real 404 status for any unknown address.
+Every active product gets its own page at `/produse/<slug>` (the `slug` column in Supabase, filled automatically for new products). After each build, `scripts/clean-prerender.mjs` removes stray NUL bytes that React 18's server renderer sometimes writes next to a multi-byte character, then `scripts/check-product-pages.mjs` checks that every product page shows its ingredients, allergens and nutrition values exactly as stored in Supabase; a mismatch fails the build. `scripts/finish-build.mjs` then writes `sitemap.xml` (the indexable pages, every category page and every product page, with the latest product edit as `lastmod`) and `404.html`, which Vercel serves with a real 404 status for any unknown address.
 
 ## Commands
 
