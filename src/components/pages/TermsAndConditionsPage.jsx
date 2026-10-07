@@ -9,7 +9,7 @@ const TermsAndConditionsPage = ({ language }) => {
     ro: {
       title: 'Termeni și Condiții',
       subtitle: 'Condiții generale de vânzare',
-      lastUpdate: 'Ultima actualizare: Septembrie 2026',
+      lastUpdate: 'Ultima actualizare: Octombrie 2026',
 
       sections: [
         {
@@ -147,7 +147,7 @@ const TermsAndConditionsPage = ({ language }) => {
     en: {
       title: 'Terms and Conditions',
       subtitle: 'General terms of sale',
-      lastUpdate: 'Last updated: September 2026',
+      lastUpdate: 'Last updated: October 2026',
 
       sections: [
         {
