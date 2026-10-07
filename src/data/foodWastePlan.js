@@ -6,7 +6,7 @@
 export const foodWastePlan = {
   title: 'Plan de diminuare a risipei alimentare',
   legalBasis: 'conform Legii nr. 217/2016 și HG nr. 51/2019',
-  period: 'Perioada de raportare: 1 ianuarie – 31 decembrie 2025',
+  period: 'Perioada de raportare: 1 ianuarie – 31 decembrie 2026',
   drawnUp: 'Întocmit în martie 2026',
 
   // Section 8: what happens to products close to their expiry date, in order of priority
