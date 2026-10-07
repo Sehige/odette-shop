@@ -67,10 +67,10 @@ export const siteConfig = {
     legalName: 'Olala Sweets SRL',
     cui: '52083122',
     tradeRegister: 'J2025048164006',
-    // Registered office same as contact address
+    // Registered office (sediu social); the lab and shop (punct de lucru) is contact.address
     registeredOffice: {
-      ro: 'Strada Câmpului 133, Cluj-Napoca, România',
-      en: '133 Câmpului Street, Cluj-Napoca, Romania'
+      ro: 'Strada Petuniei nr. 5, Cluj-Napoca, România',
+      en: '5 Petuniei Street, Cluj-Napoca, Romania'
     }
   }
 };

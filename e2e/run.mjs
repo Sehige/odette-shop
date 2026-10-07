@@ -87,8 +87,10 @@ const domClick = (page, selector) =>
   page.evaluate((s) => { const el = document.querySelector(s); if (el) el.click(); return !!el; }, selector);
 const scrollY = (page) => page.evaluate(() => window.scrollY);
 const where = (page) => page.evaluate(() => location.pathname + location.search);
-async function open(page, path) {
-  const res = await page.goto(BASE + path, { waitUntil: 'networkidle0', timeout: 60000 });
+// waitUntil 'load' where a third-party frame (the Google map) never lets the network go quiet
+async function open(page, path, { waitUntil = 'networkidle0' } = {}) {
+  // 120 s: on a slow connection the live site can take a while to go quiet
+  const res = await page.goto(BASE + path, { waitUntil, timeout: 120000 });
   if (page.dismissCookies) await clickText(page, 'button', 'Respinge opționale');
   return res;
 }
@@ -128,6 +130,10 @@ try {
   const bakery = [...homeHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Bakery') || {};
   check('structured data: the business has its opening hours and map link',
     (bakery.openingHoursSpecification || []).length === 2 && /google\.com\/maps\/place/.test(bakery.hasMap || ''), JSON.stringify(bakery.openingHoursSpecification));
+  const waste = await raw('/risipa-alimentara');
+  check('HTML /risipa-alimentara: the food waste plan, with the order of measures for products close to expiry',
+    waste.status === 200 && waste.html.includes('Ce facem cu produsele aproape de expirare') && waste.html.includes('Transfer gratuit pentru consum uman') &&
+      waste.html.includes('Legii nr. 217/2016') && /name="robots" content="noindex/.test(waste.html), `${waste.status}`);
   const oldBrownie = await raw('/produse/brownie2');
   check('HTTP /produse/brownie2 redirects permanently to /produse/brownie-la-kg',
     oldBrownie.status === 301 && (oldBrownie.location || '').endsWith('/produse/brownie-la-kg'), `${oldBrownie.status} ${oldBrownie.location}`);
@@ -155,7 +161,7 @@ try {
     await clickText(accept, 'button', 'Acceptă toate');
     await sleep(5000);
     check('consent: analytics load after accepting', accept.analytics.some((u) => u.includes('gtag/js')));
-    await open(accept, '/contact');
+    await open(accept, '/contact', { waitUntil: 'load' });
     check('contact map loads by itself after accepting all cookies', !!(await accept.waitForSelector('iframe[src*="google.com/maps"]', { timeout: 5000 }).catch(() => null)));
 
     const prefs = await newPage({ dismissCookies: false });
@@ -203,7 +209,7 @@ try {
       const nav = footer.querySelector('nav[aria-label="Informații legale"]');
       const hrefs = nav ? [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href')) : [];
       return /© \d{4} Olala Sweets SRL · CUI 52083122 · Reg\. Com\. J2025048164006/.test(footer.textContent) &&
-        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', 'https://anpc.ro/ce-este-sal/', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
+        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/risipa-alimentara', 'https://anpc.ro/ce-este-sal/', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
         !!nav.querySelector('button');
     }));
     await page.click('button[aria-label="Switch to English"]');
@@ -396,7 +402,7 @@ try {
     const phone = await newPage({ viewport: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true } });
     const narrow = await newPage({ viewport: { width: 375, height: 800, isMobile: true, hasTouch: true } });
     const wide = [];
-    for (const path of ['/', '/contact', '/shop', productPaths[0]]) {
+    for (const path of ['/', '/contact', '/shop', productPaths[0], '/risipa-alimentara']) {
       await open(narrow, path);
       if (await narrow.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) wide.push(path);
     }

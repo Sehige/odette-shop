@@ -92,6 +92,7 @@ const Footer = ({ language }) => {
               <li><Link to="/terms-and-conditions" className={legalLink}>{f.terms}</Link></li>
               <li><Link to="/privacy-policy" className={legalLink}>{f.privacy}</Link></li>
               <li><Link to="/cookie-policy" className={legalLink}>{f.cookies}</Link></li>
+              <li><Link to="/risipa-alimentara" className={legalLink}>{f.foodWaste}</Link></li>
               <li>
                 <button type="button" onClick={openPreferences} className={legalLink}>
                   {t.cookieConsent?.manageCookies || 'Manage cookies'}
