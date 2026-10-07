@@ -12,6 +12,7 @@ export default [
     route('terms-and-conditions', 'routes/terms.jsx'),
     route('privacy-policy', 'routes/privacy.jsx'),
     route('cookie-policy', 'routes/cookies.jsx'),
+    route('risipa-alimentara', 'routes/food-waste.jsx'),
     route('admin', 'routes/admin.jsx'),
     // category pages (/torturi, /babka, ...); fixed paths above take precedence
     route(':category', 'routes/category.jsx'),

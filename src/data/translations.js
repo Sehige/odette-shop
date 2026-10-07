@@ -164,6 +164,7 @@ export const translations = {
       terms: 'Termeni',
       privacy: 'Confidențialitate',
       cookies: 'Cookies',
+      foodWaste: 'Risipa alimentară',
       anpc: 'ANPC – SAL',
       euDisputes: 'Litigii UE',
       tradeRegister: 'Reg. Com.'
@@ -448,6 +449,7 @@ export const translations = {
       terms: 'Terms',
       privacy: 'Privacy',
       cookies: 'Cookies',
+      foodWaste: 'Food waste',
       anpc: 'ANPC – ADR',
       euDisputes: 'EU disputes',
       tradeRegister: 'Trade Reg.'

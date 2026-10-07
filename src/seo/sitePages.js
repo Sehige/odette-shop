@@ -10,6 +10,7 @@ export const NOINDEX_PAGES = [
   '/terms-and-conditions',
   '/privacy-policy',
   '/cookie-policy',
+  '/risipa-alimentara',
   '/admin',
 ];
 
