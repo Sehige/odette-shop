@@ -407,6 +407,17 @@ try {
       if (await narrow.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) wide.push(path);
     }
     check('phone (375px): no page scrolls sideways', wide.length === 0, wide.join(' '));
+    const covered = [];
+    for (const [label, viewport] of [['wide', { width: 1920, height: 900 }], ['phone', { width: 375, height: 800, isMobile: true, hasTouch: true }]]) {
+      const view = await newPage({ viewport });
+      for (const path of ['/risipa-alimentara', '/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/contact', '/shop']) {
+        await open(view, path);
+        const hidden = await view.evaluate(() =>
+          document.querySelector('main h1').getBoundingClientRect().top < document.querySelector('header').getBoundingClientRect().bottom);
+        if (hidden) covered.push(`${label} ${path}`);
+      }
+    }
+    check('the fixed header never covers a page title (1920px and phone)', covered.length === 0, covered.join(', '));
     await open(phone, '/');
     const menu = 'button[aria-controls="mobile-menu"]';
     const before = await phone.$eval(menu, (b) => b.getAttribute('aria-expanded'));

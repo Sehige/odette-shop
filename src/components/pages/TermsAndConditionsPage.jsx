@@ -290,7 +290,8 @@ const TermsAndConditionsPage = ({ language }) => {
     <>
       <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>
+      {/* starts below the fixed header (taller on large screens) */}
+      <section className="relative pt-32 pb-20 lg:pt-44 overflow-hidden" style={{ backgroundColor: '#1e3a8a' }}>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)'
