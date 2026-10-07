@@ -53,7 +53,8 @@ const FoodWastePage = ({ language }) => {
   const en = language === 'en';
   return (
     <div className="min-h-screen bg-white">
-      <section className="relative py-20 overflow-hidden" style={{ backgroundColor: NAVY }}>
+      {/* starts below the fixed header (taller on large screens) */}
+      <section className="relative pt-32 pb-20 lg:pt-44 overflow-hidden" style={{ backgroundColor: NAVY }}>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center text-white">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">{en ? 'Reducing food waste' : 'Diminuarea risipei alimentare'}</h1>
