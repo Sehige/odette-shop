@@ -451,7 +451,7 @@ try {
     const page = await newPage();
     const paths = [...(await raw('/sitemap.xml')).html.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     const before = errors.length;
-    for (const path of paths) await page.goto(BASE + path, { waitUntil: 'networkidle0', timeout: 60000 });
+    for (const path of paths) await open(page, path);
     check(`all ${paths.length} sitemap pages open without JavaScript errors`, errors.length === before, errors.slice(before, before + 3).join(' | '));
   }
 
