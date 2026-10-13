@@ -77,7 +77,8 @@ const LocationCard = ({ language, headingLevel = 'h3', contacts = false, mapSide
           )}
         </div>
       </div>
-      <div className={`bg-gray-200 rounded-2xl overflow-hidden min-h-[17rem] aspect-[16/10] md:aspect-auto md:min-h-[380px] ${mapSide === 'left' ? 'md:order-first' : ''}`}>
+      {/* a fixed height on phones: an aspect ratio plus a minimum height would widen the page */}
+      <div className={`bg-gray-200 rounded-2xl overflow-hidden h-72 md:h-auto md:min-h-[380px] ${mapSide === 'left' ? 'md:order-first' : ''}`}>
         <ContactMap language={language} compact />
       </div>
     </div>
