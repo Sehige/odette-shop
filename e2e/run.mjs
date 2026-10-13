@@ -400,13 +400,18 @@ try {
     check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la acest număr de telefon')));
 
     const phone = await newPage({ viewport: { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true } });
-    const narrow = await newPage({ viewport: { width: 375, height: 800, isMobile: true, hasTouch: true } });
+    // a phone widens its own view to fit a too-wide page (innerWidth grows with it), so the
+    // page is compared with the screen's width (clientWidth)
     const wide = [];
-    for (const path of ['/', '/contact', '/shop', productPaths[0], '/risipa-alimentara']) {
-      await open(narrow, path);
-      if (await narrow.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)) wide.push(path);
+    for (const width of [360, 390]) {
+      const narrow = await newPage({ viewport: { width, height: 800, isMobile: true, hasTouch: true } });
+      for (const path of ['/', '/contact', '/shop', productPaths[0], '/risipa-alimentara']) {
+        await open(narrow, path);
+        const sizes = await narrow.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
+        if (sizes[0] > sizes[1]) wide.push(`${width}px ${path} (${sizes[0]}px)`);
+      }
     }
-    check('phone (375px): no page scrolls sideways', wide.length === 0, wide.join(' '));
+    check('phones (360 and 390px): no page is wider than the screen', wide.length === 0, wide.join(', '));
     const covered = [];
     for (const [label, viewport] of [['wide', { width: 1920, height: 900 }], ['phone', { width: 375, height: 800, isMobile: true, hasTouch: true }]]) {
       const view = await newPage({ viewport });
@@ -451,7 +456,7 @@ try {
     const page = await newPage();
     const paths = [...(await raw('/sitemap.xml')).html.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname);
     const before = errors.length;
-    for (const path of paths) await page.goto(BASE + path, { waitUntil: 'networkidle0', timeout: 60000 });
+    for (const path of paths) await open(page, path);
     check(`all ${paths.length} sitemap pages open without JavaScript errors`, errors.length === before, errors.slice(before, before + 3).join(' | '));
   }
 
