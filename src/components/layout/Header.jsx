@@ -15,8 +15,9 @@ const NAVY = '#1e3a8a';
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language];
-  // The festive "Crăciun" button, until the last day to order. It takes the socials' place
-  // on small laptops (1024-1279px), where the centred menu leaves no room for both.
+  // The festive "Crăciun" button, until the last day to order: in the menu between "Meniu" and
+  // the events offer from 1280px; on small laptops (1024-1279px), where the centred menu has no
+  // room for it, it takes the socials' place on the right; on phones it sits next to "Ro".
   const christmasOn = useChristmasSeason();
   const socialClass = `hidden ${christmasOn ? 'xl:inline' : 'lg:inline'} text-white/90 hover:text-white transition`;
 
@@ -58,13 +59,15 @@ const Header = ({ language, setLanguage }) => {
           </Link>
 
           {/* CENTER: navigation (desktop), absolutely centered on the header */}
-          <nav className="hidden lg:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <nav className={`hidden lg:flex items-center ${christmasOn ? 'gap-8 2xl:gap-10' : 'gap-10'} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2`}>
             <Link to="/" className={navLinkClass}>
               {t.home}
             </Link>
             <Link to="/shop" className={navLinkClass}>
               {t.shopNav}
             </Link>
+            {/* from 1280px; on 1024-1279px the menu has no room for it, so it sits on the right */}
+            {christmasOn && <ChristmasButton language={language} className="hidden xl:inline-flex px-5 py-2 text-lg" />}
             <a
               href={weddingOfferUrl}
               target="_blank"
@@ -82,7 +85,7 @@ const Header = ({ language, setLanguage }) => {
           <div className="flex items-center gap-4 sm:gap-5">
             {christmasOn && (
               <>
-                <ChristmasButton language={language} className="hidden lg:inline-flex px-5 py-2.5 text-base" />
+                <ChristmasButton language={language} className="hidden lg:inline-flex xl:hidden px-5 py-2.5 text-base" />
                 {/* phones: smaller, the tree icon only where there is room for it */}
                 <ChristmasButton
                   language={language}
