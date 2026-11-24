@@ -4,6 +4,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { christmas, christmasItems } from '../data/christmas';
 import { deliveryText, orderMessage, priceText } from '../components/pages/ChristmasPage';
+import { christmasBannerOn } from '../lib/christmasBanner';
 
 const items = christmasItems();
 const photoWidths = (section) => (section.layout === 'large' ? [600, 1200] : [400, 800]);
@@ -50,6 +51,14 @@ describe('Christmas offer', () => {
 
   it('every section has a short name for the buttons that jump to it', () => {
     for (const section of christmas.sections) expect(section.nav, section.id).toBeTruthy();
+  });
+
+  it('the homepage banner shows until the end of the last day to order, in Romania', () => {
+    expect(christmasBannerOn(new Date('2026-11-24T12:00:00+02:00'))).toBe(true);
+    expect(christmasBannerOn(new Date('2026-12-21T23:59:00+02:00'))).toBe(true);
+    expect(christmasBannerOn(new Date('2026-12-22T00:01:00+02:00'))).toBe(false);
+    // 22:30 UTC on the 21st is already the 22nd in Romania
+    expect(christmasBannerOn(new Date('2026-12-21T22:30:00Z'))).toBe(false);
   });
 
   it('the order deadline is set', () => {

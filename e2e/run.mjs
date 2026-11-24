@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import puppeteer from 'puppeteer-core';
 import { startServer } from './serve.mjs';
+import { christmas } from '../src/data/christmas.js';
 
 const executablePath = [
   process.env.CHROME_PATH,
@@ -187,6 +188,14 @@ try {
     check('home: title', (await page.title()).startsWith('Odette Confiserie'), await page.title());
     const hero = await page.$eval('section img', (i) => ({ ok: i.complete && i.naturalWidth > 0, alt: i.alt, src: i.currentSrc.split('/').pop() }));
     check('home: hero image loaded, with alt text', hero.ok && hero.alt.length > 10, hero.src);
+    const christmasOn = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Bucharest' }).format(new Date()) <= christmas.bannerUntil;
+    const opening = await page.evaluate(() => {
+      const first = document.querySelector('main section');
+      return { h1: first.querySelector('h1')?.textContent || '', links: [...first.querySelectorAll('a')].map((a) => [a.textContent.trim(), a.getAttribute('href')]) };
+    });
+    check('home: until the last day to order, the Christmas banner opens the page and "Comandă acum" leads to /craciun',
+      !christmasOn || (opening.h1.includes('Crăciun') && opening.links.some(([text, href]) => /comandă acum/i.test(text) && href === '/craciun')),
+      JSON.stringify(opening));
     check('home: best sellers link their product pages', (await page.$$(CARDS)).length > 0 || (await page.$$('a[href^="/produse/"]')).length > 0);
     await page.keyboard.press('Tab');
     check('a11y: the first Tab reaches "Sari la conținut"', (await page.evaluate(() => document.activeElement?.textContent)) === 'Sari la conținut');

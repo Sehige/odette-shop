@@ -11,6 +11,8 @@ export const christmas = {
   // last day to order
   orderBy: '21 decembrie',
   orderByEn: '21 December',
+  // the homepage opens with the Christmas banner until this day (the last day to order)
+  bannerUntil: '2026-12-21',
 
   // Orders are picked up from the lab or delivered only on these days, so everything is fresh
   pickup: [

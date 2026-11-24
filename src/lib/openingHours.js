@@ -34,6 +34,12 @@ function calendarDay(y, m, d, offset = 0) {
   return { iso: date.toISOString().slice(0, 10), weekday: date.getUTCDay() };
 }
 
+/** Today's date in Romania, 'YYYY-MM-DD' */
+export function romaniaDate(now) {
+  const { y, m, d } = localNow(now);
+  return calendarDay(y, m, d).iso;
+}
+
 // The hours that apply on a day: a special day wins over the weekly hours
 export function hoursOn(iso, weekday, specialDays = {}, weekly = siteConfig.openingHours) {
   if (Object.prototype.hasOwnProperty.call(specialDays, iso)) return specialDays[iso];
