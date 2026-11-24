@@ -2,7 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { reactRouter } from '@react-router/dev/vite';
 
+// The day the site is built, in Romania. Seasonal parts (the Christmas banner and buttons,
+// src/lib/christmasBanner.js) use it so the built HTML and the browser's first render agree.
+const BUILD_DAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Bucharest' }).format(new Date());
+
 export default defineConfig({
+  define: { __BUILD_DAY__: JSON.stringify(BUILD_DAY) },
   // React Router's plugin builds and prerenders the site (react-router.config.js);
   // Vitest renders components on their own and only needs the React plugin.
   plugins: [process.env.VITEST ? react() : reactRouter()],

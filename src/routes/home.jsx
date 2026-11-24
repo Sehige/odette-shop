@@ -6,7 +6,6 @@ import { Preload } from '../context/PreloadContext';
 import { buildMeta } from '../seo/meta';
 import { getBestSellers } from '../services/productService';
 import { getAllImageSettings } from '../services/imageSettingsService';
-import { christmasBannerOn } from '../lib/christmasBanner';
 import { must } from './_data';
 
 export async function loader() {
@@ -14,8 +13,6 @@ export async function loader() {
   return {
     bestSellers: must(bestSellers, 'best sellers'),
     imageSettings: must(imageSettings, 'image settings'),
-    // decided when the page is built, so the browser's first render matches the HTML
-    christmasBanner: christmasBannerOn(),
   };
 }
 
@@ -31,7 +28,7 @@ export default function Home() {
   const { language, setSelectedProduct } = useAppState();
   return (
     <Preload data={data}>
-      <HomePage language={language} setSelectedProduct={setSelectedProduct} christmasBanner={data.christmasBanner} />
+      <HomePage language={language} setSelectedProduct={setSelectedProduct} />
     </Preload>
   );
 }
