@@ -48,6 +48,10 @@ describe('Christmas offer', () => {
     expect(deliveryText).toBe('15 lei în Cluj-Napoca, 25 lei în afara orașului, gratuit pentru comenzile de peste 250 lei');
   });
 
+  it('every section has a short name for the buttons that jump to it', () => {
+    for (const section of christmas.sections) expect(section.nav, section.id).toBeTruthy();
+  });
+
   it('the order deadline is set', () => {
     expect(christmas.orderBy).toBe('21 decembrie');
   });

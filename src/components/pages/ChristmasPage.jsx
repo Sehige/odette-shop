@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ChevronDown, Gift, MapPin, MessageSquare, Phone, Truck, Wallet } from 'lucide-react';
 import { christmas } from '../../data/christmas';
 import { siteConfig } from '../../data/siteConfig';
@@ -70,6 +69,7 @@ const Contents = ({ items }) => (
 );
 
 const orderButton = 'inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white font-semibold px-5 py-2.5 hover:brightness-95 transition';
+const outlineButton = 'inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#1e3a8a] text-[#1e3a8a] font-semibold px-6 hover:bg-[#f7f4ec] transition';
 
 // Gift boxes: a large card with the contents of the box. A box sold in several sizes gets a
 // size menu; the page is built with the first size, and every size's price is in its option.
@@ -99,7 +99,7 @@ const BoxCard = ({ item }) => {
             </span>
           </label>
         )}
-        <p className="mt-4 text-sm text-gray-600">{[box.weight, box.pieces && `${box.pieces} buc`].filter(Boolean).join(' · ')}</p>
+        <p className="mt-4 font-bold text-gray-900">{[box.weight, box.pieces && `${box.pieces} buc`].filter(Boolean).join(' · ')}</p>
         {box.contents && <Contents items={box.contents} />}
         <div className="mt-auto pt-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-3xl font-bold" style={{ color: NAVY }}>{priceText(box)}</p>
@@ -118,29 +118,25 @@ const ItemCard = ({ item }) => (
     <Photo name={item.image} widths={[400, 800]} sizes="(min-width: 1152px) 360px, (min-width: 768px) 33vw, 50vw" alt={item.name} />
     <div className="p-3 sm:p-5 flex flex-col flex-1 text-center">
       <h3 className="font-semibold text-gray-900 text-sm sm:text-lg leading-snug">{item.name}</h3>
-      {item.weight && <p className="text-xs sm:text-sm text-gray-600 mt-1">{item.weight}</p>}
+      {item.weight && <p className="mt-1 text-sm sm:text-base font-bold text-gray-900">{item.weight}</p>}
       <p className="mt-2 text-lg sm:text-2xl font-bold" style={{ color: NAVY }}>{priceText(item)}</p>
-      <div className="mt-auto pt-3 flex flex-col items-center gap-2 text-sm">
+      <div className="mt-auto pt-3 flex justify-center text-sm">
         <WhatsAppLink label={itemLabel(item)} className="inline-flex items-center gap-1.5 font-semibold text-[#128C7E] hover:underline">
           Comandă
         </WhatsAppLink>
-        {item.product && (
-          <Link to={`/produse/${item.product}`} className="text-gray-600 underline hover:text-gray-900">Detalii produs</Link>
-        )}
       </div>
     </div>
   </article>
 );
 
+// One step of "Cum comanzi", in its own box
 const Step = ({ icon: Icon, title, children }) => (
-  <li className="flex gap-4">
-    <span className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: GOLD }}>
+  <li className="bg-white rounded-2xl shadow-sm border border-black/5 p-6 flex flex-col">
+    <span className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: GOLD }}>
       <Icon className="text-white" size={22} aria-hidden="true" />
     </span>
-    <div>
-      <h3 className="font-semibold text-lg text-gray-900">{title}</h3>
-      <div className="text-gray-700 mt-1 leading-relaxed">{children}</div>
-    </div>
+    <h3 className="mt-4 font-semibold text-lg text-gray-900">{title}</h3>
+    <div className="mt-2 text-gray-700 leading-relaxed">{children}</div>
   </li>
 );
 
@@ -229,21 +225,19 @@ const ChristmasPage = ({ language }) => {
               Cutii cadou, cozonac babka, fursecuri la gramaj și mici bucurii pentru cămară. Prețurile sunt mai jos.
             </Step>
             <Step icon={MessageSquare} title="2. Ne scrii sau ne suni">
-              Pe <WhatsAppLink className="inline-flex items-center gap-1 font-semibold text-[#128C7E] underline">WhatsApp</WhatsAppLink>,
-              prin <a href={smsHref} className="font-semibold underline">SMS</a> sau la <a href={telHref} className="font-semibold underline whitespace-nowrap">{phone}</a>:
-              ne spui ce produse vrei, ce cantitate și când dorești comanda.
+              Pe WhatsApp, prin SMS sau telefonic, la{' '}
+              <a href={telHref} className="font-semibold text-gray-900 whitespace-nowrap">{phone}</a>.
+              Ne spui ce produse vrei, ce cantitate și când dorești comanda.
             </Step>
             <Step icon={Wallet} title="3. Plătești avansul">
               Plătești avansul și îți confirmăm comanda.
             </Step>
             <Step icon={Truck} title="4. Ridicare sau livrare">
-              Ridici din laborator, de pe{' '}
-              <a href={siteConfig.maps.placeUrl} target="_blank" rel="noopener noreferrer" className="underline">Strada Câmpului 133</a>,
-              sau îți livrăm cu mașina, pe {pickupDays} ({christmas.pickupHours}).
-              <span className="block mt-2 text-sm text-gray-600">Livrare: {nb(deliveryText)}.</span>
+              Ridici din laborator, de pe Strada Câmpului 133, sau îți livrăm cu mașina, pe {pickupDays} ({christmas.pickupHours}).
+              <span className="block mt-3 text-sm text-gray-600">Livrare: {nb(deliveryText)}.</span>
             </Step>
           </ol>
-          <p className="mt-10 text-center text-lg font-semibold text-gray-900">
+          <p className="mt-8 rounded-2xl px-6 py-4 text-center text-white text-lg font-semibold" style={{ backgroundColor: NAVY }}>
             Comenzile se primesc până pe {christmas.orderBy}. Oferta e valabilă și pentru Revelion.
           </p>
         </div>
@@ -251,10 +245,14 @@ const ChristmasPage = ({ language }) => {
 
       {/* The offer */}
       <div id="oferta" className="scroll-mt-20 lg:scroll-mt-32">
-        <nav aria-label="Secțiuni ofertă" className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 flex flex-wrap justify-center gap-2 sm:gap-3">
+        <nav aria-label="Secțiuni ofertă" className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
           {christmas.sections.map((s) => (
-            <a key={s.id} href={`#${s.id}`} className="rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 text-sm sm:text-base font-medium">
-              {s.title}
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              className="flex items-center justify-center text-center rounded-xl border border-gray-200 bg-white shadow-sm px-3 py-3 font-semibold text-gray-900 hover:border-[#1e3a8a] hover:text-[#1e3a8a] transition"
+            >
+              {s.nav}
             </a>
           ))}
         </nav>
@@ -281,36 +279,45 @@ const ChristmasPage = ({ language }) => {
       <section className="py-12 md:py-16 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-center" style={{ color: NAVY }}>Întrebări despre comenzile de sărbători</h2>
-          <dl className="mt-8 divide-y divide-gray-200">
+          {/* Closed until tapped; the answers are still in the page for search engines */}
+          <div className="mt-8 space-y-3">
             {FAQ.map(({ q, a }) => (
-              <div key={q} className="py-5">
-                <dt className="font-semibold text-lg text-gray-900">{q}</dt>
-                <dd className="mt-2 text-gray-700 leading-relaxed">{nb(a)}</dd>
-              </div>
+              <details key={q} className="group rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold text-lg text-gray-900 [&::-webkit-details-marker]:hidden">
+                  {q}
+                  <ChevronDown className="w-5 h-5 shrink-0 text-gray-500 transition-transform group-open:rotate-180" aria-hidden="true" />
+                </summary>
+                <p className="px-5 pb-5 text-gray-700 leading-relaxed">{nb(a)}</p>
+              </details>
             ))}
-          </dl>
+          </div>
         </div>
       </section>
 
       {/* Closing call to action */}
-      <section className="py-14 md:py-20 text-center bg-[#f7f4ec]">
+      <section className="py-14 md:py-20 bg-[#f7f4ec]">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: NAVY }}>Comandă din timp</h2>
-          <p className="mt-4 text-gray-700 text-lg">
-            Comenzile se primesc până pe {christmas.orderBy}. Scrie-ne sau sună-ne ce îți dorești și când vrei comanda, ca să ți-o pregătim proaspătă.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
-            <WhatsAppLink className={`${orderButton} px-7 py-3.5`}>Comandă pe WhatsApp</WhatsAppLink>
-            <a href={smsHref} className="inline-flex items-center gap-2 rounded-full border-2 border-[#1e3a8a] text-[#1e3a8a] px-6 py-3.5 font-semibold hover:bg-white transition">
-              <MessageSquare className="w-5 h-5" aria-hidden="true" /> SMS
-            </a>
-            <a href={telHref} className="inline-flex items-center gap-2 rounded-full border-2 border-[#1e3a8a] text-[#1e3a8a] px-6 py-3.5 font-semibold hover:bg-white transition">
-              <Phone className="w-5 h-5" aria-hidden="true" /> {phone}
-            </a>
+          <div className="rounded-2xl bg-white shadow-lg px-5 py-8 sm:p-10 text-center">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: NAVY }}>Comandă din timp</h2>
+            <p className="mt-3 text-gray-700 text-lg">
+              Comenzile se primesc până pe <strong className="whitespace-nowrap">{christmas.orderBy}</strong>.
+            </p>
+            {/* stacked on phones, in a row from tablets up */}
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+              <WhatsAppLink className={`${orderButton} py-3.5`}>Comandă pe WhatsApp</WhatsAppLink>
+              <a href={smsHref} className={`${outlineButton} py-3.5`}>
+                <MessageSquare className="w-5 h-5" aria-hidden="true" /> SMS
+              </a>
+              <a href={telHref} className={`${outlineButton} py-3.5`}>
+                <Phone className="w-5 h-5" aria-hidden="true" /> {phone}
+              </a>
+            </div>
+            <p className="mt-6 text-sm text-gray-600">
+              <MapPin className="inline w-4 h-4 -mt-0.5 mr-1" aria-hidden="true" />
+              Ridicare din Strada Câmpului 133, <span className="whitespace-nowrap">Cluj-Napoca</span>
+              <span className="block">sau livrare cu mașina</span>
+            </p>
           </div>
-          <p className="mt-6 text-gray-600 text-sm inline-flex items-center gap-1.5">
-            <MapPin className="w-4 h-4" aria-hidden="true" /> Ridicare din Strada Câmpului 133, Cluj-Napoca, sau livrare cu mașina
-          </p>
         </div>
       </section>
     </div>
