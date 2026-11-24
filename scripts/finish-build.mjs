@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fetchActiveProducts, fetchCategoriesWithProducts } from './catalog.mjs';
 import { INDEXABLE_PAGES, isReservedSlug } from '../src/seo/sitePages.js';
+import { christmas } from '../src/data/christmas.js';
 
 const SITE = 'https://www.odette-confiserie.ro';
 const OUT = path.join('build', 'client');
@@ -21,7 +22,7 @@ const day = (timestamp) => (timestamp ? timestamp.slice(0, 10) : null);
 
 // The home page and the product list show the catalogue, so they change with it
 const catalogueDate = products.map((p) => day(p.updated_at)).filter(Boolean).sort().pop() || null;
-const pageDates = { '/': catalogueDate, '/shop': catalogueDate };
+const pageDates = { '/': catalogueDate, '/shop': catalogueDate, '/craciun': christmas.updated };
 
 const entries = [
   ...INDEXABLE_PAGES.map((page) => ({ loc: `${SITE}${page}`, lastmod: pageDates[page] || null })),
