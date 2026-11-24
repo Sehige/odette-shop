@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { translations } from '../../data/translations';
 import { christmas } from '../../data/christmas';
+import { festiveColors } from '../common/ChristmasButton';
 import home768 from '../../assets/christmas/home-768.webp';
 import home1152 from '../../assets/christmas/home-1152.webp';
 import home1536 from '../../assets/christmas/home-1536.webp';
@@ -51,7 +52,7 @@ const ChristmasHero = ({ language }) => {
           <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center lg:justify-start">
             <Link
               to="/craciun"
-              className="inline-block bg-[#f7f4ec] text-[#1e3a8a] px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase hover:opacity-90 transition transform hover:scale-105 shadow-xl"
+              className={`inline-block ${festiveColors} px-10 py-4 rounded-full text-base font-semibold tracking-wide uppercase transition transform hover:scale-105 shadow-xl`}
             >
               {t.landing.orderNow}
             </Link>
