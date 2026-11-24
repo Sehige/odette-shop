@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Menu, X, Facebook, Instagram } from 'lucide-react';
 import { translations } from '../../data/translations';
 import { siteConfig } from '../../data/siteConfig';
+import { useChristmasSeason } from '../../lib/christmasBanner';
+import ChristmasButton from '../common/ChristmasButton';
 // White wordmark for the navy header
 import odetteLogo from '../../Odette_Confiserie.svg';
 // White swan logo mark (sits left of the wordmark)
@@ -13,6 +15,10 @@ const NAVY = '#1e3a8a';
 const Header = ({ language, setLanguage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = translations[language];
+  // The festive "Crăciun" button, until the last day to order. It takes the socials' place
+  // on small laptops (1024-1279px), where the centred menu leaves no room for both.
+  const christmasOn = useChristmasSeason();
+  const socialClass = `hidden ${christmasOn ? 'xl:inline' : 'lg:inline'} text-white/90 hover:text-white transition`;
 
   // Wedding / events offer URL
   const weddingOfferUrl = 'https://www.canva.com/design/DAG9eAIoAiU/4Wzi004UggxTwSxsU1Wp8Q/view';
@@ -74,12 +80,24 @@ const Header = ({ language, setLanguage }) => {
 
           {/* RIGHT: socials + language (desktop) / menu button (mobile) */}
           <div className="flex items-center gap-4 sm:gap-5">
+            {christmasOn && (
+              <>
+                <ChristmasButton language={language} className="hidden lg:inline-flex px-5 py-2.5 text-base" />
+                {/* phones: smaller, the tree icon only where there is room for it */}
+                <ChristmasButton
+                  language={language}
+                  onClick={closeMenu}
+                  className="lg:hidden px-3 py-1.5 text-sm"
+                  iconClassName="hidden min-[380px]:block w-4 h-4"
+                />
+              </>
+            )}
             <a
               href={siteConfig.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="hidden lg:inline text-white/90 hover:text-white transition"
+              className={socialClass}
             >
               <Instagram className="w-6 h-6" />
             </a>
@@ -88,7 +106,7 @@ const Header = ({ language, setLanguage }) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="hidden lg:inline text-white/90 hover:text-white transition"
+              className={socialClass}
             >
               <Facebook className="w-6 h-6" />
             </a>

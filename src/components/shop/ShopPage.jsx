@@ -8,6 +8,8 @@ import { useGalleryImages } from '../../hooks/useGallery';
 import useSupabaseSession from '../../hooks/useSupabaseSession';
 import CakeGalleryCarousel from './CakeGalleryCarousel';
 import CakeOrderSteps from './CakeOrderSteps';
+import ChristmasButton from '../common/ChristmasButton';
+import { useChristmasSeason } from '../../lib/christmasBanner';
 
 // ?product only changes what this page shows, so keep the scroll position
 // (the router otherwise scrolls to the top on every URL change).
@@ -29,6 +31,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
   const [searchParams, setSearchParams] = useSearchParams();
   // Product counts in section titles are shown only to the logged-in admin
   const { isAdmin } = useSupabaseSession();
+  const christmasOn = useChristmasSeason();
 
   const { products: allProducts, loading: productsLoading, error: productsError } = useAllProducts();
   const { categories, loading: categoriesLoading } = useCategories();
@@ -197,6 +200,13 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
             </p>
           )}
         </div>
+
+        {/* The Christmas offer, above the categories, until the last day to order */}
+        {christmasOn && (
+          <div className="mb-3 sm:mb-4 flex justify-center">
+            <ChristmasButton language={language} className="px-6 py-2 sm:py-2.5 text-sm sm:text-base" />
+          </div>
+        )}
 
         {/* Category links - min-height to prevent CLS. Switching category keeps the scroll position. */}
         <nav

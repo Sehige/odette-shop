@@ -10,6 +10,9 @@ import puppeteer from 'puppeteer-core';
 import { startServer } from './serve.mjs';
 import { christmas } from '../src/data/christmas.js';
 
+// The Christmas banner and buttons show until the last day to order (src/lib/christmasBanner.js)
+const christmasOn = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Bucharest' }).format(new Date()) <= christmas.bannerUntil;
+
 const executablePath = [
   process.env.CHROME_PATH,
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -188,7 +191,6 @@ try {
     check('home: title', (await page.title()).startsWith('Odette Confiserie'), await page.title());
     const hero = await page.$eval('section img', (i) => ({ ok: i.complete && i.naturalWidth > 0, alt: i.alt, src: i.currentSrc.split('/').pop() }));
     check('home: hero image loaded, with alt text', hero.ok && hero.alt.length > 10, hero.src);
-    const christmasOn = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Bucharest' }).format(new Date()) <= christmas.bannerUntil;
     const opening = await page.evaluate(() => {
       const first = document.querySelector('main section');
       return { h1: first.querySelector('h1')?.textContent || '', links: [...first.querySelectorAll('a')].map((a) => [a.textContent.trim(), a.getAttribute('href')]) };
@@ -369,6 +371,25 @@ try {
     check('/craciun: the Nostalgie size menu switches the contents, price and WhatsApp message to Cutia 2',
       first.text.includes('Cutia 1') && second.text.includes('Cutia 2') && second.message.includes('Nostalgie la cutie – Cutia 2 (1,34 kg)') &&
         contents.includes('12 nuci cu ciocolată') && contents.includes('209 lei'), JSON.stringify(second));
+  }
+
+  // 6c. The festive "Crăciun" buttons (header and shop), until the last day to order
+  if (christmasOn) {
+    const headerLink = (page) => page.evaluate(() => {
+      const link = [...document.querySelectorAll('header a[href="/craciun"]')].find((a) => a.offsetParent !== null);
+      const logo = document.querySelector('header a[aria-label^="Odette"]').getBoundingClientRect();
+      return link ? { text: link.textContent.trim(), left: Math.round(link.getBoundingClientRect().left), logoRight: Math.round(logo.right) } : null;
+    });
+    const laptop = await newPage({ viewport: { width: 1024, height: 800 } });
+    await open(laptop, '/shop');
+    const laptopLink = await headerLink(laptop);
+    const shopLinks = await laptop.$$eval('main a[href="/craciun"]', (as) => as.map((a) => a.textContent.trim()));
+    const phone = await newPage({ viewport: { width: 360, height: 800, isMobile: true, hasTouch: true } });
+    await open(phone, '/');
+    const phoneLink = await headerLink(phone);
+    check('"Crăciun" button to /craciun: in the header (1024px laptop, 360px phone clear of the logo) and on the shop page',
+      laptopLink?.text === 'Crăciun' && phoneLink?.text === 'Crăciun' && phoneLink.left >= phoneLink.logoRight + 4 && shopLinks.includes('Crăciun'),
+      JSON.stringify({ laptopLink, phoneLink, shopLinks }));
   }
 
   // 7. Contact page and phone layout
