@@ -1,8 +1,7 @@
 // The Christmas and New Year offer (/craciun), from the owner's catalogue
 // "Oferta de Crăciun 2026" (Canva). Update it every November; the page and its address stay.
-// Prices in lei. `image` is the photo's name in src/assets/christmas (<image>-<width>.webp).
-// `product` links a card to an existing product page (/produse/<slug>), which has the
-// ingredients and allergens.
+// Prices in lei. `image` is the photo's name in src/assets/christmas (<image>-<width>.webp);
+// `nav` is the section's short name on the buttons that jump to it.
 
 export const christmas = {
   year: 2026,
@@ -25,6 +24,7 @@ export const christmas = {
     {
       id: 'cutii',
       title: 'Cutii cadou de Crăciun',
+      nav: 'Cutii cadou',
       intro: 'Asortimente gata făcute pentru masa de sărbători sau pentru un cadou: prăjituri ca pe vremuri, fursecuri, macarons și madeleine, așezate frumos în cutie.',
       layout: 'large',
       items: [
@@ -83,12 +83,13 @@ export const christmas = {
     {
       id: 'babka',
       title: 'Cozonac babka și cozonaci',
+      nav: 'Babka și cozonaci',
       intro: 'Aluat cu unt și ouă, dospit lent și împletit cu cremă de nucă, mac, ciocolată sau fistic. Cozonacul babka este cozonacul nostru de sărbători, iar pentru cei care țin la tradiție avem și cozonac clasic cu mac sau nucă.',
       items: [
-        { id: 'babka-cu-mac', name: 'Babka cu mac', image: 'babka-cu-mac', weight: '700 g', price: 80, product: 'babka-cu-mac' },
-        { id: 'babka-cu-nuca', name: 'Babka cu nucă', image: 'babka-cu-nuca', weight: '700 g', price: 80, product: 'babka-cu-nuca' },
-        { id: 'babka-cu-ciocolata', name: 'Babka cu ciocolată', image: 'babka-cu-ciocolata', weight: '700 g', price: 80, product: 'babka-cu-nuca-si-ciocolata' },
-        { id: 'babka-cu-fistic', name: 'Babka cu fistic', image: 'babka-cu-fistic', weight: '700 g', price: 100, product: 'babka-cu-fistic' },
+        { id: 'babka-cu-mac', name: 'Babka cu mac', image: 'babka-cu-mac', weight: '700 g', price: 80 },
+        { id: 'babka-cu-nuca', name: 'Babka cu nucă', image: 'babka-cu-nuca', weight: '700 g', price: 80 },
+        { id: 'babka-cu-ciocolata', name: 'Babka cu ciocolată', image: 'babka-cu-ciocolata', weight: '700 g', price: 80 },
+        { id: 'babka-cu-fistic', name: 'Babka cu fistic', image: 'babka-cu-fistic', weight: '700 g', price: 100 },
         { id: 'cozonac-cu-mac-sau-nuca', name: 'Cozonac cu mac sau nucă', image: 'cozonac-cu-mac-sau-nuca', weight: '1 kg', price: 120 },
         { id: 'mini-babka-cu-ciocolata', name: 'Mini babka cu ciocolată', image: 'mini-babka-cu-ciocolata', weight: '150 g', price: 20 },
       ],
@@ -96,6 +97,7 @@ export const christmas = {
     {
       id: 'la-gramaj',
       title: 'Fursecuri și prăjituri la gramaj',
+      nav: 'La gramaj',
       intro: 'Ambalate individual, în pachete de 100 g, 500 g sau 1 kg din fiecare. Prețul afișat este pentru 100 g.',
       items: [
         { id: 'linzere-cu-magiun-de-prune', name: 'Linzere cu magiun de prune', image: 'linzere-cu-magiun-de-prune', price: 18, per: '100 g' },
@@ -103,15 +105,16 @@ export const christmas = {
         { id: 'brownie-cu-peanut-butter', name: 'Brownie cu peanut butter', image: 'brownie-cu-peanut-butter', price: 17, per: '100 g' },
         { id: 'cosulete-cu-magiun-de-prune', name: 'Coșulețe cu magiun de prune', image: 'cosulete-cu-magiun-de-prune', price: 16, per: '100 g' },
         { id: 'ciocolata-de-casa-cu-migdale', name: 'Ciocolată de casă cu fulgi de migdale', image: 'ciocolata-de-casa-cu-migdale', price: 16, per: '100 g' },
-        { id: 'madeleine-asortate', name: 'Madeleine asortate', image: 'madeleine-asortate', price: 15, per: '100 g', product: 'pachet-madeleine-asortate' },
+        { id: 'madeleine-asortate', name: 'Madeleine asortate', image: 'madeleine-asortate', price: 15, per: '100 g' },
         { id: 'crinkle-cookies', name: 'Crinkle cookies', image: 'crinkle-cookies', price: 14, per: '100 g' },
-        { id: 'saratele', name: 'Sărățele', image: 'saratele', price: 14, per: '100 g', product: 'saratele-cu-chimen' },
+        { id: 'saratele', name: 'Sărățele', image: 'saratele', price: 14, per: '100 g' },
         { id: 'macarons-ciocolata-cu-lapte-si-alune', name: 'Macarons cu ganache de ciocolată cu lapte și alune', image: 'macarons-ciocolata-cu-lapte-si-alune', price: 8, per: 'buc' },
       ],
     },
     {
       id: 'camara',
       title: 'Pentru cămară și cadouri',
+      nav: 'Cămară și cadouri',
       intro: 'Mici bucurii de iarnă, bune de pus lângă o cutie de prăjituri.',
       items: [
         { id: 'condimente-pentru-vin-fiert', name: 'Condimente pentru vin fiert', image: 'condimente-pentru-vin-fiert', price: 20, per: '100 g' },
