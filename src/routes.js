@@ -9,6 +9,7 @@ export default [
     route('shop', 'routes/shop.jsx'),
     route('produse/:slug', 'routes/product.jsx'),
     route('contact', 'routes/contact.jsx'),
+    route('craciun', 'routes/christmas.jsx'),
     route('terms-and-conditions', 'routes/terms.jsx'),
     route('privacy-policy', 'routes/privacy.jsx'),
     route('cookie-policy', 'routes/cookies.jsx'),

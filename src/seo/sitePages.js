@@ -4,7 +4,7 @@
 // Keep in sync with the `noindex` flags in the route modules.
 // Unknown addresses get 404.html (the single-page fallback, see finish-build.mjs).
 
-export const INDEXABLE_PAGES = ['/', '/shop', '/contact'];
+export const INDEXABLE_PAGES = ['/', '/shop', '/contact', '/craciun'];
 
 export const NOINDEX_PAGES = [
   '/terms-and-conditions',

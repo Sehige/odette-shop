@@ -130,6 +130,12 @@ try {
   const bakery = [...homeHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1])).find((d) => d['@type'] === 'Bakery') || {};
   check('structured data: the business has its opening hours and map link',
     (bakery.openingHoursSpecification || []).length === 2 && /google\.com\/maps\/place/.test(bakery.hasMap || ''), JSON.stringify(bakery.openingHoursSpecification));
+  const xmas = await raw('/craciun');
+  const xmasText = xmas.html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ');
+  check('HTML /craciun: the Christmas offer is in the page (boxes, babka, prices, pickup days), indexable, in the sitemap',
+    xmas.status === 200 && ['Cutia colindătorilor', 'Babka cu fistic', '18 lei / 100 g', '30–31 decembrie'].every((s) => xmasText.includes(s)) &&
+      /name="robots" content="index/.test(xmas.html) && (xmas.html.match(/href="https:\/\/wa\.me\//g) || []).length >= 20 &&
+      (await raw('/sitemap.xml')).html.includes('/craciun</loc>'), `${xmas.status}`);
   const waste = await raw('/risipa-alimentara');
   check('HTML /risipa-alimentara: the food waste plan, with the order of measures for products close to expiry',
     waste.status === 200 && waste.html.includes('Ce facem cu produsele aproape de expirare') && waste.html.includes('Transfer gratuit pentru consum uman') &&
@@ -340,6 +346,22 @@ try {
     check('product page: breadcrumb links home, products and the category', crumbs.includes('/') && crumbs.includes('/shop') && crumbs.length >= 3, crumbs.join(' '));
   }
 
+  // 6b. Christmas page: the box size menu and the WhatsApp message
+  {
+    const page = await newPage();
+    await open(page, '/craciun');
+    const box = '#nostalgie-la-cutie';
+    const order = () => page.$eval(`${box} a[href^="https://wa.me/"]`, (a) => ({ text: a.textContent.trim(), message: new URL(a.href).searchParams.get('text') }));
+    const first = await order();
+    await page.select(`${box} select`, '1');
+    await sleep(200);
+    const second = await order();
+    const contents = await page.$eval(box, (el) => el.textContent);
+    check('/craciun: the Nostalgie size menu switches the contents, price and WhatsApp message to Cutia 2',
+      first.text.includes('Cutia 1') && second.text.includes('Cutia 2') && second.message.includes('Nostalgie la cutie – Cutia 2 (1,34 kg)') &&
+        contents.includes('12 nuci cu ciocolată') && contents.includes('209 lei'), JSON.stringify(second));
+  }
+
   // 7. Contact page and phone layout
   {
     const page = await newPage();
@@ -405,7 +427,7 @@ try {
     const wide = [];
     for (const width of [360, 390]) {
       const narrow = await newPage({ viewport: { width, height: 800, isMobile: true, hasTouch: true } });
-      for (const path of ['/', '/contact', '/shop', productPaths[0], '/risipa-alimentara']) {
+      for (const path of ['/', '/contact', '/shop', productPaths[0], '/risipa-alimentara', '/craciun']) {
         await open(narrow, path);
         const sizes = await narrow.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
         if (sizes[0] > sizes[1]) wide.push(`${width}px ${path} (${sizes[0]}px)`);
@@ -415,7 +437,7 @@ try {
     const covered = [];
     for (const [label, viewport] of [['wide', { width: 1920, height: 900 }], ['phone', { width: 375, height: 800, isMobile: true, hasTouch: true }]]) {
       const view = await newPage({ viewport });
-      for (const path of ['/risipa-alimentara', '/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/contact', '/shop']) {
+      for (const path of ['/risipa-alimentara', '/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/contact', '/shop', '/craciun']) {
         await open(view, path);
         const hidden = await view.evaluate(() =>
           document.querySelector('main h1').getBoundingClientRect().top < document.querySelector('header').getBoundingClientRect().bottom);
