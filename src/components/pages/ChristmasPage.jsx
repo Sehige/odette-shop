@@ -3,6 +3,7 @@ import { ChevronDown, Gift, MapPin, MessageSquare, Phone, Truck, Wallet } from '
 import { christmas } from '../../data/christmas';
 import { siteConfig } from '../../data/siteConfig';
 import { WhatsAppIcon, whatsappHref } from '../common/WhatsAppButton';
+import { festiveColors } from '../common/ChristmasButton';
 
 const NAVY = '#1e3a8a';
 const GOLD = '#d4af37';
@@ -68,7 +69,8 @@ const Contents = ({ items }) => (
   </ul>
 );
 
-const orderButton = 'inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white font-semibold px-5 py-2.5 hover:brightness-95 transition';
+// The WhatsApp buttons are Christmas red, like the "Crăciun" buttons
+const orderButton = `inline-flex items-center justify-center gap-2 rounded-full ${festiveColors} font-semibold px-5 py-2.5 transition`;
 const outlineButton = 'inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#1e3a8a] text-[#1e3a8a] font-semibold px-6 hover:bg-[#f7f4ec] transition';
 
 // Gift boxes: a large card with the contents of the box. A box sold in several sizes gets a
@@ -121,7 +123,7 @@ const ItemCard = ({ item }) => (
       {item.weight && <p className="mt-1 text-sm sm:text-base font-bold text-gray-900">{item.weight}</p>}
       <p className="mt-2 text-lg sm:text-2xl font-bold" style={{ color: NAVY }}>{priceText(item)}</p>
       <div className="mt-auto pt-3 flex justify-center text-sm">
-        <WhatsAppLink label={itemLabel(item)} className="inline-flex items-center gap-1.5 font-semibold text-[#128C7E] hover:underline">
+        <WhatsAppLink label={itemLabel(item)} className="inline-flex items-center gap-1.5 font-semibold text-[#b3121f] hover:underline">
           Comandă
         </WhatsAppLink>
       </div>
@@ -188,7 +190,7 @@ const ChristmasPage = ({ language }) => {
                 : `Totul e făcut în laboratorul nostru din Cluj-Napoca. Comenzi până pe ${christmas.orderBy}, cu ridicare din laborator sau livrare pe ${pickupDays}.`}
             </p>
             <div className="mt-8 flex flex-wrap gap-3 justify-center lg:justify-start">
-              <WhatsAppLink className="inline-flex items-center gap-2 rounded-full bg-[#f7f4ec] text-[#1e3a8a] font-semibold px-7 py-3.5 uppercase tracking-wide text-sm hover:opacity-90 transition">
+              <WhatsAppLink className={`inline-flex items-center gap-2 rounded-full ${festiveColors} font-semibold px-7 py-3.5 uppercase tracking-wide text-sm transition`}>
                 {en ? 'Order on WhatsApp' : 'Comandă pe WhatsApp'}
               </WhatsAppLink>
               <a href="#oferta" className="inline-flex items-center rounded-full border border-white/70 text-white font-semibold px-7 py-3.5 uppercase tracking-wide text-sm hover:bg-white/10 transition">

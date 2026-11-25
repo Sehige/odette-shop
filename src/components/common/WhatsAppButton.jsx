@@ -1,6 +1,8 @@
 import React from 'react';
 import { useCookieConsent } from '../../context/CookieConsentContext';
 import { siteConfig } from '../../data/siteConfig';
+import { useChristmasSeason } from '../../lib/christmasBanner';
+import { festiveColors } from './ChristmasButton';
 
 // WhatsApp glyph (Simple Icons, CC0) — lucide-react has no brand icons
 export const WhatsAppIcon = ({ className }) => (
@@ -15,10 +17,11 @@ export const whatsappHref = (text) => `https://wa.me/${siteConfig.contact.whatsa
 /**
  * Floating click-to-chat button. A plain wa.me link: no third-party script,
  * nothing is loaded until it is clicked. Hidden while the cookie banner is open
- * so it never covers the banner's buttons.
+ * so it never covers the banner's buttons. Christmas red during the Christmas season.
  */
 const WhatsAppButton = ({ language }) => {
   const { showBanner } = useCookieConsent();
+  const christmasOn = useChristmasSeason();
   if (showBanner) return null;
 
   const isRo = language === 'ro';
@@ -37,7 +40,7 @@ const WhatsAppButton = ({ language }) => {
       title={label}
       // gtag only exists as a queue until analytics consent loads GA, so this sends nothing without consent
       onClick={() => window.gtag && window.gtag('event', 'whatsapp_click')}
-      className="fixed bottom-5 right-5 z-40 flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl hover:scale-105 transition"
+      className={`fixed bottom-5 right-5 z-40 flex items-center justify-center w-14 h-14 rounded-full ${christmasOn ? festiveColors : 'bg-[#25D366] text-white'} shadow-xl hover:scale-105 transition`}
     >
       <WhatsAppIcon className="w-8 h-8" />
     </a>
