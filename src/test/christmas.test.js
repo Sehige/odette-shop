@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { christmas, christmasItems } from '../data/christmas';
+import { christmas, christmasItems, tr } from '../data/christmas';
 import { deliveryText, orderMessage, priceText } from '../components/pages/ChristmasPage';
 import { christmasBannerOn } from '../lib/christmasBanner';
 
@@ -35,6 +35,7 @@ describe('Christmas offer', () => {
   it('prices show their unit', () => {
     expect(priceText({ price: 18, per: '100 g' })).toBe('18 lei / 100 g');
     expect(priceText({ price: 189 })).toBe('189 lei');
+    expect(priceText({ price: 8, per: 'buc', perEn: 'pc' }, 'en')).toBe('8 lei / pc');
   });
 
   it('the WhatsApp message names the product and asks for pickup or delivery and the day', () => {
@@ -45,8 +46,43 @@ describe('Christmas offer', () => {
     expect(text).toContain('23–24 decembrie, 30–31 decembrie');
   });
 
+  it('in English, the WhatsApp message is in English too', () => {
+    const text = orderMessage('The carolers’ box (1.22 kg)', 'en');
+    expect(text).toContain('Christmas offer');
+    expect(text).toContain('- The carolers’ box (1.22 kg)');
+    expect(text).toContain('Pickup from the lab or delivery');
+    expect(text).toContain('23–24 December, 30–31 December');
+  });
+
+  it('every text on the page has its English version', () => {
+    const fields = { section: ['title', 'nav', 'intro'], item: ['name', 'description', 'contents'] };
+    for (const section of christmas.sections) {
+      for (const key of fields.section) expect(section[`${key}En`], `${section.id}.${key}En`).toBeTruthy();
+      for (const item of section.items) {
+        // a name that is the same in both languages ("Crinkle cookies") needs no English copy
+        if (!/^[A-Za-z ]+$/.test(item.name)) expect(item.nameEn, `${item.id}.nameEn`).toBeTruthy();
+        for (const p of [item, ...(item.variants || [])]) {
+          for (const key of fields.item.slice(1)) {
+            if (p[key]) expect(p[`${key}En`], `${item.id}.${key}En`).toBeTruthy();
+          }
+          if (p.contents) expect(p.contentsEn.length, `${item.id} contents`).toBe(p.contents.length);
+        }
+        for (const v of item.variants || []) expect(v.nameEn, `${item.id} ${v.name}`).toBeTruthy();
+      }
+    }
+    for (const p of christmas.pickup) expect(p.daysEn && p.untilEn, p.days).toBeTruthy();
+  });
+
+  it('tr picks the English text when there is one', () => {
+    const item = { name: 'Babka cu mac', nameEn: 'Poppy seed babka', per: '100 g' };
+    expect(tr(item, 'name', 'en')).toBe('Poppy seed babka');
+    expect(tr(item, 'name', 'ro')).toBe('Babka cu mac');
+    expect(tr(item, 'per', 'en')).toBe('100 g');
+  });
+
   it('delivery costs the same as on the rest of the site', () => {
-    expect(deliveryText).toBe('15 lei în Cluj-Napoca, 25 lei în afara orașului, gratuit pentru comenzile de peste 250 lei');
+    expect(deliveryText('ro')).toBe('15 lei în Cluj-Napoca, 25 lei în afara orașului, gratuit pentru comenzile de peste 250 lei');
+    expect(deliveryText('en')).toBe('15 lei in Cluj-Napoca, 25 lei outside the city, free for orders over 250 lei');
   });
 
   it('every section has a short name for the buttons that jump to it', () => {
