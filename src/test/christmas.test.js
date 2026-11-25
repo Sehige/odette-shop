@@ -97,6 +97,14 @@ describe('Christmas offer', () => {
     expect(christmasBannerOn(new Date('2026-12-21T22:30:00Z'))).toBe(false);
   });
 
+  it('every photo the shop SQL names is in public/foto/craciun (scripts/christmas-products-sql.mjs)', () => {
+    const dir = 'supabase/sql';
+    const file = fs.readdirSync(dir).filter((f) => f.endsWith('_christmas_products.sql')).sort().pop();
+    const photos = [...fs.readFileSync(path.join(dir, file), 'utf8').matchAll(/\/foto\/craciun\/([a-z0-9-]+\.webp)/g)].map((m) => m[1]);
+    expect(photos.length).toBeGreaterThan(0);
+    for (const photo of photos) expect(fs.existsSync(path.join('public/foto/craciun', photo)), photo).toBe(true);
+  });
+
   it('the order deadline is set', () => {
     expect(christmas.orderBy).toBe('21 decembrie');
   });
