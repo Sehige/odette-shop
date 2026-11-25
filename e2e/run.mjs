@@ -384,6 +384,19 @@ try {
       first.text.includes('Cutia 1') && second.text.includes('Cutia 2') && second.message.includes('Nostalgie la cutie – Cutia 2 (1,34 kg)') &&
         contents.includes('12 nuci cu ciocolată') && contents.includes('209 lei'), JSON.stringify(second));
 
+    // One click on a section button lands on that section, under the header. As plain <a href="#…">
+    // links, every jump after the first was scrolled back by <ScrollRestoration>.
+    const missed = [];
+    for (const hash of await page.$$eval('#oferta nav a', (as) => as.map((a) => new URL(a.href).hash))) {
+      await page.$eval('#oferta nav', (nav) => nav.scrollIntoView({ block: 'center' }));
+      await sleep(300);
+      await page.click(`#oferta nav a[href$="${hash}"]`);
+      await sleep(700);
+      const gap = await page.$eval(hash, (el) => Math.round(el.getBoundingClientRect().top - document.querySelector('header').getBoundingClientRect().bottom));
+      if (gap < -4 || gap > 60) missed.push(`${hash} ${gap}px`);
+    }
+    check('/craciun: one click on each section button scrolls to that section', !missed.length, missed.join(', '));
+
     // In English, the whole offer is in English, down to the WhatsApp message
     await page.click('button[aria-label="Switch to English"]');
     await sleep(300);

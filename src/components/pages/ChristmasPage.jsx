@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronDown, Gift, MapPin, MessageSquare, Phone, Truck, Wallet } from 'lucide-react';
 import { christmas, tr } from '../../data/christmas';
 import { siteConfig } from '../../data/siteConfig';
@@ -240,9 +241,9 @@ const ChristmasPage = ({ language }) => {
               <WhatsAppLink language={language} className={`inline-flex items-center gap-2 rounded-full ${festiveColors} font-semibold px-7 py-3.5 uppercase tracking-wide text-sm transition`}>
                 {en ? 'Order on WhatsApp' : 'Comandă pe WhatsApp'}
               </WhatsAppLink>
-              <a href="#oferta" className="inline-flex items-center rounded-full border border-white/70 text-white font-semibold px-7 py-3.5 uppercase tracking-wide text-sm hover:bg-white/10 transition">
+              <Link to="#oferta" className="inline-flex items-center rounded-full border border-white/70 text-white font-semibold px-7 py-3.5 uppercase tracking-wide text-sm hover:bg-white/10 transition">
                 {en ? 'See the offer' : 'Vezi oferta'}
-              </a>
+              </Link>
             </div>
           </div>
           <img
@@ -295,17 +296,19 @@ const ChristmasPage = ({ language }) => {
         </div>
       </section>
 
-      {/* The offer */}
+      {/* The offer. In-page links are router <Link>s: a plain <a href="#…"> makes a history
+          entry the router can't tell from the one before, so <ScrollRestoration> scrolled the
+          page back to where it was and the button took a second click. */}
       <div id="oferta" className="scroll-mt-20 lg:scroll-mt-32">
         <nav aria-label={en ? 'Offer sections' : 'Secțiuni ofertă'} className="max-w-4xl mx-auto px-4 sm:px-6 pt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
           {christmas.sections.map((s) => (
-            <a
+            <Link
               key={s.id}
-              href={`#${s.id}`}
+              to={`#${s.id}`}
               className="flex items-center justify-center text-center rounded-xl border border-gray-200 bg-white shadow-sm px-3 py-3 font-semibold text-gray-900 hover:border-[#1e3a8a] hover:text-[#1e3a8a] transition"
             >
               {tr(s, 'nav', language)}
-            </a>
+            </Link>
           ))}
         </nav>
         {christmas.sections.map((section, i) => (
