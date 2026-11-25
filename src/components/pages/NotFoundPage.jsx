@@ -5,7 +5,7 @@ const NotFoundPage = ({ language }) => {
   const isRo = language === 'ro';
 
   return (
-    <div className="pt-32 pb-16 min-h-[70vh] bg-gray-50">
+    <div className="pt-32 lg:pt-44 pb-16 min-h-[70vh] bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
           {isRo ? 'Pagina nu a fost găsită' : 'Page not found'}

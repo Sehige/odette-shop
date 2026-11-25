@@ -128,18 +128,11 @@ export const translations = {
         message: 'Mesaj',
         address: 'Adresă',
         hours: 'Program',
-        kind: 'Despre ce ne scrii?',
-        cakeDate: 'Data dorită',
-        eventDate: 'Data evenimentului',
-        portions: 'Număr de porții',
-        guests: 'Număr de invitați'
-      },
-      kinds: {
-        contact: 'Întrebare sau comandă',
-        custom_cake: 'Tort personalizat',
-        event: 'Eveniment'
+        orderDate: 'Pentru ce dată este comanda?',
+        optional: 'opțional'
       },
       placeholders: {
+        contact: 'Ce produse dorești, cantitatea, ridicare sau livrare…',
         custom_cake: 'Aroma, decorul, mesajul de pe tort, alergii de care să ținem cont…',
         event: 'Tipul evenimentului, locul și ce ai vrea să pregătim…'
       },
@@ -165,7 +158,7 @@ export const translations = {
       privacy: 'Confidențialitate',
       cookies: 'Cookies',
       foodWaste: 'Risipa alimentară',
-      anpc: 'ANPC – SAL',
+      salBadge: 'ANPC – Soluționarea alternativă a litigiilor (SAL)',
       euDisputes: 'Litigii UE',
       tradeRegister: 'Reg. Com.'
     },
@@ -413,18 +406,11 @@ export const translations = {
         message: 'Message',
         address: 'Address',
         hours: 'Hours',
-        kind: 'What is it about?',
-        cakeDate: 'Date needed',
-        eventDate: 'Event date',
-        portions: 'Number of portions',
-        guests: 'Number of guests'
-      },
-      kinds: {
-        contact: 'Question or order',
-        custom_cake: 'Custom cake',
-        event: 'Event'
+        orderDate: 'What date is the order for?',
+        optional: 'optional'
       },
       placeholders: {
+        contact: 'Which products, how many, pickup or delivery…',
         custom_cake: 'Flavour, decoration, message on the cake, allergies we should know about…',
         event: 'Type of event, venue and what you would like us to prepare…'
       },
@@ -450,7 +436,7 @@ export const translations = {
       privacy: 'Privacy',
       cookies: 'Cookies',
       foodWaste: 'Food waste',
-      anpc: 'ANPC – ADR',
+      salBadge: 'ANPC – Alternative dispute resolution (SAL)',
       euDisputes: 'EU disputes',
       tradeRegister: 'Trade Reg.'
     },

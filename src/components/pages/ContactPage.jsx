@@ -7,10 +7,32 @@ import Toast from '../common/Toast';
 import LocationCard from '../location/LocationCard';
 
 // `website` is a trap: hidden from people, but bots that fill in every field fill it in
-const EMPTY_FORM = { kind: 'contact', name: '', phone: '', event_date: '', guests: '', message: '', website: '' };
-const KINDS = ['contact', 'custom_cake', 'event'];
-// Links can preselect the topic: /contact?subiect=tort-personalizat or ?subiect=eveniment
+const EMPTY_FORM = { kind: 'contact', name: '', phone: '', event_date: '', message: '', website: '' };
+// One form for everything. Old links can still name the topic (/contact?subiect=tort-personalizat
+// or ?subiect=eveniment): it only labels the email to the shop.
 const SUBJECTS = { 'tort-personalizat': 'custom_cake', eveniment: 'event' };
+
+// "2026-12-12" → "12 decembrie 2026" (the shop reads the emails in Romanian)
+const dayRo = (iso) =>
+  new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${iso}T00:00:00Z`));
+
+/**
+ * What the form sends to submit-enquiry. The function keeps the date in its own field only for
+ * custom cakes and events, so on a plain message the date opens the message text instead.
+ */
+export const enquiryBody = (formData, { elapsedMs, language }) => {
+  const date = formData.event_date;
+  const plain = formData.kind === 'contact';
+  return {
+    ...formData,
+    message: plain && date ? `Data dorită: ${dayRo(date)}
+
+${formData.message}` : formData.message,
+    event_date: plain ? '' : date,
+    elapsed_ms: elapsedMs,
+    language,
+  };
+};
 
 const ContactPage = ({ language }) => {
   const [formData, setFormData] = useState(EMPTY_FORM);
@@ -22,7 +44,6 @@ const ContactPage = ({ language }) => {
   const shownAt = useRef(0);
 
   const t = translations[language].contact;
-  const isEnquiry = formData.kind !== 'contact';
 
   useEffect(() => {
     shownAt.current = Date.now();
@@ -63,14 +84,9 @@ const ContactPage = ({ language }) => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await contactService.submitContactForm({
-        ...formData,
-        // date and count only belong to custom cakes and events
-        event_date: isEnquiry ? formData.event_date : '',
-        guests: isEnquiry ? formData.guests : '',
-        elapsed_ms: Date.now() - shownAt.current,
-        language
-      });
+      const { error } = await contactService.submitContactForm(
+        enquiryBody(formData, { elapsedMs: Date.now() - shownAt.current, language })
+      );
 
       if (error) {
         const messages = {
@@ -121,7 +137,8 @@ const ContactPage = ({ language }) => {
 
   return (
     <>
-      <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+      {/* starts well below the fixed header (124px tall on large screens) */}
+      <div className="pt-32 lg:pt-44 pb-16 min-h-screen bg-gray-50">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -135,14 +152,11 @@ const ContactPage = ({ language }) => {
         </div>
 
       {/* Main Content */}
-      <section className="py-16">
+      <section className="pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto space-y-12">
-            {/* Map and contact details side by side, the form underneath */}
-            <LocationCard language={language} headingLevel="h2" contacts mapSide="left" />
-
-            {/* Bottom Section: Contact Form */}
-            <div className="max-w-3xl mx-auto bg-gray-50 p-8 rounded-2xl">
+            {/* The form first; the map and contact details underneath */}
+            <div className="max-w-3xl mx-auto bg-gray-50 sm:p-8 rounded-2xl">
               <h2 className="text-3xl font-bold mb-6" style={{ color: '#1e3a8a' }}>
                 {t.formTitle}
               </h2>
@@ -158,31 +172,6 @@ const ContactPage = ({ language }) => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <fieldset>
-                    <legend className="block text-sm font-semibold text-gray-700 mb-2">{t.labels.kind}</legend>
-                    <div className="flex flex-wrap gap-2">
-                      {KINDS.map((kind) => (
-                        <label
-                          key={kind}
-                          className={`px-4 py-2 rounded-full border-2 text-sm font-semibold cursor-pointer transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-blue-900 has-[:focus-visible]:ring-offset-2 ${
-                            formData.kind === kind ? 'border-blue-900 bg-blue-50 text-blue-900' : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="kind"
-                            value={kind}
-                            checked={formData.kind === kind}
-                            onChange={handleChange}
-                            disabled={isSubmitting}
-                            className="sr-only"
-                          />
-                          {t.kinds[kind]}
-                        </label>
-                      ))}
-                    </div>
-                  </fieldset>
-
                   <div>
                     <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 mb-2">
                       {t.labels.name} *
@@ -217,42 +206,21 @@ const ContactPage = ({ language }) => {
                     />
                   </div>
 
-                  {isEnquiry && (
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="contact-date" className="block text-sm font-semibold text-gray-700 mb-2">
-                          {formData.kind === 'event' ? t.labels.eventDate : t.labels.cakeDate}
-                        </label>
-                        <input
-                          type="date"
-                          id="contact-date"
-                          name="event_date"
-                          min={new Date().toLocaleDateString('en-CA')}
-                          value={formData.event_date}
-                          onChange={handleChange}
-                          disabled={isSubmitting}
-                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="contact-guests" className="block text-sm font-semibold text-gray-700 mb-2">
-                          {formData.kind === 'event' ? t.labels.guests : t.labels.portions}
-                        </label>
-                        <input
-                          type="number"
-                          id="contact-guests"
-                          name="guests"
-                          min="1"
-                          max="5000"
-                          inputMode="numeric"
-                          value={formData.guests}
-                          onChange={handleChange}
-                          disabled={isSubmitting}
-                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
-                        />
-                      </div>
-                    </div>
-                  )}
+                  <div>
+                    <label htmlFor="contact-date" className="block text-sm font-semibold text-gray-700 mb-2">
+                      {t.labels.orderDate} <span className="font-normal text-gray-500">({t.labels.optional})</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="contact-date"
+                      name="event_date"
+                      min={new Date().toLocaleDateString('en-CA')}
+                      value={formData.event_date}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className="w-full sm:w-64 px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-900 focus:outline-none transition disabled:opacity-50"
+                    />
+                  </div>
 
                   <div>
                     <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -287,9 +255,8 @@ const ContactPage = ({ language }) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    // navy on gold (4.9:1); white on gold was 2.1:1, too faint to read
-                    style={{ backgroundColor: isSubmitting ? '#6b7280' : '#d4af37', color: isSubmitting ? '#ffffff' : '#1e3a8a' }}
+                    className="w-full py-4 rounded-lg font-semibold text-white hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: isSubmitting ? '#6b7280' : '#1e3a8a' }}
                   >
                     <Send size={20} />
                     {isSubmitting
@@ -301,6 +268,7 @@ const ContactPage = ({ language }) => {
               )}
             </div>
 
+            <LocationCard language={language} headingLevel="h2" contacts mapSide="left" />
           </div>
         </div>
       </section>

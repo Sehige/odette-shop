@@ -124,7 +124,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
   // Loading state - use skeleton that matches final layout to prevent CLS
   if (productsLoading || categoriesLoading) {
     return (
-      <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+      <div className="pt-32 lg:pt-44 pb-16 min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Skeleton Header */}
           <div className="text-center mb-6 sm:mb-12 min-h-[80px] sm:min-h-[120px]">
@@ -178,7 +178,7 @@ const ShopPage = ({ language, setSelectedProduct, selectedProduct, category }) =
 
   return (
     <>
-      <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+      <div className="pt-32 lg:pt-44 pb-16 min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header - min-height matches skeleton to prevent CLS */}

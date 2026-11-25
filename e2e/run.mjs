@@ -226,9 +226,18 @@ try {
       const nav = footer.querySelector('nav[aria-label="Informații legale"]');
       const hrefs = nav ? [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href')) : [];
       return /© \d{4} Olala Sweets SRL · CUI 52083122 · Reg\. Com\. J2025048164006/.test(footer.textContent) &&
-        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/risipa-alimentara', 'https://anpc.ro/ce-este-sal/', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
+        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/risipa-alimentara', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
         !!nav.querySelector('button');
     }));
+    // Ordinul ANPC 449/2022 as changed by 270/2026: the SAL pictogram on the homepage, 250 x 50, to reclamatiisal.anpc.ro
+    const sal = await page.evaluate(() => {
+      const img = document.querySelector('footer a[href="https://reclamatiisal.anpc.ro/"] img');
+      if (!img) return null;
+      const box = img.getBoundingClientRect();
+      return { w: box.width, h: box.height, loaded: img.complete && img.naturalWidth > 0, alt: img.alt };
+    });
+    check('footer: the ANPC SAL pictogram (250 x 50) links to reclamatiisal.anpc.ro',
+      sal && sal.w === 250 && sal.h === 50 && sal.loaded && /ANPC/.test(sal.alt), JSON.stringify(sal));
     await page.click('button[aria-label="Switch to English"]');
     await sleep(300);
     check('language toggle switches to English', (await page.evaluate(() => document.documentElement.lang)) === 'en');
@@ -433,22 +442,26 @@ try {
     check('a11y: every contact form field has a label', await page.evaluate(() =>
       [...document.querySelectorAll('form input, form textarea')].every((el) => el.labels && el.labels.length > 0)));
     check('a11y: icon-only links have names', await page.evaluate(() =>
-      [...document.querySelectorAll('a')].filter((a) => !a.textContent.trim()).every((a) => a.getAttribute('aria-label'))));
-    check('contact: map and contact box side by side (map left), the form underneath', await page.evaluate(() => {
+      // named by aria-label, or by the alt text of the picture inside (the ANPC pictogram)
+      [...document.querySelectorAll('a')].filter((a) => !a.textContent.trim()).every((a) => a.getAttribute('aria-label') || a.querySelector('img[alt]:not([alt=""])'))));
+    check('contact: the form first, then the map and contact box side by side (map left)', await page.evaluate(() => {
       const map = [...document.querySelectorAll('button')].find((el) => el.textContent.includes('Afișează harta'));
       const rute = [...document.querySelectorAll('main a')].find((el) => el.textContent.trim() === 'Rute');
       const form = document.querySelector('main form');
       if (!map || !rute || !form) return false;
       const [m, r, f] = [map, rute, form].map((el) => el.getBoundingClientRect());
-      return m.right < r.left && m.bottom < f.top && r.bottom < f.top &&
+      return m.right < r.left && f.bottom < m.top && f.bottom < r.top &&
         !!document.querySelector('main a[href^="tel:"]') && !!document.querySelector('main a[href^="mailto:"]');
     }));
 
-    // Enquiry form: a link preselects the topic; the message goes to the submit-enquiry function
+    // One form (no topic buttons) with an optional date; the message goes to the submit-enquiry function
     const form = await newPage();
-    await open(form, '/contact?subiect=tort-personalizat');
-    check('contact: ?subiect=tort-personalizat preselects a custom cake, with date and portions', await form.evaluate(() =>
-      document.querySelector('input[name="kind"][value="custom_cake"]')?.checked && !!document.getElementById('contact-date') && !!document.getElementById('contact-guests')));
+    await open(form, '/contact');
+    check('contact: one form, no topic buttons; name, phone and message required, the order date optional', await form.evaluate(() => {
+      const date = document.getElementById('contact-date');
+      return !document.querySelector('input[name="kind"]') && !document.getElementById('contact-guests') &&
+        date?.type === 'date' && !date.required && ['contact-name', 'contact-phone', 'contact-message'].every((id) => document.getElementById(id)?.required);
+    }));
     check('contact: no email field; the phone is required', await form.evaluate(() =>
       !document.querySelector('form input[type="email"], #contact-email') && document.getElementById('contact-phone')?.required === true));
     check('a11y: every enquiry field has a label', await form.evaluate(() =>
@@ -467,20 +480,36 @@ try {
         Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, value);
         input.dispatchEvent(new Event('input', { bubbles: true }));
       }, wanted);
-      await form.type('#contact-guests', '20');
       await form.type('#contact-message', 'Un tort de test');
       await domClick(form, 'form button[type="submit"]');
     };
     await fill();
     await form.waitForFunction(() => document.body.textContent.includes('Mulțumim!'), { timeout: 10000 }).catch(() => {});
     const sent = form.enquiries[0] || {};
-    check('contact: a custom-cake enquiry reaches the function, trap empty, success shown',
-      sent.kind === 'custom_cake' && sent.phone === '0740 123 456' && !('email' in sent) && sent.event_date === wanted && sent.guests === '20' && sent.website === '' && sent.elapsed_ms > 0 &&
-        sent.language === 'ro' && (await form.evaluate(() => document.body.textContent.includes('Mulțumim!'))), JSON.stringify(sent));
+    // the function keeps a date in its own field only for cakes and events, so here it opens the message
+    const wantedRo = new Intl.DateTimeFormat('ro-RO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${wanted}T00:00:00Z`));
+    check('contact: the message, with its date, reaches the function, trap empty, success shown',
+      sent.kind === 'contact' && sent.phone === '0740 123 456' && !('email' in sent) && sent.message === `Data dorită: ${wantedRo}\n\nUn tort de test` &&
+        sent.website === '' && sent.elapsed_ms > 0 && sent.language === 'ro' && (await form.evaluate(() => document.body.textContent.includes('Mulțumim!'))), JSON.stringify(sent));
+    const cake = await newPage();
+    await open(cake, '/contact?subiect=tort-personalizat');
+    await cake.type('#contact-name', 'Test E2E');
+    await cake.type('#contact-phone', '0740 123 456');
+    await cake.evaluate((value) => {
+      const input = document.getElementById('contact-date');
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }, wanted);
+    await cake.type('#contact-message', 'Un tort de test');
+    await domClick(cake, 'form button[type="submit"]');
+    await cake.waitForFunction(() => document.body.textContent.includes('Mulțumim!'), { timeout: 10000 }).catch(() => {});
+    const cakeSent = cake.enquiries[0] || {};
+    check('contact: an old ?subiect=tort-personalizat link still labels a custom cake, the date in its own field',
+      cakeSent.kind === 'custom_cake' && cakeSent.event_date === wanted && cakeSent.message === 'Un tort de test', JSON.stringify(cakeSent));
 
     form.enquiryAnswer = { status: 429, body: { error: 'too_many' } };
     form.expectErrors = true;
-    await open(form, '/contact?subiect=tort-personalizat');
+    await open(form, '/contact');
     await fill();
     await form.waitForFunction(() => document.body.textContent.includes('mai multe mesaje'), { timeout: 10000 }).catch(() => {});
     check('contact: the "too many messages" answer is explained to the visitor', await form.evaluate(() => document.body.textContent.includes('mai multe mesaje de la acest număr de telefon')));
@@ -501,14 +530,31 @@ try {
     const covered = [];
     for (const [label, viewport] of [['wide', { width: 1920, height: 900 }], ['phone', { width: 375, height: 800, isMobile: true, hasTouch: true }]]) {
       const view = await newPage({ viewport });
-      for (const path of ['/risipa-alimentara', '/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/contact', '/shop', '/craciun']) {
+      for (const path of ['/risipa-alimentara', '/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/contact', '/shop', '/craciun', productPaths[0], '/nu-exista-pagina-test']) {
         await open(view, path);
-        const hidden = await view.evaluate(() =>
-          document.querySelector('main h1').getBoundingClientRect().top < document.querySelector('header').getBoundingClientRect().bottom);
-        if (hidden) covered.push(`${label} ${path}`);
+        // the first thing on the page: its title, or the breadcrumb above a product's title
+        const gap = await view.evaluate(() =>
+          Math.round(document.querySelector('main h1, main nav').getBoundingClientRect().top - document.querySelector('header').getBoundingClientRect().bottom));
+        if (gap < 32) covered.push(`${label} ${path} (${gap}px)`);
       }
     }
-    check('the fixed header never covers a page title (1920px and phone)', covered.length === 0, covered.join(', '));
+    check('every page title sits at least 32px below the fixed header (1920px and phone)', covered.length === 0, covered.join(', '));
+
+    // The site's buttons are navy with white text; none is gold any more (the cookie banner included)
+    const gold = [];
+    const isGold = (els, where) => els.filter((el) => getComputedStyle(el).backgroundColor === 'rgb(212, 175, 55)')
+      .map((el) => `${where}: ${el.textContent.trim().slice(0, 30) || el.getAttribute('aria-label')}`);
+    for (const path of ['/', '/contact', '/shop']) {
+      const view = await newPage({ dismissCookies: false });
+      await open(view, path);
+      gold.push(...(await view.$$eval('button, a', isGold, path)));
+      if (path === '/') {
+        await clickText(view, 'button', 'Personalizează');
+        await sleep(300);
+        gold.push(...(await view.$$eval('[role="dialog"] button, button[aria-label^="Toggle"]', isGold, 'cookie settings')));
+      }
+    }
+    check('no gold buttons: navy with white text instead (cookie banner and settings, contact form)', gold.length === 0, gold.join(', '));
     await open(phone, '/');
     const menu = 'button[aria-controls="mobile-menu"]';
     const before = await phone.$eval(menu, (b) => b.getAttribute('aria-expanded'));

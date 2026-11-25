@@ -48,7 +48,7 @@ const CookieConsentBanner = ({ language }) => {
           <button
             onClick={acceptAll}
             className="flex-1 px-6 py-3 rounded-lg font-semibold transition hover:opacity-90"
-            style={{ backgroundColor: '#d4af37', color: '#1e3a8a' }}
+            style={{ backgroundColor: '#1e3a8a', color: 'white' }}
           >
             {t.acceptAll}
           </button>

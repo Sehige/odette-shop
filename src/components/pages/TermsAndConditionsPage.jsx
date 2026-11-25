@@ -9,7 +9,7 @@ const TermsAndConditionsPage = ({ language }) => {
     ro: {
       title: 'Termeni și Condiții',
       subtitle: 'Condiții generale de vânzare',
-      lastUpdate: 'Ultima actualizare: Octombrie 2026',
+      lastUpdate: 'Ultima actualizare: Noiembrie 2026',
 
       sections: [
         {
@@ -126,8 +126,8 @@ const TermsAndConditionsPage = ({ language }) => {
             'În cazul unui litigiu, puteți depune o plângere la ANPC: <a href="https://anpc.ro/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">www.anpc.ro</a>',
             '',
             '<strong>8.2 Soluționarea Alternativă a Litigiilor (SAL)</strong>',
-            'Conform Regulamentului UE 524/2013, consumatorii au dreptul de a apela la mecanisme alternative de soluționare a litigiilor.',
-            'Platforma Europeană de Soluționare Online a Litigiilor: <a href="https://consumer-redress.ec.europa.eu/index_ro" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ec.europa.eu/consumers/odr</a>',
+            'Conform OG nr. 38/2015, consumatorii au dreptul de a apela la soluționarea alternativă a litigiilor (SAL).',
+            'Reclamațiile SAL se depun pe platforma ANPC: <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">reclamatiisal.anpc.ro</a>',
             '',
             '<strong>8.3 Legea Aplicabilă</strong>',
             'Prezentele Termene și Condiții sunt guvernate de legea română. Orice litigiu va fi soluționat de instanțele competente din România.'
@@ -147,7 +147,7 @@ const TermsAndConditionsPage = ({ language }) => {
     en: {
       title: 'Terms and Conditions',
       subtitle: 'General terms of sale',
-      lastUpdate: 'Last updated: October 2026',
+      lastUpdate: 'Last updated: November 2026',
 
       sections: [
         {
@@ -264,8 +264,8 @@ const TermsAndConditionsPage = ({ language }) => {
             'In case of a dispute, you can file a complaint with ANPC: <a href="https://anpc.ro/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">www.anpc.ro</a>',
             '',
             '<strong>8.2 Alternative Dispute Resolution (ADR)</strong>',
-            'According to EU Regulation 524/2013, consumers have the right to appeal to alternative dispute resolution mechanisms.',
-            'European Online Dispute Resolution Platform: <a href="https://consumer-redress.ec.europa.eu/index_ro" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">ec.europa.eu/consumers/odr</a>',
+            'Under Government Ordinance 38/2015, consumers have the right to alternative dispute resolution (SAL).',
+            'SAL complaints are filed on the ANPC platform: <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">reclamatiisal.anpc.ro</a>',
             '',
             '<strong>8.3 Applicable Law</strong>',
             'These Terms and Conditions are governed by Romanian law. Any dispute will be resolved by competent courts in Romania.'
