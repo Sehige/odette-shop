@@ -141,14 +141,14 @@ const CookiePreferencesModal = ({ language }) => {
                   key={category.id}
                   className="border rounded-xl p-4 transition"
                   style={{
-                    borderColor: category.enabled ? '#d4af37' : '#e5e7eb',
-                    backgroundColor: category.enabled ? '#fefce8' : 'white'
+                    borderColor: category.enabled ? '#1e3a8a' : '#e5e7eb',
+                    backgroundColor: category.enabled ? '#eff6ff' : 'white'
                   }}
                 >
                   <div className="flex items-start gap-4">
                     <div
                       className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: category.enabled ? '#d4af37' : '#e5e7eb' }}
+                      style={{ backgroundColor: category.enabled ? '#1e3a8a' : '#e5e7eb' }}
                     >
                       <Icon className={`w-5 h-5 ${category.enabled ? 'text-white' : 'text-gray-500'}`} />
                     </div>
@@ -171,7 +171,7 @@ const CookiePreferencesModal = ({ language }) => {
                             className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${
                               category.enabled ? '' : 'bg-gray-300'
                             }`}
-                            style={{ backgroundColor: category.enabled ? '#d4af37' : undefined }}
+                            style={{ backgroundColor: category.enabled ? '#1e3a8a' : undefined }}
                             aria-label={`Toggle ${category.title}`}
                           >
                             <span
@@ -212,7 +212,7 @@ const CookiePreferencesModal = ({ language }) => {
             <button
               onClick={acceptAll}
               className="flex-1 px-6 py-3 rounded-lg font-semibold transition hover:opacity-90"
-              style={{ backgroundColor: '#d4af37', color: '#1e3a8a' }}
+              style={{ backgroundColor: '#1e3a8a', color: 'white' }}
             >
               {t.acceptAll}
             </button>

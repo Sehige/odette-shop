@@ -11,7 +11,7 @@ const ProductPage = ({ product, language }) => {
   const categoryName = isRo ? product.categoryNameRo : product.categoryName;
 
   return (
-    <div className="pt-32 pb-16 min-h-screen bg-gray-50">
+    <div className="pt-32 lg:pt-44 pb-16 min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav aria-label={isRo ? 'Navigare' : 'Breadcrumb'} className="text-sm text-gray-500 mb-6">
           <ol className="flex flex-wrap items-center gap-2">
