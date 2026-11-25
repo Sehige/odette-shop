@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Building2, ClipboardList, FileText, Leaf, Recycle, Scale, Store, Users, Boxes, PackageOpen } from 'lucide-react';
 import { foodWastePlan as plan } from '../../data/foodWastePlan';
 
@@ -12,7 +13,8 @@ const Heading = ({ icon: Icon, id, children }) => (
     <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: GOLD }}>
       <Icon className="text-white" size={24} aria-hidden="true" />
     </div>
-    <h2 id={id} className="text-2xl md:text-3xl font-bold" style={{ color: NAVY }}>{children}</h2>
+    {/* scroll margin: a link to the heading stops below the fixed header */}
+    <h2 id={id} className="scroll-mt-28 lg:scroll-mt-40 text-2xl md:text-3xl font-bold" style={{ color: NAVY }}>{children}</h2>
   </div>
 );
 const Section = ({ shade, children }) => (
@@ -147,7 +149,8 @@ const FoodWastePage = ({ language }) => {
         <Heading icon={Recycle}>8. Ierarhia măsurilor de prevenire și reducere a risipei alimentare</Heading>
         <p>
           Ordinea în care tratăm produsele aflate în apropierea termenului de valabilitate este descrisă la începutul paginii:{' '}
-          <a href="#ierarhie" className="font-semibold text-blue-900 underline">Ce facem cu produsele aproape de expirare</a>.
+          {/* a router <Link>: a plain <a href="#…"> was scrolled back by <ScrollRestoration> */}
+          <Link to="#ierarhie" className="font-semibold text-blue-900 underline">Ce facem cu produsele aproape de expirare</Link>.
         </p>
       </Section>
 
