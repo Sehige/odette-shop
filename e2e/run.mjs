@@ -371,6 +371,17 @@ try {
     check('/craciun: the Nostalgie size menu switches the contents, price and WhatsApp message to Cutia 2',
       first.text.includes('Cutia 1') && second.text.includes('Cutia 2') && second.message.includes('Nostalgie la cutie – Cutia 2 (1,34 kg)') &&
         contents.includes('12 nuci cu ciocolată') && contents.includes('209 lei'), JSON.stringify(second));
+
+    // In English, the whole offer is in English, down to the WhatsApp message
+    await page.click('button[aria-label="Switch to English"]');
+    await sleep(300);
+    const en = await page.evaluate(() => document.querySelector('main').innerText);
+    const enOrder = await order();
+    const romanian = ['Cum comanzi', 'Alege cutia', 'Comandă', 'Cutii cadou de Crăciun', 'Întrebări', 'Ridicare', 'livrare', 'cantitate', 'buc'].filter((s) => en.includes(s));
+    check('/craciun in English: steps, boxes, products, FAQ and the WhatsApp message are in English',
+      ['How to order', 'Nostalgia in a box', 'Poppy seed babka', '1.34 kg', 'Questions about holiday orders', 'Order early'].every((s) => en.includes(s)) &&
+        !romanian.length && enOrder.text.includes('Order Box 2') && enOrder.message.startsWith('Hello!') && enOrder.message.includes('Nostalgia in a box – Box 2 (1.34 kg)'),
+      JSON.stringify({ romanian, enOrder }));
   }
 
   // 6c. The festive "Crăciun" buttons (header and shop), until the last day to order
