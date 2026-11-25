@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TreePine } from 'lucide-react';
 
-// Christmas red with white: the "Crăciun" buttons and the homepage banner's "Comandă acum"
+// Christmas red with white: the "Crăciun" buttons, the homepage banner's "Comandă acum" and the WhatsApp buttons
 export const festiveColors = 'bg-[#b3121f] text-white ring-2 ring-white hover:bg-[#9a0f1a]';
 
 /**
