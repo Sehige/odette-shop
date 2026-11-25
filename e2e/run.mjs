@@ -390,20 +390,29 @@ try {
     check('"Crăciun" button to /craciun: in the header (1024px laptop, 360px phone clear of the logo) and on the shop page',
       laptopLink?.text === 'Crăciun' && phoneLink?.text === 'Crăciun' && phoneLink.left >= phoneLink.logoRight + 4 && shopLinks.includes('Crăciun'),
       JSON.stringify({ laptopLink, phoneLink, shopLinks }));
-    // from 1280px it is in the menu, between "Meniu" and the events offer, clear of the logo
-    const inMenu = [];
-    for (const width of [1280, 1920]) {
+    // on desktop it takes the socials' place on the right, clear of the menu; the menu stays clear of the logo
+    // (only 15px on a 1024px laptop, as before)
+    const onRight = [];
+    for (const width of [1024, 1280, 1920]) {
       const wide = await newPage({ viewport: { width, height: 900 } });
       await open(wide, '/');
-      inMenu.push(await wide.evaluate((w) => {
+      onRight.push(await wide.evaluate((w) => {
         const nav = document.querySelector('header nav');
         const items = [...nav.children].filter((el) => el.offsetParent !== null).map((el) => el.textContent.trim());
         const logo = document.querySelector('header a[aria-label^="Odette"]').getBoundingClientRect();
-        return { w, items: items.join(' | '), clear: nav.getBoundingClientRect().left - logo.right };
+        const button = [...document.querySelectorAll('header a[href="/craciun"]')].find((a) => a.offsetParent !== null);
+        const socials = [...document.querySelectorAll('header a[aria-label="Instagram"], header a[aria-label="Facebook"]')]
+          .filter((a) => a.offsetParent !== null).length;
+        return {
+          w, items: items.join(' | '), socials,
+          logoClear: Math.round(nav.getBoundingClientRect().left - logo.right),
+          buttonClear: button ? Math.round(button.getBoundingClientRect().left - nav.getBoundingClientRect().right) : null,
+        };
       }, width));
     }
-    check('"Crăciun" button sits in the menu between "Meniu" and the events offer from 1280px, clear of the logo',
-      inMenu.every((m) => m.items.startsWith('Acasă | Meniu | Crăciun | Ofertă evenimente') && m.clear >= 24), JSON.stringify(inMenu));
+    check('"Crăciun" button replaces the header socials on the right (1024, 1280, 1920px), clear of the menu',
+      onRight.every((m) => m.items === 'Acasă | Meniu | Ofertă evenimente | Contact' && m.socials === 0 && m.logoClear >= (m.w < 1280 ? 12 : 24) && m.buttonClear >= 24),
+      JSON.stringify(onRight));
   }
 
   // 7. Contact page and phone layout
