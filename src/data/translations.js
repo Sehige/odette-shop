@@ -159,7 +159,7 @@ export const translations = {
       cookies: 'Cookies',
       foodWaste: 'Risipa alimentară',
       salBadge: 'ANPC – Soluționarea alternativă a litigiilor (SAL)',
-      euDisputes: 'Litigii UE',
+      solBadge: 'Soluționarea online a litigiilor (UE)',
       tradeRegister: 'Reg. Com.'
     },
 
@@ -437,7 +437,7 @@ export const translations = {
       cookies: 'Cookies',
       foodWaste: 'Food waste',
       salBadge: 'ANPC – Alternative dispute resolution (SAL)',
-      euDisputes: 'EU disputes',
+      solBadge: 'Online dispute resolution (EU)',
       tradeRegister: 'Trade Reg.'
     },
 
