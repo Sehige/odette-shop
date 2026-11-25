@@ -8,13 +8,19 @@ import HoursBox from '../location/HoursBox';
 // White wordmark and swan, as in the header
 import odetteLogo from '../../Odette_Confiserie.svg';
 import logoMark from '../../Stickere.svg';
-// ANPC's official SAL pictogram (anpc.ro/sal)
+// ANPC's pictograms: SAL is the official file (anpc.ro/sal); SOL is a vector copy of the
+// Ordinul 449/2022 model (anpc.ro no longer offers it)
 import salBadge from '../../assets/anpc-sal.png';
+import solBadge from '../../assets/anpc-sol.svg';
 
 // Ordinul ANPC 449/2022, as changed by Ordinul 270/2026 (in force since 19 May 2026): the SAL
 // pictogram on the homepage, 250 x 50 px, linking to ANPC's SAL complaints platform.
-// (The EU's SOL platform closed in July 2025, so its pictogram is no longer required.)
-const SAL_URL = 'https://reclamatiisal.anpc.ro/';
+// The SOL pictogram is no longer required (the EU's SOL platform closed in July 2025); the owner
+// keeps it, linking where the platform's old address now leads, the EU's consumer redress page.
+const BADGES = [
+  { href: 'https://consumer-redress.ec.europa.eu/index_ro', src: solBadge, alt: 'solBadge' },
+  { href: 'https://reclamatiisal.anpc.ro/', src: salBadge, alt: 'salBadge' },
+];
 
 const NAVY = '#1e3a8a';
 
@@ -47,10 +53,16 @@ const Footer = ({ language }) => {
                 <Facebook className="w-6 h-6" />
               </a>
             </div>
-            <a href={SAL_URL} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block">
-              {/* the official file is 201 x 50; it sits in the 250 x 50 box without stretching */}
-              <img src={salBadge} alt={f.salBadge} width={250} height={50} className="w-[250px] h-[50px] object-contain object-left" />
-            </a>
+            {/* each pictogram is about 200 x 50; it sits in a 250 x 50 box without stretching */}
+            <ul className="mt-6 space-y-2">
+              {BADGES.map(({ href, src, alt }) => (
+                <li key={href}>
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="inline-block">
+                    <img src={src} alt={f[alt]} width={250} height={50} className="w-[250px] h-[50px] object-contain object-left" />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Opening hours, with the live status (on wide screens each column sits centred in its space) */}
@@ -109,7 +121,6 @@ const Footer = ({ language }) => {
                   {t.cookieConsent?.manageCookies || 'Manage cookies'}
                 </button>
               </li>
-              <li><a href="https://consumer-redress.ec.europa.eu/index_ro" target="_blank" rel="noopener noreferrer" className={legalLink}>{f.euDisputes}</a></li>
             </ul>
           </nav>
         </div>

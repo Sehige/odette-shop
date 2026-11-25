@@ -226,18 +226,21 @@ try {
       const nav = footer.querySelector('nav[aria-label="Informații legale"]');
       const hrefs = nav ? [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href')) : [];
       return /© \d{4} Olala Sweets SRL · CUI 52083122 · Reg\. Com\. J2025048164006/.test(footer.textContent) &&
-        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/risipa-alimentara', 'https://consumer-redress.ec.europa.eu/index_ro'].every((h) => hrefs.includes(h)) &&
+        ['/terms-and-conditions', '/privacy-policy', '/cookie-policy', '/risipa-alimentara'].every((h) => hrefs.includes(h)) &&
         !!nav.querySelector('button');
     }));
-    // Ordinul ANPC 449/2022 as changed by 270/2026: the SAL pictogram on the homepage, 250 x 50, to reclamatiisal.anpc.ro
-    const sal = await page.evaluate(() => {
-      const img = document.querySelector('footer a[href="https://reclamatiisal.anpc.ro/"] img');
+    // Ordinul ANPC 449/2022 as changed by 270/2026: the SAL pictogram on the homepage, 250 x 50, to reclamatiisal.anpc.ro;
+    // above it the SOL pictogram (kept by the owner), to the EU's consumer redress page
+    const badges = await page.evaluate(() => ['https://consumer-redress.ec.europa.eu/index_ro', 'https://reclamatiisal.anpc.ro/'].map((href) => {
+      const img = document.querySelector(`footer a[href="${href}"] img`);
       if (!img) return null;
       const box = img.getBoundingClientRect();
-      return { w: box.width, h: box.height, loaded: img.complete && img.naturalWidth > 0, alt: img.alt };
-    });
-    check('footer: the ANPC SAL pictogram (250 x 50) links to reclamatiisal.anpc.ro',
-      sal && sal.w === 250 && sal.h === 50 && sal.loaded && /ANPC/.test(sal.alt), JSON.stringify(sal));
+      return { top: box.top, w: box.width, h: box.height, loaded: img.complete && img.naturalWidth > 0, alt: img.alt };
+    }));
+    const [sol, sal] = badges;
+    check('footer: the SOL and ANPC SAL pictograms (250 x 50, SOL above) link to the EU redress page and reclamatiisal.anpc.ro',
+      sol && sal && [sol, sal].every((b) => b.w === 250 && b.h === 50 && b.loaded) && /ANPC/.test(sal.alt) && /online/.test(sol.alt) && sol.top < sal.top,
+      JSON.stringify(badges));
     await page.click('button[aria-label="Switch to English"]');
     await sleep(300);
     check('language toggle switches to English', (await page.evaluate(() => document.documentElement.lang)) === 'en');
