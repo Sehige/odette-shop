@@ -22,10 +22,10 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
     <Link
       to={`/produse/${product.slug}`}
       onClick={handleClick}
-      className="block bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
+      className="flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group cursor-pointer"
     >
       {/* Image */}
-      <div className="relative overflow-hidden aspect-square">
+      <div className="relative overflow-hidden aspect-square shrink-0">
         {/* editable=false: framing is edited from the product detail modal (same photo/setting) */}
         <AdjustableImage
           editable={false}
@@ -57,32 +57,23 @@ const ProductCard = ({ product, language, setSelectedProduct, priority = false }
       </div>
       
       {/* Product Info */}
-      <div className="p-3 sm:p-6">
-        <div className="flex flex-col items-center mb-2 sm:mb-3 min-h-[2rem] sm:min-h-[3rem]">
-          <h3 className="text-sm sm:text-xl font-semibold text-gray-900 line-clamp-2 text-center">
-            {language === 'ro' ? product.name_ro : product.name_en}
-          </h3>
-          {/* Vegan/Vegetarian Indicators - hidden on mobile */}
-          {product.isVegetarian && (
-            <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full mt-1">
-              <Check className="w-3 h-3 text-green-600" />
-              <span className="text-xs font-medium text-green-600">
-                {language === 'ro' ? 'Vegan' : 'Vegan'}
-              </span>
-            </div>
-          )}
-        </div>
-        <div className="mb-2 sm:mb-4 hidden sm:block h-10">
-          <p className="text-gray-600 text-sm line-clamp-2">
-            {product.description}
-          </p>
-        </div>
-
-        <div className="flex items-center justify-center">
-          <span className="text-lg sm:text-2xl font-bold" style={{ color: '#1e40af' }}>
-            {product.price} {t.lei}{product.price_unit && `/${product.price_unit}`}
-          </span>
-        </div>
+      {/* The name leads, the price sits just under it */}
+      <div className="p-3 sm:p-6 flex flex-col items-center text-center">
+        <h3 className="text-base sm:text-2xl font-semibold text-gray-900 leading-snug line-clamp-2">
+          {language === 'ro' ? product.name_ro : product.name_en}
+        </h3>
+        {/* Vegan/Vegetarian Indicators - hidden on mobile */}
+        {product.isVegetarian && (
+          <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full mt-1">
+            <Check className="w-3 h-3 text-green-600" />
+            <span className="text-xs font-medium text-green-600">
+              {language === 'ro' ? 'Vegan' : 'Vegan'}
+            </span>
+          </div>
+        )}
+        <span className="mt-1 sm:mt-2 text-sm sm:text-lg font-bold" style={{ color: '#1e40af' }}>
+          {product.price} {t.lei}{product.price_unit && `/${product.price_unit}`}
+        </span>
       </div>
     </Link>
   );
